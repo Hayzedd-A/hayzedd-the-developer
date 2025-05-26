@@ -3,7 +3,6 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useTheme } from "@/app/context/ThemeContext";
-import { themes } from "@/app/context/ThemeContext";
 // import { 
 //   ChevronLeftIcon,
 //   ChevronRightIcon,
@@ -32,7 +31,8 @@ const ImageSlider: React.FC<ImageSliderProps> = ({
   autoPlayInterval = 3000,
   height = "h-64 md:h-96",
 }) => {
-  const { theme } = useTheme();
+  const { currentThemes, theme } = useTheme();
+  const currentTheme = currentThemes[theme]
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [isAutoPlaying, setIsAutoPlaying] = useState(false);
   const [imageLoadError, setImageLoadError] = useState<{
@@ -74,7 +74,7 @@ const ImageSlider: React.FC<ImageSliderProps> = ({
       <div
         className={`${height} ${className} flex items-center justify-center bg-gray-200 dark:bg-gray-700 rounded-xl`}
       >
-        <span className={`text-sm ${themes[theme].textSecondary}`}>
+        <span className={`text-sm ${currentTheme.textSecondary}`}>
           No images available
         </span>
       </div>
@@ -106,7 +106,7 @@ const ImageSlider: React.FC<ImageSliderProps> = ({
               />
             ) : (
               <div className="flex items-center justify-center w-full h-full bg-gray-200 dark:bg-gray-700">
-                <span className={`text-sm ${themes[theme].textSecondary}`}>
+                <span className={`text-sm ${currentTheme.textSecondary}`}>
                   Image not available
                 </span>
               </div>
@@ -180,7 +180,7 @@ const ImageSlider: React.FC<ImageSliderProps> = ({
                 whileTap={{ scale: 0.95 }}
                 className={`relative flex-shrink-0 w-20 h-16 rounded-lg overflow-hidden border-2 transition-all duration-200 ${
                   index === currentImageIndex
-                    ? `border-current ${themes[theme].accent}`
+                    ? `border-current ${currentTheme.accent}`
                     : `border-transparent hover:border-gray-300 dark:hover:border-gray-600`
                 }`}
               >

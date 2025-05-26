@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { usePathname } from "next/navigation";
-import { useTheme, themes } from "@/app/context/ThemeContext";
+import { useTheme } from "@/app/context/ThemeContext";
 
 interface PageTransitionProps {
   children: React.ReactNode;
@@ -12,7 +12,8 @@ interface PageTransitionProps {
 const PageTransition: React.FC<PageTransitionProps> = ({ children }) => {
   const [isLoading, setIsLoading] = useState(false);
   const pathname = usePathname();
-  const { theme } = useTheme();
+  const { currentThemes, theme } = useTheme();
+  const currentTheme = currentThemes[theme]
 
   useEffect(() => {
     setIsLoading(true);
@@ -63,17 +64,17 @@ const PageTransition: React.FC<PageTransitionProps> = ({ children }) => {
             initial="initial"
             animate="animate"
             exit="exit"
-            className={`fixed inset-0 ${themes[theme].background} flex items-center justify-center z-50`}
+            className={`fixed inset-0 ${currentTheme.background} flex items-center justify-center z-50`}
           >
             <div className="text-center">
               {/* Mini loading animation for page transitions */}
               <motion.div
-                className={`w-12 h-12 border-3 border-transparent ${themes[theme].primary} border-t-3 rounded-full mx-auto mb-4`}
+                className={`w-12 h-12 border-3 border-transparent ${currentTheme.primary} border-t-3 rounded-full mx-auto mb-4`}
                 animate={{ rotate: 360 }}
                 transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
               />
               <motion.p
-                className={`text-sm ${themes[theme].textSecondary}`}
+                className={`text-sm ${currentTheme.textSecondary}`}
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.2 }}

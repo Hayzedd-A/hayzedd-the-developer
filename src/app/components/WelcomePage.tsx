@@ -2,12 +2,20 @@
 
 import React from "react";
 import { motion } from "framer-motion";
-import { ArrowRight, Download, Github, Linkedin, Mail, MessageSquare } from "lucide-react";
-import { useTheme, themes } from "@/app/context/ThemeContext";
+import {
+  ArrowRight,
+  Download,
+  Github,
+  Linkedin,
+  Mail,
+  MessageSquare,
+} from "lucide-react";
+import { useTheme } from "@/app/context/ThemeContext";
 import Link from "next/link";
 
 export default function WelcomePage() {
-  const { theme } = useTheme();
+  const { currentThemes, theme } = useTheme();
+  const currentTheme = currentThemes[theme];
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -47,7 +55,7 @@ export default function WelcomePage() {
 
   return (
     <div
-      className={`min-h-screen ${themes[theme].background} overflow-hidden flex items-center justify-center p-4 sm:px-6 lg:px-8`}
+      className={`min-h-screen ${currentTheme.background} overflow-hidden flex items-center justify-center p-4 sm:px-6 lg:px-8`}
     >
       <div className="max-w-7xl mx-auto w-full">
         <motion.div
@@ -61,7 +69,7 @@ export default function WelcomePage() {
             {/* Greeting */}
             <motion.div variants={itemVariants}>
               <span
-                className={`inline-block px-4 py-2 rounded-full text-sm font-medium ${themes[theme].primary} text-white mb-4`}
+                className={`inline-block px-4 py-2 rounded-full text-sm font-medium ${currentTheme.primary} text-white mb-4`}
               >
                 👋 Welcome to my portfolio
               </span>
@@ -70,13 +78,13 @@ export default function WelcomePage() {
             {/* Main Heading */}
             <motion.h1
               variants={itemVariants}
-              className={`text-4xl sm:text-5xl lg:text-6xl font-bold ${themes[theme].text} leading-tight`}
+              className={`text-4xl sm:text-5xl lg:text-6xl font-bold ${currentTheme.text} leading-tight`}
             >
               Hi, I'm{" "}
-              <span className={`${themes[theme].accent} relative`}>
+              <span className={`${currentTheme.accent} relative`}>
                 Azeez
                 <motion.div
-                  className={`absolute -bottom-2 left-0 h-1 ${themes[theme].primary} rounded-full`}
+                  className={`absolute -bottom-2 left-0 h-1 ${currentTheme.primary} rounded-full`}
                   initial={{ width: 0 }}
                   animate={{ width: "100%" }}
                   transition={{ delay: 1, duration: 0.8 }}
@@ -87,7 +95,7 @@ export default function WelcomePage() {
             {/* Subtitle */}
             <motion.h2
               variants={itemVariants}
-              className={`text-xl sm:text-2xl lg:text-3xl font-semibold ${themes[theme].textSecondary}`}
+              className={`text-xl sm:text-2xl lg:text-3xl font-semibold ${currentTheme.textSecondary}`}
             >
               Full Stack Web Developer
             </motion.h2>
@@ -95,7 +103,7 @@ export default function WelcomePage() {
             {/* Description */}
             <motion.p
               variants={itemVariants}
-              className={`text-lg ${themes[theme].textSecondary} leading-relaxed max-w-2xl`}
+              className={`text-lg ${currentTheme.textSecondary} leading-relaxed max-w-2xl`}
             >
               I'm a passionate full stack developer with expertise in modern web
               technologies. I create beautiful, responsive, and user-friendly
@@ -105,7 +113,7 @@ export default function WelcomePage() {
 
             {/* Key Skills */}
             <motion.div variants={itemVariants} className="space-y-3">
-              <h3 className={`text-lg font-semibold ${themes[theme].text}`}>
+              <h3 className={`text-lg font-semibold ${currentTheme.text}`}>
                 What I do:
               </h3>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
@@ -120,10 +128,10 @@ export default function WelcomePage() {
                   <motion.div
                     key={skill}
                     variants={itemVariants}
-                    className={`flex items-center space-x-2 ${themes[theme].textSecondary}`}
+                    className={`flex items-center space-x-2 ${currentTheme.textSecondary}`}
                   >
                     <div
-                      className={`w-2 h-2 rounded-full ${themes[theme].primary}`}
+                      className={`w-2 h-2 rounded-full ${currentTheme.primary}`}
                     />
                     <span>{skill}</span>
                   </motion.div>
@@ -140,7 +148,7 @@ export default function WelcomePage() {
                 <motion.button
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
-                  className={`flex items-center justify-center space-x-2 px-6 py-3 ${themes[theme].primary} text-white rounded-lg font-semibold shadow-lg hover:shadow-xl transition-all duration-300`}
+                  className={`flex items-center justify-center space-x-2 px-6 py-3 ${currentTheme.primary} text-white rounded-lg font-semibold shadow-lg hover:shadow-xl transition-all duration-300`}
                 >
                   <span>Chat Me</span>
                   <MessageSquare className="w-5 h-5" />
@@ -150,10 +158,13 @@ export default function WelcomePage() {
               <motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                className={`flex items-center justify-center space-x-2 px-6 py-3 border-2 ${themes[theme].border} ${themes[theme].text} rounded-lg font-semibold ${themes[theme].hover} transition-all duration-300`}
+                className={`flex items-center justify-center space-x-2 px-6 py-3 border-2 ${currentTheme.border} ${currentTheme.text} rounded-lg font-semibold ${currentTheme.hover} transition-all duration-300`}
               >
                 <Download className="w-5 h-5" />
-                <Link href="https://my-cv-web-developer.vercel.app/" target="_blank">
+                <Link
+                  href="https://my-cv-web-developer.vercel.app/"
+                  target="_blank"
+                >
                   Download CV
                 </Link>
               </motion.button>
@@ -185,7 +196,7 @@ export default function WelcomePage() {
                   rel="noopener noreferrer"
                   whileHover={{ scale: 1.1, y: -2 }}
                   whileTap={{ scale: 0.95 }}
-                  className={`p-3 ${themes[theme].background} border ${themes[theme].border} rounded-lg ${themes[theme].textSecondary} ${themes[theme].primaryHover} hover:text-white transition-all duration-300 shadow-md hover:shadow-lg`}
+                  className={`p-3 ${currentTheme.background} border ${currentTheme.border} rounded-lg ${currentTheme.textSecondary} ${currentTheme.primaryHover} hover:text-white transition-all duration-300 shadow-md hover:shadow-lg`}
                   title={label}
                 >
                   <Icon className="w-6 h-6" />
@@ -202,7 +213,7 @@ export default function WelcomePage() {
             <div className="relative">
               {/* Background decoration */}
               <motion.div
-                className={`absolute -inset-4 bg-gradient-to-r ${themes[theme].gradient} rounded-full opacity-20 blur-2xl`}
+                className={`absolute -inset-4 bg-gradient-to-r ${currentTheme.gradient} rounded-full opacity-20 blur-2xl`}
                 animate={{
                   scale: [1, 1.1, 1],
                   rotate: [0, 180, 360],
@@ -216,13 +227,13 @@ export default function WelcomePage() {
 
               {/* Profile image container */}
               <motion.div
-                className={`relative w-80 h-80 sm:w-96 sm:h-96 lg:w-[450px] lg:h-[450px] rounded-full overflow-hidden border-4 ${themes[theme].border} shadow-2xl`}
+                className={`relative w-80 h-80 sm:w-96 sm:h-96 lg:w-[450px] lg:h-[450px] rounded-full overflow-hidden border-4 ${currentTheme.border} shadow-2xl`}
                 whileHover={{ scale: 1.05 }}
                 transition={{ duration: 0.3 }}
               >
                 {/* Placeholder for your image */}
                 <div
-                  className={`w-full h-full bg-gradient-to-br ${themes[theme].gradient} flex items-center justify-center`}
+                  className={`w-full h-full bg-gradient-to-br ${currentTheme.gradient} flex items-center justify-center`}
                 >
                   {/* Replace this div with your actual image */}
                   <img
@@ -237,7 +248,7 @@ export default function WelcomePage() {
 
               {/* Floating elements */}
               <motion.div
-                className={`absolute top-10 -right-6 w-20 h-20 ${themes[theme].primary} rounded-lg opacity-80 flex items-center justify-center text-white text-2xl font-bold shadow-lg`}
+                className={`absolute top-10 -right-6 w-20 h-20 ${currentTheme.primary} rounded-lg opacity-80 flex items-center justify-center text-white text-2xl font-bold shadow-lg`}
                 animate={{
                   y: [0, -10, 0],
                   rotate: [0, 5, 0],
@@ -252,7 +263,7 @@ export default function WelcomePage() {
               </motion.div>
 
               <motion.div
-                className={`absolute bottom-10 -left-6 w-16 h-16 ${themes[theme].primary} rounded-full opacity-80 flex items-center justify-center text-white text-xl font-bold shadow-lg`}
+                className={`absolute bottom-10 -left-6 w-16 h-16 ${currentTheme.primary} rounded-full opacity-80 flex items-center justify-center text-white text-xl font-bold shadow-lg`}
                 animate={{
                   y: [0, 10, 0],
                   rotate: [0, -5, 0],

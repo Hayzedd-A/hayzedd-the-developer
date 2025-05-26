@@ -1,23 +1,22 @@
 "use client";
 
-import React, { useRef, useEffect, useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { gsap } from 'gsap';
-import { 
-  Mail, 
-  Phone, 
-  MapPin, 
-  Send, 
-  Github, 
-  Linkedin, 
-  Twitter,
-  MessageSquare,
+import {
+  Mail,
+  Phone,
+  MapPin,
+  Send,
   User,
-  Clock,
+  MessageSquare,
+  Github,
+  Linkedin,
+  Twitter,
   CheckCircle,
   AlertCircle
 } from 'lucide-react';
 import { useTheme } from '@/app/context/ThemeContext';
+import { useAnalytics } from '@/hooks/useAnalytics';
 
 interface FormData {
   name: string;
@@ -31,12 +30,10 @@ interface FormStatus {
   message: string;
 }
 
-const ContactPage = () => {
-  const { theme, isDarkMode } = useTheme();
-  const containerRef = useRef<HTMLDivElement>(null);
-  const formRef = useRef<HTMLFormElement>(null);
-  const contactInfoRef = useRef<HTMLDivElement>(null);
-  const headerRef = useRef<HTMLDivElement>(null);
+const ContactPage: React.FC = () => {
+  const { currentThemes, theme } = useTheme();
+  const currentTheme = currentThemes[theme];
+  const { trackEvent, trackFormSubmit, trackClick } = useAnalytics();
 
   const [formData, setFormData] = useState<FormData>({
     name: "",
@@ -50,61 +47,35 @@ const ContactPage = () => {
     message: "",
   });
 
+  const containerRef = useRef<HTMLDivElement>(null);
+  const headerRef = useRef<HTMLDivElement>(null);
+  const contactInfoRef = useRef<HTMLDivElement>(null);
+  const formRef = useRef<HTMLFormElement>(null);
+
+  // Track page interactions
   useEffect(() => {
-    const ctx = gsap.context(() => {
-      // Header animation
-      gsap.fromTo(
-        headerRef.current,
-        { opacity: 0, y: -50 },
-        { opacity: 1, y: 0, duration: 1, ease: "power3.out" }
-      );
-
-      // Contact info cards animation
-      gsap.fromTo(
-        contactInfoRef.current?.children || [],
-        { opacity: 0, x: -100, scale: 0.8 },
-        {
-          opacity: 1,
-          x: 0,
-          scale: 1,
-          duration: 0.8,
-          stagger: 0.2,
-          ease: "back.out(1.7)",
-          delay: 0.3,
-        }
-      );
-
-      // Form animation
-      gsap.fromTo(
-        formRef.current,
-        { opacity: 0, x: 100 },
-        { opacity: 1, x: 0, duration: 1, ease: "power3.out", delay: 0.5 }
-      );
-
-      // Floating animation for contact cards
-      gsap.to(contactInfoRef.current?.children || [], {
-        y: -10,
-        duration: 2,
-        ease: "power2.inOut",
-        yoyo: true,
-        repeat: -1,
-        stagger: 0.3,
-      });
-    }, containerRef);
-
-    return () => ctx.revert();
-  }, []);
+    trackEvent("engagement", "page", "contact-loaded");
+  }, [trackEvent]);
 
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
+
+    // Track form field interactions
+    trackEvent("interaction", "form-field", "input", name, undefined, {
+      fieldName: name,
+      valueLength: value.length,
+    });
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setFormStatus({ type: "loading", message: "Sending message..." });
+
+    // Track form submission attempt
+    trackEvent("interaction", "form", "submit-attempt", "contact-form");
 
     try {
       const response = await fetch("/api/contact", {
@@ -125,11 +96,19 @@ const ContactPage = () => {
           message: "Message sent successfully! I'll get back to you soon.",
         });
 
-        // Success animation
-        gsap.fromTo(
-          formRef.current,
-          { scale: 1 },
-          { scale: 1.02, duration: 0.3, yoyo: true, repeat: 1 }
+        // Track successful submission
+        trackFormSubmit("contact-form", true);
+        trackEvent(
+          "conversion",
+          "contact",
+          "form-submitted",
+          "success",
+          undefined,
+          {
+            name: formData.name,
+            subject: formData.subject,
+            messageLength: formData.message.length,
+          }
         );
       } else {
         setFormStatus({
@@ -143,216 +122,248 @@ const ContactPage = () => {
         type: "error",
         message: "Network error. Please check your connection and try again.",
       });
+
+      // Track failed submission
+      trackFormSubmit("contact-form", false);
+      trackEvent("error", "form", "submit-failed", "contact-form");
     }
     // Clear status after 5 seconds
     setTimeout(() => {
       setFormStatus({ type: "idle", message: "" });
     }, 5000);
-  }
+  };
+
+  const handleSocialClick = (platform: string, url: string) => {
+    trackClick(`social-${platform}`);
+    trackEvent("interaction", "social", "click", platform, undefined, { url });
+    window.open(url, "_blank");
+  };
 
   const contactInfo = [
     {
       icon: Mail,
-      title: "Email",
-      value: "hayzedd.dev@gmail.com",
-      description: "Send me an email anytime",
-      href: "mailto:hayzedd.dev@gmail.com",
+      label: "Email",
+      value: "hello@hayzedd.dev",
+      href: "mailto:hello@hayzedd.dev",
+      action: () => {
+        trackClick("email-contact");
+        trackEvent("interaction", "contact", "email-click");
+      },
     },
     {
       icon: Phone,
-      title: "Phone",
-      value: "+234 (0) 123 456 789",
-      description: "Call me during business hours",
-      href: "tel:+2340123456789",
+      label: "Phone",
+      value: "+1 (555) 123-4567",
+      href: "tel:+15551234567",
+      action: () => {
+        trackClick("phone-contact");
+        trackEvent("interaction", "contact", "phone-click");
+      },
     },
     {
       icon: MapPin,
-      title: "Location",
-      value: "Lagos, Nigeria",
-      description: "Available for remote work",
+      label: "Location",
+      value: "San Francisco, CA",
       href: "#",
-    },
-    {
-      icon: Clock,
-      title: "Response Time",
-      value: "24-48 hours",
-      description: "I'll get back to you quickly",
-      href: "#",
-    },
-  ];
-
-  const FAQ = [
-    {
-      question: "What's your typical response time?",
-      answer:
-        "I usually respond to emails within 24-48 hours. For urgent matters, feel free to mention it in your subject line.",
-    },
-    {
-      question: "Do you work on weekends?",
-      answer:
-        "While I prefer to maintain work-life balance, I'm flexible for urgent projects and international clients in different time zones.",
-    },
-    {
-      question: "What information should I include?",
-      answer:
-        "Please include project details, timeline, budget range, and any specific requirements. The more details, the better I can assist you.",
-    },
-    {
-      question: "Do you offer free consultations?",
-      answer:
-        "Yes! I offer a free 30-minute consultation to discuss your project and see if we're a good fit for working together.",
+      action: () => {
+        trackClick("location-contact");
+        trackEvent("interaction", "contact", "location-click");
+      },
     },
   ];
 
   const socialLinks = [
-    { icon: Github, href: "https://github.com/Hayzedd-A", label: "GitHub" },
+    {
+      icon: Github,
+      label: "GitHub",
+      url: "https://github.com/Hayzedd-A",
+      color: `${currentTheme.hover}`,
+    },
     {
       icon: Linkedin,
-      href: "https://linkedin.com/in/hayzedd",
       label: "LinkedIn",
+      url: "https://linkedin.com/in/hayzedd",
+      color: "hover:text-blue-600",
     },
     {
       icon: Twitter,
-      href: "https://twitter.com/hayzedd_dev",
       label: "Twitter",
+      url: "https://twitter.com/hayzedd",
+      color: "hover:text-blue-400",
     },
   ];
-
-  const getThemeClasses = () => {
-    const themeMap = {
-      blue: {
-        primary: "bg-blue-600 hover:bg-blue-700",
-        accent: "text-blue-600 dark:text-blue-400",
-        border: "border-blue-200 dark:border-blue-800",
-        gradient: "from-blue-600 to-blue-800",
-      },
-      purple: {
-        primary: "bg-purple-600 hover:bg-purple-700",
-        accent: "text-purple-600 dark:text-purple-400",
-        border: "border-purple-200 dark:border-purple-800",
-        gradient: "from-purple-600 to-purple-800",
-      },
-      green: {
-        primary: "bg-green-600 hover:bg-green-700",
-        accent: "text-green-600 dark:text-green-400",
-        border: "border-green-200 dark:border-green-800",
-        gradient: "from-green-600 to-green-800",
-      },
-      orange: {
-        primary: "bg-orange-600 hover:bg-orange-700",
-        accent: "text-orange-600 dark:text-orange-400",
-        border: "border-orange-200 dark:border-orange-800",
-        gradient: "from-orange-600 to-orange-800",
-      },
-    };
-    return themeMap[theme];
-  };
-
-  const themeClasses = getThemeClasses();
 
   return (
     <div
       ref={containerRef}
-      className="min-h-screen bg-white dark:bg-gray-900 py-12 px-4 sm:px-6 lg:px-8"
+      className={`min-h-screen ${currentTheme.background} py-20`}
     >
-      <div className="max-w-7xl mx-auto">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
-        <div ref={headerRef} className="text-center mb-16">
-          <motion.div
-            initial={{ opacity: 0, scale: 0.5 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.5 }}
-            className={`inline-flex items-center justify-center w-16 h-16 rounded-full bg-gradient-to-r ${themeClasses.gradient} mb-6`}
+        <motion.div
+          ref={headerRef}
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          className="text-center mb-16"
+        >
+          <h1
+            className={`text-4xl md:text-5xl font-bold ${currentTheme.text} mb-6`}
           >
-            <MessageSquare className="w-8 h-8 text-white" />
-          </motion.div>
-
-          <h1 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-4">
-            Get In Touch
+            Get In{" "}
+            <span
+              className={`bg-gradient-to-r ${currentTheme.gradient} bg-clip-text text-transparent`}
+            >
+              Touch
+            </span>
           </h1>
-          <p className="text-xl text-gray-600 dark:text-gray-400 max-w-3xl mx-auto">
-            Have a project in mind or want us to collaborate? I'd love to hear from
-            you. Let's create something amazing together.
+          <p
+            className={`text-xl ${currentTheme.textSecondary} max-w-3xl mx-auto`}
+          >
+            Have a project in mind? Let's discuss how we can work together to
+            bring your ideas to life.
           </p>
-        </div>
+        </motion.div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
           {/* Contact Information */}
-          <div className="lg:col-span-1">
-            <div ref={contactInfoRef} className="space-y-6">
-              {contactInfo.map((info, index) => {
-                const IconComponent = info.icon;
+          <motion.div
+            ref={contactInfoRef}
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+            className="space-y-8"
+          >
+            <div>
+              <h2 className={`text-2xl font-bold ${currentTheme.text} mb-6`}>
+                Let's Start a Conversation
+              </h2>
+              <p className={`${currentTheme.textSecondary} mb-8`}>
+                I'm always interested in hearing about new projects and
+                opportunities. Whether you're a company looking to hire, or
+                you're a fellow developer wanting to collaborate, I'd love to
+                hear from you.
+              </p>
+            </div>
+
+            {/* Contact Details */}
+            <div className="space-y-6">
+              {contactInfo.map((item, index) => {
+                const IconComponent = item.icon;
                 return (
-                  <motion.div
-                    key={index}
-                    whileHover={{ scale: 1.05, y: -5 }}
-                    className={`p-6 rounded-2xl bg-white dark:bg-gray-800 shadow-lg border ${themeClasses.border} hover:shadow-xl transition-all duration-300`}
+                  <motion.a
+                    key={item.label}
+                    href={item.href}
+                    onClick={item.action}
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ duration: 0.6, delay: 0.3 + index * 0.1 }}
+                    className={`flex items-center space-x-4 p-4 rounded-lg ${currentTheme.backgroundSecondary} ${currentTheme.hover} transition-colors group`}
                   >
-                    <div className="flex items-start space-x-4">
-                      <div
-                        className={`p-3 rounded-lg bg-gradient-to-r ${themeClasses.gradient}`}
-                      >
-                        <IconComponent className="w-6 h-6 text-white" />
-                      </div>
-                      <div className="flex-1">
-                        <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-1">
-                          {info.title}
-                        </h3>
-                        <p
-                          className={`font-medium ${themeClasses.accent} mb-1`}
-                        >
-                          {info.value}
-                        </p>
-                        <p className="text-sm text-gray-600 dark:text-gray-400">
-                          {info.description}
-                        </p>
-                      </div>
+                    <div className={`p-3 rounded-lg ${currentTheme.accent}`}>
+                      <IconComponent className="w-6 h-6" />
                     </div>
-                  </motion.div>
+                    <div>
+                      <p className={`text-sm ${currentTheme.textSecondary}`}>
+                        {item.label}
+                      </p>
+                      <p
+                        className={`text-lg font-medium ${currentTheme.text} group-hover:${currentTheme.accent} transition-colors`}
+                      >
+                        {item.value}
+                      </p>
+                    </div>
+                  </motion.a>
                 );
               })}
-
-              {/* Social Links */}
-              <div className="pt-6">
-                <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
-                  Connect With Me
-                </h3>
-                <div className="flex space-x-4">
-                  {socialLinks.map((social, index) => {
-                    const IconComponent = social.icon;
-                    return (
-                      <motion.a
-                        key={index}
-                        href={social.href}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        whileHover={{ scale: 1.1, rotate: 5 }}
-                        whileTap={{ scale: 0.95 }}
-                        className={`p-3 rounded-lg bg-gradient-to-r ${themeClasses.gradient} text-white hover:shadow-lg transition-all duration-300`}
-                        aria-label={social.label}
-                      >
-                        <IconComponent className="w-5 h-5" />
-                      </motion.a>
-                    );
-                  })}
-                </div>
-              </div>
             </div>
-          </div>
+
+            {/* Social Links */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.6 }}
+              className={`pt-8 border-t ${currentTheme.border}`}
+            >
+              <h3 className={`text-lg font-semibold ${currentTheme.text} mb-4`}>
+                Follow Me
+              </h3>
+              <div className="flex space-x-4">
+                {socialLinks.map((social, index) => {
+                  const IconComponent = social.icon;
+                  return (
+                    <motion.button
+                      key={social.label}
+                      onClick={() =>
+                        handleSocialClick(
+                          social.label.toLowerCase(),
+                          social.url
+                        )
+                      }
+                      initial={{ opacity: 0, scale: 0.8 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      transition={{ duration: 0.3, delay: 0.7 + index * 0.1 }}
+                      className={`p-3 rounded-lg ${currentTheme.backgroundSecondary} ${currentTheme.textSecondary} ${social.color} transition-all duration-300 hover:scale-110 hover:shadow-lg`}
+                      title={social.label}
+                    >
+                      <IconComponent className="w-6 h-6" />
+                    </motion.button>
+                  );
+                })}
+              </div>
+            </motion.div>
+          </motion.div>
 
           {/* Contact Form */}
-          <div className="lg:col-span-2">
-            <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8 border border-gray-200 dark:border-gray-700">
-              <form ref={formRef} onSubmit={handleSubmit} className="space-y-6">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div>
-                    <label
-                      htmlFor="name"
-                      className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
-                    >
-                      <User className="w-4 h-4 inline mr-2" />
-                      Full Name
-                    </label>
+          <motion.div
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.6, delay: 0.4 }}
+            className={`${currentTheme.backgroundSecondary} rounded-2xl p-8`}
+          >
+            <h2 className={`text-2xl font-bold ${currentTheme.text} mb-6`}>
+              Send Me a Message
+            </h2>
+
+            {/* Form Status */}
+            {formStatus.type !== "idle" && (
+              <motion.div
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                className={`mb-6 p-4 rounded-lg flex items-center space-x-3 ${
+                  formStatus.type === "success"
+                    ? "bg-green-100 dark:bg-green-900/20 text-green-800 dark:text-green-400"
+                    : formStatus.type === "error"
+                    ? "bg-red-100 dark:bg-red-900/20 text-red-800 dark:text-red-400"
+                    : "bg-blue-100 dark:bg-blue-900/20 text-blue-800 dark:text-blue-400"
+                }`}
+              >
+                {formStatus.type === "success" && (
+                  <CheckCircle className="w-5 h-5" />
+                )}
+                {formStatus.type === "error" && (
+                  <AlertCircle className="w-5 h-5" />
+                )}
+                {formStatus.type === "loading" && (
+                  <div className="w-5 h-5 border-2 border-current border-t-transparent rounded-full animate-spin" />
+                )}
+                <span>{formStatus.message}</span>
+              </motion.div>
+            )}
+
+            <form ref={formRef} onSubmit={handleSubmit} className="space-y-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <label
+                    htmlFor="name"
+                    className={`block text-sm font-medium ${currentTheme.text} mb-2`}
+                  >
+                    Name *
+                  </label>
+                  <div className="relative">
+                    <User
+                      className={`absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 ${currentTheme.textSecondary}`}
+                    />
                     <input
                       type="text"
                       id="name"
@@ -360,19 +371,23 @@ const ContactPage = () => {
                       value={formData.name}
                       onChange={handleInputChange}
                       required
-                      className={`w-full px-4 py-3 rounded-lg border ${themeClasses.border} bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-${theme}-500 focus:border-transparent transition-all duration-300`}
-                      placeholder="Your full name"
+                      className={`w-full pl-10 pr-4 py-3 border ${currentTheme.border} rounded-lg ${currentTheme.background} ${currentTheme.text} placeholder-gray-500 dark:placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors`}
+                      placeholder="Your name"
                     />
                   </div>
+                </div>
 
-                  <div>
-                    <label
-                      htmlFor="email"
-                      className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
-                    >
-                      <Mail className="w-4 h-4 inline mr-2" />
-                      Email Address
-                    </label>
+                <div>
+                  <label
+                    htmlFor="email"
+                    className={`block text-sm font-medium ${currentTheme.text} mb-2`}
+                  >
+                    Email *
+                  </label>
+                  <div className="relative">
+                    <Mail
+                      className={`absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 ${currentTheme.textSecondary}`}
+                    />
                     <input
                       type="email"
                       id="email"
@@ -380,39 +395,43 @@ const ContactPage = () => {
                       value={formData.email}
                       onChange={handleInputChange}
                       required
-                      className={`w-full px-4 py-3 rounded-lg border ${themeClasses.border} bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-${theme}-500 focus:border-transparent transition-all duration-300`}
+                      className={`w-full pl-10 pr-4 py-3 border ${currentTheme.border} rounded-lg ${currentTheme.background} ${currentTheme.text} placeholder-gray-500 dark:placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors`}
                       placeholder="your.email@example.com"
                     />
                   </div>
                 </div>
+              </div>
 
-                <div>
-                  <label
-                    htmlFor="subject"
-                    className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
-                  >
-                    <MessageSquare className="w-4 h-4 inline mr-2" />
-                    Subject
-                  </label>
-                  <input
-                    type="text"
-                    id="subject"
-                    name="subject"
-                    value={formData.subject}
-                    onChange={handleInputChange}
-                    required
-                    className={`w-full px-4 py-3 rounded-lg border ${themeClasses.border} bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-${theme}-500 focus:border-transparent transition-all duration-300`}
-                    placeholder="What's this about?"
+              <div>
+                <label
+                  htmlFor="subject"
+                  className={`block text-sm font-medium ${currentTheme.text} mb-2`}
+                >
+                  Subject *
+                </label>
+                <input
+                  type="text"
+                  id="subject"
+                  name="subject"
+                  value={formData.subject}
+                  onChange={handleInputChange}
+                  required
+                  className={`w-full px-4 py-3 border ${currentTheme.border} rounded-lg ${currentTheme.background} ${currentTheme.text} placeholder-gray-500 dark:placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors`}
+                  placeholder="What's this about?"
+                />
+              </div>
+
+              <div>
+                <label
+                  htmlFor="message"
+                  className={`block text-sm font-medium ${currentTheme.text} mb-2`}
+                >
+                  Message *
+                </label>
+                <div className="relative">
+                  <MessageSquare
+                    className={`absolute left-3 top-3 w-5 h-5 ${currentTheme.textSecondary}`}
                   />
-                </div>
-
-                <div>
-                  <label
-                    htmlFor="message"
-                    className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
-                  >
-                    Message
-                  </label>
                   <textarea
                     id="message"
                     name="message"
@@ -420,148 +439,93 @@ const ContactPage = () => {
                     onChange={handleInputChange}
                     required
                     rows={6}
-                    className={`w-full px-4 py-3 rounded-lg border ${themeClasses.border} bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-${theme}-500 focus:border-transparent transition-all duration-300 resize-none`}
-                    placeholder="Tell me about your project or just say hello..."
+                    className={`w-full pl-10 pr-4 py-3 border ${currentTheme.border} rounded-lg ${currentTheme.background} ${currentTheme.text} placeholder-gray-500 dark:placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors resize-none`}
+                    placeholder="Tell me about your project or idea..."
                   />
                 </div>
+              </div>
 
-                {/* Form Status */}
-                {formStatus.type !== "idle" && (
-                  <motion.div
-                    initial={{ opacity: 0, y: -10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    className={`p-4 rounded-lg flex items-center space-x-2 ${
-                      formStatus.type === "success"
-                        ? "bg-green-50 dark:bg-green-900/20 text-green-700 dark:text-green-400 border border-green-200 dark:border-green-800"
-                        : formStatus.type === "error"
-                        ? "bg-red-50 dark:bg-red-900/20 text-red-700 dark:text-red-400 border border-red-200 dark:border-red-800"
-                        : "bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-400 border border-blue-200 dark:border-blue-800"
-                    }`}
-                  >
-                    {formStatus.type === "success" && (
-                      <CheckCircle className="w-5 h-5" />
-                    )}
-                    {formStatus.type === "error" && (
-                      <AlertCircle className="w-5 h-5" />
-                    )}
-                    {formStatus.type === "loading" && (
-                      <div className="w-5 h-5 border-2 border-current border-t-transparent rounded-full animate-spin" />
-                    )}
-                    <span>{formStatus.message}</span>
-                  </motion.div>
+              <motion.button
+                type="submit"
+                disabled={formStatus.type === "loading"}
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                className={`w-full py-3 px-6 rounded-lg font-medium text-white transition-all duration-300 flex items-center justify-center space-x-2 ${
+                  formStatus.type === "loading"
+                    ? "bg-gray-400 cursor-not-allowed"
+                    : `${currentTheme.primary} ${currentTheme.primaryHover} focus:ring-4 ${currentTheme.ring}`
+                }`}
+              >
+                {formStatus.type === "loading" ? (
+                  <>
+                    <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                    <span>Sending...</span>
+                  </>
+                ) : (
+                  <>
+                    <Send className="w-5 h-5" />
+                    <span>Send Message</span>
+                  </>
                 )}
+              </motion.button>
+            </form>
 
-                {/* Submit Button */}
-                <motion.button
-                  type="submit"
-                  disabled={formStatus.type === "loading"}
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                  className={`w-full ${themeClasses.primary} text-white font-semibold py-4 px-6 rounded-lg transition-all duration-300 flex items-center justify-center space-x-2 disabled:opacity-50 disabled:cursor-not-allowed shadow-lg hover:shadow-xl`}
-                >
-                  {formStatus.type === "loading" ? (
-                    <>
-                      <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                      <span>Sending...</span>
-                    </>
-                  ) : (
-                    <>
-                      <Send className="w-5 h-5" />
-                      <span>Send Message</span>
-                    </>
-                  )}
-                </motion.button>
-              </form>
-            </div>
-          </div>
+            <p
+              className={`mt-4 text-sm ${currentTheme.textSecondary} text-center`}
+            >
+              I'll get back to you within 24 hours.
+            </p>
+          </motion.div>
         </div>
 
-        {/* Additional Info Section */}
+        {/* Additional CTA Section */}
         <motion.div
-          initial={{ opacity: 0, y: 50 }}
+          initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 1 }}
-          className="mt-16 text-center"
+          transition={{ duration: 0.6, delay: 0.8 }}
+          className="mt-20 text-center"
         >
-          <div className="bg-gradient-to-r from-gray-50 to-gray-100 dark:from-gray-800 dark:to-gray-700 rounded-2xl p-8 border border-gray-200 dark:border-gray-600">
-            <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">
-              Let's Build Something Great Together
+          <div
+            className={`bg-gradient-to-r ${currentTheme.backgroundSecondary} to-gray-100 dark:to-gray-700 rounded-2xl p-8 md:p-12`}
+          >
+            <h3
+              className={`text-2xl md:text-3xl font-bold ${currentTheme.text} mb-4`}
+            >
+              Ready to Start Your Project?
             </h3>
-            <p className="text-gray-600 dark:text-gray-400 max-w-2xl mx-auto mb-6">
-              Whether you have a project in mind, need technical consultation,
-              or just want to discuss the latest in web development, I'm always
-              excited to connect with fellow developers and potential
-              collaborators.
+            <p
+              className={`text-lg ${currentTheme.textSecondary} mb-8 max-w-2xl mx-auto`}
+            >
+              Let's discuss your ideas and see how we can bring them to life.
+              I'm here to help you build something amazing.
             </p>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8">
-              <div className="text-center">
-                <div
-                  className={`w-12 h-12 mx-auto mb-3 rounded-full bg-gradient-to-r ${themeClasses.gradient} flex items-center justify-center`}
-                >
-                  <MessageSquare className="w-6 h-6 text-white" />
-                </div>
-                <h4 className="font-semibold text-gray-900 dark:text-white mb-2">
-                  Quick Response
-                </h4>
-                <p className="text-sm text-gray-600 dark:text-gray-400">
-                  I typically respond within 24-48 hours
-                </p>
-              </div>
-              <div className="text-center">
-                <div
-                  className={`w-12 h-12 mx-auto mb-3 rounded-full bg-gradient-to-r ${themeClasses.gradient} flex items-center justify-center`}
-                >
-                  <User className="w-6 h-6 text-white" />
-                </div>
-                <h4 className="font-semibold text-gray-900 dark:text-white mb-2">
-                  Personal Touch
-                </h4>
-                <p className="text-sm text-gray-600 dark:text-gray-400">
-                  Every project gets my full attention and care
-                </p>
-              </div>
-              <div className="text-center">
-                <div
-                  className={`w-12 h-12 mx-auto mb-3 rounded-full bg-gradient-to-r ${themeClasses.gradient} flex items-center justify-center`}
-                >
-                  <CheckCircle className="w-6 h-6 text-white" />
-                </div>
-                <h4 className="font-semibold text-gray-900 dark:text-white mb-2">
-                  Quality Assured
-                </h4>
-                <p className="text-sm text-gray-600 dark:text-gray-400">
-                  Committed to delivering exceptional results
-                </p>
-              </div>
-            </div>
-          </div>
-        </motion.div>
-
-        {/* FAQ Section */}
-        <motion.div
-          initial={{ opacity: 0, y: 50 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 1.2 }}
-          className="mt-16"
-        >
-          <h3 className="text-2xl font-bold text-gray-900 dark:text-white text-center mb-8">
-            Frequently Asked Questions
-          </h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {FAQ.map((faq, index) => (
-              <motion.div
-                key={index}
-                whileHover={{ scale: 1.02 }}
-                className="bg-white dark:bg-gray-800 p-6 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm hover:shadow-md transition-all duration-300"
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <motion.button
+                onClick={() => {
+                  trackClick("cta-schedule-call");
+                  trackEvent("interaction", "cta", "schedule-call-click");
+                  // Add your scheduling logic here
+                }}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className={`px-8 py-3 rounded-lg font-medium text-white transition-all duration-300 ${currentTheme.primary} ${currentTheme.primaryHover}`}
               >
-                <h4 className={`font-semibold ${themeClasses.accent} mb-2`}>
-                  {faq.question}
-                </h4>
-                <p className="text-gray-600 dark:text-gray-400 text-sm">
-                  {faq.answer}
-                </p>
-              </motion.div>
-            ))}
+                Schedule a Call
+              </motion.button>
+              <motion.button
+                onClick={() => {
+                  trackClick("cta-view-portfolio");
+                  trackEvent("interaction", "cta", "portfolio-click");
+                  // Navigate to portfolio
+                  window.location.href = "/portfolio";
+                }}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className={`px-8 py-3 rounded-lg font-medium ${currentTheme.text} ${currentTheme.background} border ${currentTheme.border} ${currentTheme.hover} transition-all duration-300`}
+              >
+                View My Work
+              </motion.button>
+            </div>
           </div>
         </motion.div>
       </div>

@@ -6,6 +6,7 @@ import Sidebar from "./components/Sidebar";
 import MainWrapper from "./components/MainWrapper";
 import SuspenseWrapper from "./components/common/SuspenseWrapper";
 import AppInitializer from "./components/common/AppInitializer";
+import { AnalyticsProvider } from "@/components/AnalyticsProvider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -34,14 +35,16 @@ export default function RootLayout({
         suppressHydrationWarning
       >
         <ThemeProvider>
-          <AppInitializer>
-            {/* <SuspenseWrapper> */}
-            <div className="flex min-h-screen bg-white dark:bg-gray-900 transition-colors duration-300">
-              <Sidebar />
-              <MainWrapper>{children}</MainWrapper>
-            </div>
-            {/* </SuspenseWrapper> */}
-          </AppInitializer>
+          <AnalyticsProvider>
+            <AppInitializer>
+              {/* <SuspenseWrapper> */}
+              <div className="flex min-h-screen bg-white dark:bg-gray-900 transition-colors duration-300">
+                <Sidebar />
+                <MainWrapper>{children}</MainWrapper>
+              </div>
+              {/* </SuspenseWrapper> */}
+            </AppInitializer>
+          </AnalyticsProvider>
         </ThemeProvider>
       </body>
     </html>

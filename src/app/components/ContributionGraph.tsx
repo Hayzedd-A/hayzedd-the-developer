@@ -2,7 +2,6 @@
 
 import { motion } from "framer-motion";
 import { useTheme } from "@/app/context/ThemeContext";
-import { themes } from "@/app/context/ThemeContext";
 import { GitHubContribution, Theme } from "@/types/types.index";
 import { useState } from "react";
 
@@ -18,6 +17,8 @@ const ContributionGraph: React.FC<ContributionGraphProps> = ({
   const [hoveredDay, setHoveredDay] = useState<GitHubContribution | null>(null);
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
 
+  const { currentThemes } = useTheme();
+  const currentTheme = currentThemes[theme]
   // Group contributions by week
   const weeks: GitHubContribution[][] = [];
   let currentWeek: GitHubContribution[] = [];
@@ -48,7 +49,7 @@ const ContributionGraph: React.FC<ContributionGraphProps> = ({
   // const currentColor = theme; // blue | green | purple | orange
 
   const levelColors =
-    themes[theme].githubVariants || themes.blue.githubVariants;
+    currentTheme.githubVariants;
 
   const handleMouseEnter = (
     contribution: GitHubContribution,
@@ -66,27 +67,27 @@ const ContributionGraph: React.FC<ContributionGraphProps> = ({
     <div className="space-y-4">
       {/* Stats */}
       <div className="grid grid-cols-3 gap-4 mb-6">
-        <div className={`text-center p-3 rounded-lg ${themes[theme].hover}`}>
-          <div className={`text-lg font-bold ${themes[theme].text}`}>
+        <div className={`text-center p-3 rounded-lg ${currentTheme.hover}`}>
+          <div className={`text-lg font-bold ${currentTheme.text}`}>
             {totalContributions.toLocaleString()}
           </div>
-          <div className={`text-xs ${themes[theme].textSecondary}`}>
+          <div className={`text-xs ${currentTheme.textSecondary}`}>
             Total Contributions
           </div>
         </div>
-        <div className={`text-center p-3 rounded-lg ${themes[theme].hover}`}>
-          <div className={`text-lg font-bold ${themes[theme].text}`}>
+        <div className={`text-center p-3 rounded-lg ${currentTheme.hover}`}>
+          <div className={`text-lg font-bold ${currentTheme.text}`}>
             {maxContributions}
           </div>
-          <div className={`text-xs ${themes[theme].textSecondary}`}>
+          <div className={`text-xs ${currentTheme.textSecondary}`}>
             Best Day
           </div>
         </div>
-        <div className={`text-center p-3 rounded-lg ${themes[theme].hover}`}>
-          <div className={`text-lg font-bold ${themes[theme].text}`}>
+        <div className={`text-center p-3 rounded-lg ${currentTheme.hover}`}>
+          <div className={`text-lg font-bold ${currentTheme.text}`}>
             {streakDays}
           </div>
-          <div className={`text-xs ${themes[theme].textSecondary}`}>
+          <div className={`text-xs ${currentTheme.textSecondary}`}>
             Current Streak
           </div>
         </div>
@@ -134,7 +135,7 @@ const ContributionGraph: React.FC<ContributionGraphProps> = ({
                       className={`w-3 h-3 rounded-sm cursor-pointer transition-all duration-200 ${
                         isEmpty
                           ? "opacity-30"
-                          : `hover:ring-2 hover:ring-offset-1 ${themes[theme].ring}`
+                          : `hover:ring-2 hover:ring-offset-1 ${currentTheme.ring}`
                       }`}
                       style={{
                         backgroundColor: String(isEmpty

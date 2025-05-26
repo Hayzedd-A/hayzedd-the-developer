@@ -24,7 +24,6 @@ import {
 
 import { motion } from "framer-motion";
 import { useTheme } from "@/app/context/ThemeContext";
-import { themes } from "@/app/context/ThemeContext";
 // import {
 //   CodeBracketIcon,
 //   AcademicCapIcon,
@@ -39,7 +38,8 @@ import Image from "next/image";
 import GitHubStats from "@/app/components/GithubStat";
 
 const About = () => {
-  const { theme } = useTheme();
+  const { currentThemes, theme } = useTheme();
+  const currentTheme = currentThemes[theme]
 
   const skills = [
     { name: "React", icon: PiIcon, level: 90, color: "#61DAFB" },
@@ -136,7 +136,7 @@ const About = () => {
 
   return (
     <div
-      className={`min-h-screen ${themes[theme].background} transition-colors duration-300`}
+      className={`min-h-screen ${currentTheme.background} transition-colors duration-300`}
     >
       <div className="container mx-auto px-4 py-8">
         {/* Header */}
@@ -160,12 +160,12 @@ const About = () => {
             />
           </div>
           <h1
-            className={`text-4xl md:text-5xl font-bold ${themes[theme].text} mb-4`}
+            className={`text-4xl md:text-5xl font-bold ${currentTheme.text} mb-4`}
           >
             About Me
           </h1>
           <p
-            className={`text-lg ${themes[theme].textSecondary} max-w-3xl mx-auto leading-relaxed`}
+            className={`text-lg ${currentTheme.textSecondary} max-w-3xl mx-auto leading-relaxed`}
           >
             I'm a passionate full-stack developer with over 5 years of
             experience creating digital solutions that make a difference. I love
@@ -184,37 +184,37 @@ const About = () => {
           className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12"
         >
           <div
-            className={`${themes[theme].background} border ${themes[theme].border} rounded-xl p-6 text-center shadow-lg`}
+            className={`${currentTheme.background} border ${currentTheme.border} rounded-xl p-6 text-center shadow-lg`}
           >
             <MapPinIcon
-              className={`w-8 h-8 ${themes[theme].accent} mx-auto mb-3`}
+              className={`w-8 h-8 ${currentTheme.accent} mx-auto mb-3`}
             />
-            <h3 className={`font-semibold ${themes[theme].text} mb-1`}>
+            <h3 className={`font-semibold ${currentTheme.text} mb-1`}>
               Location
             </h3>
-            <p className={`${themes[theme].textSecondary}`}>Ikotun, Lagos, Nigeria</p>
+            <p className={`${currentTheme.textSecondary}`}>Ikotun, Lagos, Nigeria</p>
           </div>
           <div
-            className={`${themes[theme].background} border ${themes[theme].border} rounded-xl p-6 text-center shadow-lg`}
+            className={`${currentTheme.background} border ${currentTheme.border} rounded-xl p-6 text-center shadow-lg`}
           >
             <CalendarIcon
-              className={`w-8 h-8 ${themes[theme].accent} mx-auto mb-3`}
+              className={`w-8 h-8 ${currentTheme.accent} mx-auto mb-3`}
             />
-            <h3 className={`font-semibold ${themes[theme].text} mb-1`}>
+            <h3 className={`font-semibold ${currentTheme.text} mb-1`}>
               Experience
             </h3>
-            <p className={`${themes[theme].textSecondary}`}>5+ Years</p>
+            <p className={`${currentTheme.textSecondary}`}>5+ Years</p>
           </div>
           <div
-            className={`${themes[theme].background} border ${themes[theme].border} rounded-xl p-6 text-center shadow-lg`}
+            className={`${currentTheme.background} border ${currentTheme.border} rounded-xl p-6 text-center shadow-lg`}
           >
             <BriefcaseIcon
-              className={`w-8 h-8 ${themes[theme].accent} mx-auto mb-3`}
+              className={`w-8 h-8 ${currentTheme.accent} mx-auto mb-3`}
             />
-            <h3 className={`font-semibold ${themes[theme].text} mb-1`}>
+            <h3 className={`font-semibold ${currentTheme.text} mb-1`}>
               Status
             </h3>
-            <p className={`${themes[theme].textSecondary}`}>
+            <p className={`${currentTheme.textSecondary}`}>
               Available for Work
             </p>
           </div>
@@ -228,7 +228,7 @@ const About = () => {
           className="mb-12"
         >
           <h2
-            className={`text-3xl font-bold ${themes[theme].text} mb-8 text-center`}
+            className={`text-3xl font-bold ${currentTheme.text} mb-8 text-center`}
           >
             GitHub Statistics
           </h2>
@@ -243,7 +243,7 @@ const About = () => {
           className="mb-12"
         >
           <h2
-            className={`text-3xl font-bold ${themes[theme].text} mb-8 text-center`}
+            className={`text-3xl font-bold ${currentTheme.text} mb-8 text-center`}
           >
             Technical Skills
           </h2>
@@ -256,7 +256,7 @@ const About = () => {
                   initial={{ opacity: 0, x: -20 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ duration: 0.4, delay: index * 0.1 }}
-                  className={`${themes[theme].background} border ${themes[theme].border} rounded-xl p-6 shadow-lg`}
+                  className={`${currentTheme.background} border ${currentTheme.border} rounded-xl p-6 shadow-lg`}
                 >
                   <div className="flex items-center mb-4">
                     <Icon
@@ -264,10 +264,10 @@ const About = () => {
                       style={{ color: skill.color }}
                     />
                     <div className="flex-1">
-                      <h3 className={`font-semibold ${themes[theme].text}`}>
+                      <h3 className={`font-semibold ${currentTheme.text}`}>
                         {skill.name}
                       </h3>
-                      <p className={`text-sm ${themes[theme].textSecondary}`}>
+                      <p className={`text-sm ${currentTheme.textSecondary}`}>
                         {skill.level}% Proficiency
                       </p>
                     </div>
@@ -297,7 +297,7 @@ const About = () => {
           className="mb-12"
         >
           <h2
-            className={`text-3xl font-bold ${themes[theme].text} mb-8 text-center`}
+            className={`text-3xl font-bold ${currentTheme.text} mb-8 text-center`}
           >
             Work Experience
           </h2>
@@ -308,33 +308,33 @@ const About = () => {
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.4, delay: index * 0.1 }}
-                className={`${themes[theme].background} border ${themes[theme].border} rounded-xl p-6 shadow-lg`}
+                className={`${currentTheme.background} border ${currentTheme.border} rounded-xl p-6 shadow-lg`}
               >
                 <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-4">
                   <div>
                     <h3
-                      className={`text-xl font-semibold ${themes[theme].text}`}
+                      className={`text-xl font-semibold ${currentTheme.text}`}
                     >
                       {exp.title}
                     </h3>
-                    <p className={`${themes[theme].accent} font-medium`}>
+                    <p className={`${currentTheme.accent} font-medium`}>
                       {exp.company}
                     </p>
                   </div>
                   <span
-                    className={`${themes[theme].textSecondary} text-sm mt-1 md:mt-0`}
+                    className={`${currentTheme.textSecondary} text-sm mt-1 md:mt-0`}
                   >
                     {exp.period}
                   </span>
                 </div>
-                <p className={`${themes[theme].textSecondary} mb-4`}>
+                <p className={`${currentTheme.textSecondary} mb-4`}>
                   {exp.description}
                 </p>
                 <div className="flex flex-wrap gap-2">
                   {exp.technologies.map((tech) => (
                     <span
                       key={tech}
-                      className={`px-3 py-1 text-xs rounded-full ${themes[theme].primary} text-white`}
+                      className={`px-3 py-1 text-xs rounded-full ${currentTheme.primary} text-white`}
                     >
                       {tech}
                     </span>
@@ -353,7 +353,7 @@ const About = () => {
           className="mb-12"
         >
           <h2
-            className={`text-3xl font-bold ${themes[theme].text} mb-8 text-center`}
+            className={`text-3xl font-bold ${currentTheme.text} mb-8 text-center`}
           >
             Education
           </h2>
@@ -364,27 +364,27 @@ const About = () => {
                 initial={{ opacity: 0, scale: 0.9 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ duration: 0.4, delay: index * 0.1 }}
-                className={`${themes[theme].background} border ${themes[theme].border} rounded-xl p-6 shadow-lg`}
+                className={`${currentTheme.background} border ${currentTheme.border} rounded-xl p-6 shadow-lg`}
               >
                 <div className="flex items-start mb-4">
                   <CaptionsIcon
-                    className={`w-8 h-8 ${themes[theme].accent} mr-3 mt-1`}
+                    className={`w-8 h-8 ${currentTheme.accent} mr-3 mt-1`}
                   />
                   <div className="flex-1">
-                    <h3 className={`font-semibold ${themes[theme].text} mb-1`}>
+                    <h3 className={`font-semibold ${currentTheme.text} mb-1`}>
                       {edu.degree}
                     </h3>
-                    <p className={`${themes[theme].accent} text-sm mb-1`}>
+                    <p className={`${currentTheme.accent} text-sm mb-1`}>
                       {edu.school}
                     </p>
                     <p
-                      className={`${themes[theme].textSecondary} text-xs mb-3`}
+                      className={`${currentTheme.textSecondary} text-xs mb-3`}
                     >
                       {edu.period}
                     </p>
                   </div>
                 </div>
-                <p className={`${themes[theme].textSecondary} text-sm`}>
+                <p className={`${currentTheme.textSecondary} text-sm`}>
                   {edu.description}
                 </p>
               </motion.div>
@@ -400,7 +400,7 @@ const About = () => {
           className="mb-12"
         >
           <h2
-            className={`text-3xl font-bold ${themes[theme].text} mb-8 text-center`}
+            className={`text-3xl font-bold ${currentTheme.text} mb-8 text-center`}
           >
             Interests & Hobbies
           </h2>
@@ -414,15 +414,15 @@ const About = () => {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.4, delay: index * 0.1 }}
                   whileHover={{ scale: 1.05 }}
-                  className={`${themes[theme].background} border ${themes[theme].border} rounded-xl p-6 text-center shadow-lg hover:shadow-xl transition-all duration-300`}
+                  className={`${currentTheme.background} border ${currentTheme.border} rounded-xl p-6 text-center shadow-lg hover:shadow-xl transition-all duration-300`}
                 >
                   <Icon
-                    className={`w-12 h-12 ${themes[theme].accent} mx-auto mb-4`}
+                    className={`w-12 h-12 ${currentTheme.accent} mx-auto mb-4`}
                   />
-                  <h3 className={`font-semibold ${themes[theme].text} mb-2`}>
+                  <h3 className={`font-semibold ${currentTheme.text} mb-2`}>
                     {interest.name}
                   </h3>
-                  <p className={`${themes[theme].textSecondary} text-sm`}>
+                  <p className={`${currentTheme.textSecondary} text-sm`}>
                     {interest.description}
                   </p>
                 </motion.div>
@@ -436,13 +436,13 @@ const About = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.8 }}
-          className={`${themes[theme].background} border ${themes[theme].border} rounded-2xl p-8 text-center shadow-lg`}
+          className={`${currentTheme.background} border ${currentTheme.border} rounded-2xl p-8 text-center shadow-lg`}
         >
-          <h2 className={`text-2xl font-bold ${themes[theme].text} mb-4`}>
+          <h2 className={`text-2xl font-bold ${currentTheme.text} mb-4`}>
             Let's Work Together
           </h2>
           <p
-            className={`${themes[theme].textSecondary} mb-6 max-w-2xl mx-auto`}
+            className={`${currentTheme.textSecondary} mb-6 max-w-2xl mx-auto`}
           >
             I'm always interested in new opportunities and exciting projects.
             Whether you have a project in mind or just want to chat about
@@ -453,7 +453,7 @@ const About = () => {
               href="/contact"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              className={`${themes[theme].primary} ${themes[theme].primaryHover} text-white px-8 py-3 rounded-lg font-medium transition-all duration-200 shadow-lg hover:shadow-xl`}
+              className={`${currentTheme.primary} ${currentTheme.primaryHover} text-white px-8 py-3 rounded-lg font-medium transition-all duration-200 shadow-lg hover:shadow-xl`}
             >
               Get In Touch
             </motion.a>
@@ -461,7 +461,7 @@ const About = () => {
               href="/projects"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              className={`border-2 ${themes[theme].border} ${themes[theme].text} px-8 py-3 rounded-lg font-medium transition-all duration-200 hover:${themes[theme].hover}`}
+              className={`border-2 ${currentTheme.border} ${currentTheme.text} px-8 py-3 rounded-lg font-medium transition-all duration-200 hover:${currentTheme.hover}`}
             >
               View My Work
             </motion.a>

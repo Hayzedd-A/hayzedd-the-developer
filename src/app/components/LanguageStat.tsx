@@ -2,7 +2,6 @@
 
 import { motion } from "framer-motion";
 import { useTheme } from "@/app/context/ThemeContext";
-import { themes } from "@/app/context/ThemeContext";
 import { GitHubLanguageStats, Theme } from "@/types/types.index";
 import { JSX } from "react";
 
@@ -12,6 +11,8 @@ interface LanguageChartProps {
 }
 
 const LanguageChart: React.FC<LanguageChartProps> = ({ languages, theme }) => {
+  const { currentThemes } = useTheme();
+  const currentTheme = currentThemes[theme]
   // Language colors mapping
   const languageColors: { [key: string]: string } = {
     JavaScript: "#f1e05a",
@@ -53,7 +54,7 @@ const LanguageChart: React.FC<LanguageChartProps> = ({ languages, theme }) => {
 
   if (sortedLanguages.length === 0) {
     return (
-      <div className={`text-center py-8 ${themes[theme].textSecondary}`}>
+      <div className={`text-center py-8 ${currentTheme.textSecondary}`}>
         No language data available
       </div>
     );
@@ -81,9 +82,9 @@ const LanguageChart: React.FC<LanguageChartProps> = ({ languages, theme }) => {
                     className="w-3 h-3 rounded-full"
                     style={{ backgroundColor: color }}
                   />
-                  <span className={themes[theme].text}>{language}</span>
+                  <span className={currentTheme.text}>{language}</span>
                 </div>
-                <span className={themes[theme].textSecondary}>
+                <span className={currentTheme.textSecondary}>
                   {percentage.toFixed(1)}%
                 </span>
               </div>
@@ -160,7 +161,7 @@ const LanguageChart: React.FC<LanguageChartProps> = ({ languages, theme }) => {
                 className="w-2 h-2 rounded-full flex-shrink-0"
                 style={{ backgroundColor: color }}
               />
-              <span className={`${themes[theme].textSecondary} truncate`}>
+              <span className={`${currentTheme.textSecondary} truncate`}>
                 {language} ({percentage.toFixed(1)}%)
               </span>
             </div>

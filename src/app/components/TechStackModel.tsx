@@ -3,7 +3,7 @@
 import React, { useRef, useEffect, useState } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { useTheme, themes } from "@/app/context/ThemeContext";
+import { useTheme } from "@/app/context/ThemeContext";
 
 // Register GSAP plugins
 if (typeof window !== "undefined") {
@@ -55,7 +55,8 @@ const TechStackModel: React.FC = () => {
   const containerRef = useRef<HTMLDivElement>(null);
   const [currentFace, setCurrentFace] = useState(0);
   const [isHovered, setIsHovered] = useState(false);
-  const { theme } = useTheme();
+    const { currentThemes, theme } = useTheme();
+    const currentTheme = currentThemes[theme]
 
   useEffect(() => {
     const cube = cubeRef.current;
@@ -152,13 +153,13 @@ const TechStackModel: React.FC = () => {
   return (
     <div className="flex flex-col items-center max-w-2xs justify-center p-8">
       {/* <div className="text-center mb-8">
-        <h2 className={`text-4xl font-bold mb-4 ${themes[theme].text}`}>
+        <h2 className={`text-4xl font-bold mb-4 ${currentTheme.text}`}>
           My Tech Stack
         </h2>
-        <p className={`text-lg ${themes[theme].textSecondary} mb-2`}>
+        <p className={`text-lg ${currentTheme.textSecondary} mb-2`}>
           Interactive 3D showcase of technologies I work with
         </p>
-        <p className={`text-sm ${themes[theme].textSecondary}`}>
+        <p className={`text-sm ${currentTheme.textSecondary}`}>
           Scroll, hover, or click to explore
         </p>
       </div> */}
@@ -189,7 +190,7 @@ const TechStackModel: React.FC = () => {
             return (
               <div
                 key={tech.name}
-                className={`absolute inset-0 w-38 h-38 ${themes[theme].background} border-2 ${themes[theme].border} rounded-lg shadow-xl flex flex-col items-center justify-center transition-all duration-300 hover:shadow-2xl`}
+                className={`absolute inset-0 w-38 h-38 ${currentTheme.background} border-2 ${currentTheme.border} rounded-lg shadow-xl flex flex-col items-center justify-center transition-all duration-300 hover:shadow-2xl`}
                 style={{
                   transform: `${rotations[index]} translateZ(132px)`,
                   backfaceVisibility: "hidden",
@@ -201,16 +202,16 @@ const TechStackModel: React.FC = () => {
                 >
                   {tech.icon}
                 </div>
-                <h3 className={`text-2xl font-bold mb-2 ${themes[theme].text}`}>
+                <h3 className={`text-2xl font-bold mb-2 ${currentTheme.text}`}>
                   {tech.name}
                 </h3>
                 <p
-                  className={`text-sm ${themes[theme].textSecondary} text-center px-4`}
+                  className={`text-sm ${currentTheme.textSecondary} text-center px-4`}
                 >
                   {tech.description}
                 </p>
                 <div
-                  className={`mt-4 w-16 h-1 rounded-full ${themes[theme].primary} opacity-60`}
+                  className={`mt-4 w-16 h-1 rounded-full ${currentTheme.primary} opacity-60`}
                 />
               </div>
             );
@@ -222,7 +223,7 @@ const TechStackModel: React.FC = () => {
           {[...Array(6)].map((_, i) => (
             <div
               key={i}
-              className={`absolute w-2 h-2 ${themes[theme].primary} rounded-full opacity-30 animate-pulse`}
+              className={`absolute w-2 h-2 ${currentTheme.primary} rounded-full opacity-30 animate-pulse`}
               style={{
                 top: `${Math.random() * 100}%`,
                 left: `${Math.random() * 100}%`,
@@ -250,8 +251,8 @@ const TechStackModel: React.FC = () => {
             }}
             className={`w-3 h-3 rounded-full transition-all duration-300 ${
               currentFace === index
-                ? themes[theme].primary
-                : `${themes[theme].border} border-2`
+                ? currentTheme.primary
+                : `${currentTheme.border} border-2`
             } hover:scale-125`}
             title={tech.name}
           />
@@ -260,12 +261,12 @@ const TechStackModel: React.FC = () => {
 
       {/* Current tech info */}
       <div
-        className={`mt-6 text-center p-4 rounded-lg ${themes[theme].background} ${themes[theme].border} border`}
+        className={`mt-6 text-center p-4 rounded-lg ${currentTheme.background} ${currentTheme.border} border`}
       >
-        <h4 className={`text-xl font-semibold ${themes[theme].text}`}>
+        <h4 className={`text-xl font-semibold ${currentTheme.text}`}>
           {techStack[currentFace].name}
         </h4>
-        <p className={`${themes[theme].textSecondary} mt-1`}>
+        <p className={`${currentTheme.textSecondary} mt-1`}>
           {techStack[currentFace].description}
         </p>
       </div>

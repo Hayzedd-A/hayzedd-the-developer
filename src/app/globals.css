@@ -19,12 +19,12 @@
 } */
 
 /* Update CSS custom properties for dark mode */
-@media (prefers-color-scheme: dark) {
+/* @media (prefers-color-scheme: dark) {
   :root {
     --background: #0a0a0a;
     --foreground: #ededed;
   }
-}
+} */
 
 /* Dark mode override when class is applied */
 .dark {
@@ -39,6 +39,10 @@
   line-clamp: 3;
   -webkit-box-orient: vertical;
   overflow: hidden;
+}
+
+button {
+  cursor: pointer;
 }
 
 .line-clamp-2 {

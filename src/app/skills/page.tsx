@@ -1,14 +1,14 @@
-'use client'
+"use client";
 
-import React, { useState, useRef, useEffect, useCallback } from 'react'
-import { gsap } from 'gsap'
-import { Draggable } from 'gsap/Draggable'
-import { 
-  Grid3X3, 
-  List, 
-  Search, 
-  Filter, 
-  RotateCcw, 
+import React, { useState, useRef, useEffect, useCallback } from "react";
+import { gsap } from "gsap";
+import { Draggable } from "gsap/Draggable";
+import {
+  Grid3X3,
+  List,
+  Search,
+  Filter,
+  RotateCcw,
   Star,
   ExternalLink,
   Code,
@@ -16,139 +16,139 @@ import {
   Database,
   Globe,
   Smartphone,
-  Settings
-} from 'lucide-react'
-import { useTheme, themes } from "@/app/context/ThemeContext"
+  Settings,
+} from "lucide-react";
+import { useTheme } from "@/app/context/ThemeContext";
 
 // Register GSAP plugins
-if (typeof window !== 'undefined') {
-  gsap.registerPlugin(Draggable)
+if (typeof window !== "undefined") {
+  gsap.registerPlugin(Draggable);
 }
 
 interface Skill {
-  id: string
-  name: string
-  category: 'frontend' | 'backend' | 'database' | 'tools' | 'design' | 'mobile'
-  level: 'beginner' | 'intermediate' | 'advanced' | 'expert'
-  icon: string
-  color: string
-  description: string
-  experience: string
-  projects?: number
+  id: string;
+  name: string;
+  category: "frontend" | "backend" | "database" | "tools" | "design" | "mobile";
+  level: "beginner" | "intermediate" | "advanced" | "expert";
+  icon: string;
+  color: string;
+  description: string;
+  experience: string;
+  projects?: number;
 }
 
 const skills: Skill[] = [
   {
-    id: '1',
-    name: 'React',
-    category: 'frontend',
-    level: 'expert',
-    icon: '⚛️',
-    color: '#61DAFB',
-    description: 'Building modern, interactive user interfaces',
-    experience: '3+ years',
-    projects: 25
+    id: "1",
+    name: "React",
+    category: "frontend",
+    level: "expert",
+    icon: "⚛️",
+    color: "#61DAFB",
+    description: "Building modern, interactive user interfaces",
+    experience: "3+ years",
+    projects: 25,
   },
   {
-    id: '2',
-    name: 'Next.js',
-    category: 'frontend',
-    level: 'advanced',
-    icon: '▲',
-    color: '#000000',
-    description: 'Full-stack React framework for production',
-    experience: '2+ years',
-    projects: 15
+    id: "2",
+    name: "Next.js",
+    category: "frontend",
+    level: "advanced",
+    icon: "▲",
+    color: "#000000",
+    description: "Full-stack React framework for production",
+    experience: "2+ years",
+    projects: 15,
   },
   {
-    id: '3',
-    name: 'TypeScript',
-    category: 'frontend',
-    level: 'advanced',
-    icon: '📘',
-    color: '#3178C6',
-    description: 'Type-safe JavaScript development',
-    experience: '2+ years',
-    projects: 20
+    id: "3",
+    name: "TypeScript",
+    category: "frontend",
+    level: "advanced",
+    icon: "📘",
+    color: "#3178C6",
+    description: "Type-safe JavaScript development",
+    experience: "2+ years",
+    projects: 20,
   },
   {
-    id: '4',
-    name: 'Node.js',
-    category: 'backend',
-    level: 'advanced',
-    icon: '🟢',
-    color: '#339933',
-    description: 'Server-side JavaScript runtime',
-    experience: '2+ years',
-    projects: 18
+    id: "4",
+    name: "Node.js",
+    category: "backend",
+    level: "advanced",
+    icon: "🟢",
+    color: "#339933",
+    description: "Server-side JavaScript runtime",
+    experience: "2+ years",
+    projects: 18,
   },
   {
-    id: '5',
-    name: 'MongoDB',
-    category: 'database',
-    level: 'intermediate',
-    icon: '🍃',
-    color: '#47A248',
-    description: 'NoSQL database for modern applications',
-    experience: '1+ years',
-    projects: 12
+    id: "5",
+    name: "MongoDB",
+    category: "database",
+    level: "intermediate",
+    icon: "🍃",
+    color: "#47A248",
+    description: "NoSQL database for modern applications",
+    experience: "1+ years",
+    projects: 12,
   },
   {
-    id: '6',
-    name: 'PostgreSQL',
-    category: 'database',
-    level: 'intermediate',
-    icon: '🐘',
-    color: '#336791',
-    description: 'Advanced relational database',
-    experience: '1+ years',
-    projects: 8
+    id: "6",
+    name: "PostgreSQL",
+    category: "database",
+    level: "intermediate",
+    icon: "🐘",
+    color: "#336791",
+    description: "Advanced relational database",
+    experience: "1+ years",
+    projects: 8,
   },
   {
-    id: '7',
-    name: 'Figma',
-    category: 'design',
-    level: 'advanced',
-    icon: '🎨',
-    color: '#F24E1E',
-    description: 'UI/UX design and prototyping',
-    experience: '2+ years',
-    projects: 30
+    id: "7",
+    name: "Figma",
+    category: "design",
+    level: "advanced",
+    icon: "🎨",
+    color: "#F24E1E",
+    description: "UI/UX design and prototyping",
+    experience: "2+ years",
+    projects: 30,
   },
   {
-    id: '8',
-    name: 'Tailwind CSS',
-    category: 'frontend',
-    level: 'expert',
-    icon: '💨',
-    color: '#06B6D4',
-    description: 'Utility-first CSS framework',
-    experience: '2+ years',
-    projects: 22
+    id: "8",
+    name: "Tailwind CSS",
+    category: "frontend",
+    level: "expert",
+    icon: "💨",
+    color: "#06B6D4",
+    description: "Utility-first CSS framework",
+    experience: "2+ years",
+    projects: 22,
   },
   {
-    id: '9',
-    name: 'GSAP',
-    category: 'frontend',
-    level: 'advanced',
-    icon: '🎭',
-    color: '#88CE02',
-    description: 'Professional-grade animation library',
-    experience: '1+ years',
-    projects: 10
+    id: "9",
+    name: "GSAP",
+    category: "frontend",
+    level: "advanced",
+    icon: "🎭",
+    color: "#88CE02",
+    description: "Professional-grade animation library",
+    experience: "1+ years",
+    projects: 10,
   },
   {
-    id: '10',
-    name: 'React Native',
-    category: 'mobile',
-    level: 'intermediate',
-    icon: '📱',
-    color: '#61DAFB',
-    description: 'Cross-platform mobile development',
-    experience: '1+ years',
-    projects: 6
-  }
-]
+    id: "10",
+    name: "React Native",
+    category: "mobile",
+    level: "intermediate",
+    icon: "📱",
+    color: "#61DAFB",
+    description: "Cross-platform mobile development",
+    experience: "1+ years",
+    projects: 6,
+  },
+];
 
 const categoryIcons = {
   frontend: <Code className="w-4 h-4" />,
@@ -156,19 +156,19 @@ const categoryIcons = {
   database: <Database className="w-4 h-4" />,
   tools: <Settings className="w-4 h-4" />,
   design: <Palette className="w-4 h-4" />,
-  mobile: <Smartphone className="w-4 h-4" />
-}
+  mobile: <Smartphone className="w-4 h-4" />,
+};
 
 const levelColors = {
-  beginner: 'bg-green-500',
-  intermediate: 'bg-yellow-500',
-  advanced: 'bg-orange-500',
-  expert: 'bg-red-500'
-}
+  beginner: "bg-green-500",
+  intermediate: "bg-yellow-500",
+  advanced: "bg-orange-500",
+  expert: "bg-red-500",
+};
 
 export default function SkillsPage() {
-  const { theme, isDarkMode } = useTheme();
-  const currentTheme = themes[theme];
+  const { currentThemes, theme } = useTheme();
+  const currentTheme = currentThemes[theme];
 
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
   const [searchTerm, setSearchTerm] = useState("");
@@ -340,7 +340,7 @@ export default function SkillsPage() {
       `}
       style={{
         background: `linear-gradient(135deg, ${skill.color}10, transparent)`,
-        border: `1px solid ${currentTheme.primary}`
+        border: `1px solid ${currentTheme.primary}`,
       }}
     >
       {/* Floating effect overlay */}
@@ -462,7 +462,9 @@ export default function SkillsPage() {
   );
 
   return (
-    <div className={`min-h-screen ${currentTheme.background} transition-colors py-12`}>
+    <div
+      className={`min-h-screen ${currentTheme.background} transition-colors py-12`}
+    >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="text-center mb-12">
@@ -776,4 +778,3 @@ export default function SkillsPage() {
     </div>
   );
 }
-

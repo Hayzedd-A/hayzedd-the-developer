@@ -2,14 +2,14 @@
 
 import { useState, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { themes, useTheme } from "@/app/context/ThemeContext";
+import { useTheme } from "@/app/context/ThemeContext";
 // import { themes } from "@/app/context/ThemeContext";
 import { projects } from "@/datas/projects";
 import { Project, Theme } from "@/types/types.index";
-// import { 
-//   FolderIcon, 
-//   UserIcon, 
-//   StarIcon, 
+// import {
+//   FolderIcon,
+//   UserIcon,
+//   StarIcon,
 //   CalendarIcon,
 //   ExternalLinkIcon,
 //   CodeBracketIcon,
@@ -19,12 +19,22 @@ import { Project, Theme } from "@/types/types.index";
 import Image from "next/image";
 import Link from "next/link";
 import ProjectModal from "@/app/components/ProjectModal";
-import { CalendarIcon, CodeSquareIcon, ExternalLinkIcon, EyeIcon, FolderIcon, GithubIcon, StarIcon, UserIcon } from "lucide-react";
+import {
+  CalendarIcon,
+  CodeSquareIcon,
+  ExternalLinkIcon,
+  EyeIcon,
+  FolderIcon,
+  GithubIcon,
+  StarIcon,
+  UserIcon,
+} from "lucide-react";
 
 type ProjectCategory = "all" | "personal" | "client";
 
 const Portfolio = () => {
-  const { theme } = useTheme();
+  const { currentThemes, theme } = useTheme();
+  const currentTheme = currentThemes[theme];
   const [activeTab, setActiveTab] = useState<ProjectCategory>("all");
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -99,7 +109,7 @@ const Portfolio = () => {
 
   return (
     <div
-      className={`min-h-screen ${themes[theme].background} transition-colors duration-300`}
+      className={`min-h-screen ${currentTheme.background} transition-colors duration-300`}
     >
       <div className="container mx-auto px-4 py-8">
         {/* Header */}
@@ -110,12 +120,12 @@ const Portfolio = () => {
           className="text-center mb-12"
         >
           <h1
-            className={`text-4xl md:text-5xl font-bold ${themes[theme].text} mb-4`}
+            className={`text-4xl md:text-5xl font-bold ${currentTheme.text} mb-4`}
           >
             My Portfolio
           </h1>
           <p
-            className={`text-lg ${themes[theme].textSecondary} max-w-2xl mx-auto`}
+            className={`text-lg ${currentTheme.textSecondary} max-w-2xl mx-auto`}
           >
             A collection of projects I've worked on, showcasing my skills in
             full-stack development, UI/UX design, and modern web technologies.
@@ -138,19 +148,17 @@ const Portfolio = () => {
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ duration: 0.4, delay: index * 0.1 }}
                 whileHover={{ scale: 1.05 }}
-                className={`${themes[theme].background} border ${themes[theme].border} rounded-xl p-6 text-center shadow-lg hover:shadow-xl transition-all duration-300`}
+                className={`${currentTheme.background} border ${currentTheme.border} rounded-xl p-6 text-center shadow-lg hover:shadow-xl transition-all duration-300`}
               >
                 <div
-                  className={`inline-flex items-center justify-center w-12 h-12 rounded-lg ${themes[theme].primary} mb-3`}
+                  className={`inline-flex items-center justify-center w-12 h-12 rounded-lg ${currentTheme.primary} mb-3`}
                 >
                   <Icon className="w-6 h-6 text-white" />
                 </div>
-                <div
-                  className={`text-2xl font-bold ${themes[theme].text} mb-1`}
-                >
+                <div className={`text-2xl font-bold ${currentTheme.text} mb-1`}>
                   {stat.value}
                 </div>
-                <div className={`text-sm ${themes[theme].textSecondary}`}>
+                <div className={`text-sm ${currentTheme.textSecondary}`}>
                   {stat.label}
                 </div>
               </motion.div>
@@ -177,8 +185,8 @@ const Portfolio = () => {
                 whileTap={{ scale: 0.95 }}
                 className={`flex items-center px-6 py-3 rounded-lg font-medium transition-all duration-300 ${
                   isActive
-                    ? `${themes[theme].primary} text-white shadow-lg`
-                    : `${themes[theme].background} ${themes[theme].text} border ${themes[theme].border} ${themes[theme].hover}`
+                    ? `${currentTheme.primary} text-white shadow-lg`
+                    : `${currentTheme.background} ${currentTheme.text} border ${currentTheme.border} ${currentTheme.hover}`
                 }`}
               >
                 <Icon className="w-5 h-5 mr-2" />
@@ -187,7 +195,7 @@ const Portfolio = () => {
                   className={`ml-2 px-2 py-1 text-xs rounded-full ${
                     isActive
                       ? "bg-white/20 text-white"
-                      : `${themes[theme].primary} text-white`
+                      : `${currentTheme.primary} text-white`
                   }`}
                 >
                   {tab.count}
@@ -227,12 +235,12 @@ const Portfolio = () => {
             className="text-center py-12"
           >
             <FolderIcon
-              className={`w-16 h-16 ${themes[theme].textSecondary} mx-auto mb-4`}
+              className={`w-16 h-16 ${currentTheme.textSecondary} mx-auto mb-4`}
             />
-            <h3 className={`text-xl font-semibold ${themes[theme].text} mb-2`}>
+            <h3 className={`text-xl font-semibold ${currentTheme.text} mb-2`}>
               No projects found
             </h3>
-            <p className={`${themes[theme].textSecondary}`}>
+            <p className={`${currentTheme.textSecondary}`}>
               No projects match the current filter.
             </p>
           </motion.div>
@@ -264,6 +272,8 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
   onProjectClick,
 }) => {
   const [isHovered, setIsHovered] = useState(false);
+    const { currentThemes } = useTheme();
+    const currentTheme = currentThemes[theme]
 
   return (
     <motion.div
@@ -273,7 +283,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
       whileHover={{ y: -5 }}
       onHoverStart={() => setIsHovered(true)}
       onHoverEnd={() => setIsHovered(false)}
-      className={`${themes[theme].background} border ${themes[theme].border} rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 group cursor-pointer`}
+      className={`${currentTheme.background} border ${currentTheme.border} rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 group cursor-pointer`}
       onClick={() => onProjectClick(project)}
     >
       {/* Project Image */}
@@ -290,7 +300,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
         {project.featured && (
           <div className="absolute top-3 left-3">
             <span
-              className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${themes[theme].primary} text-white`}
+              className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${currentTheme.primary} text-white`}
             >
               <StarIcon className="w-3 h-3 mr-1" />
               Featured
@@ -347,7 +357,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
                 exit={{ scale: 0.8 }}
                 className="bg-white/90 dark:bg-gray-900/90 backdrop-blur-sm px-4 py-2 rounded-lg"
               >
-                <span className={`text-sm font-medium ${themes[theme].text}`}>
+                <span className={`text-sm font-medium ${currentTheme.text}`}>
                   Click to view details
                 </span>
               </motion.div>
@@ -360,19 +370,19 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
       <div className="p-6">
         <div className="flex items-start justify-between mb-3">
           <h3
-            className={`text-xl font-semibold ${themes[theme].text} group-hover:${themes[theme].accent} transition-colors duration-200`}
+            className={`text-xl font-semibold ${currentTheme.text} group-hover:${currentTheme.accent} transition-colors duration-200`}
           >
             {project.title}
           </h3>
           <span
-            className={`px-2 py-1 text-xs rounded-full ${themes[theme].border} ${themes[theme].textSecondary} capitalize`}
+            className={`px-2 py-1 text-xs rounded-full ${currentTheme.border} ${currentTheme.textSecondary} capitalize`}
           >
             {project.category}
           </span>
         </div>
 
         <p
-          className={`${themes[theme].textSecondary} text-sm mb-4 line-clamp-3`}
+          className={`${currentTheme.textSecondary} text-sm mb-4 line-clamp-3`}
         >
           {project.description}
         </p>
@@ -382,14 +392,14 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
           {project.technologies.slice(0, 3).map((tech) => (
             <span
               key={tech}
-              className={`px-2 py-1 text-xs rounded-md ${themes[theme].hover} ${themes[theme].textSecondary}`}
+              className={`px-2 py-1 text-xs rounded-md ${currentTheme.hover} ${currentTheme.textSecondary}`}
             >
               {tech}
             </span>
           ))}
           {project.technologies.length > 3 && (
             <span
-              className={`px-2 py-1 text-xs rounded-md ${themes[theme].textSecondary}`}
+              className={`px-2 py-1 text-xs rounded-md ${currentTheme.textSecondary}`}
             >
               +{project.technologies.length - 3} more
             </span>
@@ -411,7 +421,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
                 href={project.githubUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className={`p-1 ${themes[theme].textSecondary} hover:${themes[theme].accent} transition-colors duration-200`}
+                className={`p-1 ${currentTheme.textSecondary} hover:${currentTheme.accent} transition-colors duration-200`}
               >
                 <CodeSquareIcon className="w-4 h-4" />
               </Link>
@@ -421,7 +431,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
                 href={project.liveUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className={`p-1 ${themes[theme].textSecondary} hover:${themes[theme].accent} transition-colors duration-200`}
+                className={`p-1 ${currentTheme.textSecondary} hover:${currentTheme.accent} transition-colors duration-200`}
               >
                 <EyeIcon className="w-4 h-4" />
               </Link>
@@ -434,4 +444,3 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
 };
 
 export default Portfolio;
-
