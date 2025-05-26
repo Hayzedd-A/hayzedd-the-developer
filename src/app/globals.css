@@ -1,7 +1,7 @@
 @import "tailwindcss";
 /* @tailwind base;
 @tailwind components; */
-@tailwind utilities;
+/* @tailwind utilities; */
 /* @config {
   darkMode: "class";
 } */
@@ -11,12 +11,12 @@
   --foreground: #171717;
 }
 
-@theme inline {
+/* @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
-}
+} */
 
 /* Update CSS custom properties for dark mode */
 @media (prefers-color-scheme: dark) {
@@ -76,6 +76,6 @@ body {
 }
 
 /* Add body background classes that work with Tailwind */
-body {
+/* body {
   @apply bg-white dark:bg-gray-900 text-gray-900 dark:text-white transition-colors duration-300;
-}
+} */

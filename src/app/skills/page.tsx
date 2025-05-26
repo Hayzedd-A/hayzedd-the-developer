@@ -507,7 +507,7 @@ export default function SkillsPage() {
               value={selectedCategory}
               onChange={(e) => setSelectedCategory(e.target.value)}
               className={`px-3 py-2 ${currentTheme.border} rounded-lg
-                         ${currentTheme.background} ${currentTheme.text} transition-all duration-200`}
+                         ${currentTheme.backgroundSecondary} ${currentTheme.text} transition-all duration-200`}
             >
               <option value="all">All Categories</option>
               <option value="frontend">Frontend</option>
@@ -522,7 +522,7 @@ export default function SkillsPage() {
               value={selectedLevel}
               onChange={(e) => setSelectedLevel(e.target.value)}
               className={`px-3 py-2 ${currentTheme.border} rounded-lg
-                         ${currentTheme.background} ${currentTheme.text} transition-all duration-200`}
+                         ${currentTheme.backgroundSecondary} ${currentTheme.text} transition-all duration-200`}
             >
               <option value="all">All Levels</option>
               <option value="beginner">Beginner</option>

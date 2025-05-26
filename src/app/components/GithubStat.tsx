@@ -305,7 +305,7 @@ if (loading) {
             className={`flex-1 px-4 py-3 text-sm font-medium transition-colors duration-200 ${
               activeTab === tab.id
                 ? `${themes[theme].accent} border-b-2 border-current`
-                : `${themes[theme].textSecondary} hover:${themes[theme].text}`
+                : `${themes[theme].textSecondary} hover:${themes[theme].hover}`
             }`}
           >
             {tab.label}
