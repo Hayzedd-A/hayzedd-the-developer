@@ -324,7 +324,7 @@ export default function SkillsPage() {
     <div
       ref={(el) => setSkillRef(skill.id, el)}
       className={`
-        skill-card group relative overflow-hidden rounded-xl ${
+        skill-card group relative overflow-hidden rounded-xl border-[1px] ${
           currentTheme.border
         }
         ${
@@ -482,7 +482,7 @@ export default function SkillsPage() {
 
         {/* Controls */}
         <div
-          className={`flex flex-wrap items-center justify-between gap-4 mb-8 p-4 
+          className={`flex flex-wrap items-center justify-between gap-4 mb-8 p-4 border-2
                         ${currentTheme.background} rounded-xl shadow-lg ${currentTheme.border}`}
         >
           {/* Search */}
@@ -611,7 +611,7 @@ export default function SkillsPage() {
         {/* Stats Section */}
         <div className="mt-16 grid grid-cols-1 md:grid-cols-4 gap-6">
           <div
-            className={`${currentTheme.background} rounded-xl p-6 text-center shadow-lg ${currentTheme.border} ${currentTheme.hover} transition-all duration-300`}
+            className={`${currentTheme.background} rounded-xl p-6 text-center border-2 shadow-lg ${currentTheme.border} ${currentTheme.hover} transition-all duration-300`}
           >
             <div className={`text-3xl font-bold ${currentTheme.accent} mb-2`}>
               {skills.length}
@@ -620,7 +620,7 @@ export default function SkillsPage() {
           </div>
 
           <div
-            className={`${currentTheme.background} rounded-xl p-6 text-center shadow-lg ${currentTheme.border} ${currentTheme.hover} transition-all duration-300`}
+            className={`${currentTheme.background} rounded-xl p-6 text-center shadow-lg border-2 ${currentTheme.border} ${currentTheme.hover} transition-all duration-300`}
           >
             <div className="text-3xl font-bold text-green-600 mb-2">
               {skills.filter((s) => s.level === "expert").length}
@@ -629,7 +629,7 @@ export default function SkillsPage() {
           </div>
 
           <div
-            className={`${currentTheme.background} rounded-xl p-6 text-center shadow-lg ${currentTheme.border} ${currentTheme.hover} transition-all duration-300`}
+            className={`${currentTheme.background} rounded-xl p-6 text-center shadow-lg border-2 ${currentTheme.border} ${currentTheme.hover} transition-all duration-300`}
           >
             <div className="text-3xl font-bold text-purple-600 mb-2">
               {skills.reduce((acc, skill) => acc + (skill.projects || 0), 0)}
@@ -638,7 +638,7 @@ export default function SkillsPage() {
           </div>
 
           <div
-            className={`${currentTheme.background} rounded-xl p-6 text-center shadow-lg ${currentTheme.border} ${currentTheme.hover} transition-all duration-300`}
+            className={`${currentTheme.background} rounded-xl p-6 text-center shadow-lg border-2 ${currentTheme.border} ${currentTheme.hover} transition-all duration-300`}
           >
             <div className="text-3xl font-bold text-orange-600 mb-2">
               {new Set(skills.map((s) => s.category)).size}
@@ -667,7 +667,7 @@ export default function SkillsPage() {
               <div
                 key={category}
                 className={`${currentTheme.background} rounded-xl p-6 shadow-lg hover:shadow-xl 
-                           transition-all duration-300 group cursor-pointer ${currentTheme.border}
+                           transition-all duration-300 group cursor-pointer border-2 border-dotted ${currentTheme.border}
                            ${currentTheme.hover}`}
                 onClick={() => setSelectedCategory(category)}
               >
