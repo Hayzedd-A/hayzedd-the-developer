@@ -15,10 +15,8 @@ import {
   Monitor,
   Tablet,
   Clock,
-  MousePointer,
   ArrowUpDown,
   Calendar,
-  MapPin,
   Activity,
   RefreshCw,
   Download,
@@ -80,7 +78,6 @@ interface VisitorListResponse {
 }
 
 const VisitorsPage: React.FC = () => {
-  const { isDarkMode } = useTheme();
   const [visitors, setVisitors] = useState<VisitorListItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -947,7 +944,7 @@ const VisitorsPage: React.FC = () => {
           </div>
         </motion.div>
         {modalOpen && 
-        <VisitorDetails isOpen={modalOpen} onClose={() => {setModalOpen(false)}} visitorId={selectedVisitor} />
+        <VisitorDetails onClose={() => {setModalOpen(false)}} visitorId={selectedVisitor} />
         }
       </div>
     </div>

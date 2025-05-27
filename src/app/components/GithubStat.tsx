@@ -4,24 +4,25 @@ import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useTheme } from "@/app/context/ThemeContext";
 import { githubService, GITHUB_USERNAME } from "@/app/services/github";
-import { GitHubUser, GitHubRepo, GitHubLanguageStats } from "@/types/types.index";
-// import {
-//   StarIcon,
-//   EyeIcon,
-//   CodeBracketIcon,
-//   UserGroupIcon,
-//   CalendarIcon,
-//   LinkIcon,
-//   MapPinIcon,
-//   BuildingOfficeIcon
-// } from "@heroicons/react/24/outline";
-// import { FaGithub, FaExternalLinkAlt } from "react-icons/fa";
+import {
+  GitHubUser,
+  GitHubRepo,
+  GitHubLanguageStats,
+} from "@/types/types.index";
 import Image from "next/image";
 import Link from "next/link";
 import ContributionGraph from "./ContributionGraph";
 import LanguageChart from "./LanguageStat";
-import LoadingSpinner from "./common/loadingSpinner";
-import { Building, CalendarIcon, CodeSquareIcon, ExternalLinkIcon, GithubIcon, MapPinIcon, StarIcon, User2Icon } from "lucide-react";
+import {
+  Building,
+  CalendarIcon,
+  CodeSquareIcon,
+  ExternalLinkIcon,
+  GithubIcon,
+  MapPinIcon,
+  StarIcon,
+  User2Icon,
+} from "lucide-react";
 
 interface GitHubStatsData {
   user: GitHubUser | null;
@@ -34,8 +35,8 @@ interface GitHubStatsData {
 }
 
 const GitHubStats = () => {
-    const { currentThemes, theme } = useTheme();
-    const currentTheme = currentThemes[theme]
+  const { currentThemes, theme } = useTheme();
+  const currentTheme = currentThemes[theme];
   const [data, setData] = useState<GitHubStatsData>({
     user: null,
     repos: [],
@@ -95,55 +96,54 @@ const GitHubStats = () => {
     fetchGitHubData();
   }, []);
 
-if (loading) {
-  return (
-    <div
-      className={`${currentTheme.background} rounded-2xl p-8 border ${currentTheme.border}`}
-    >
-      <div className="flex flex-col items-center justify-center h-64 space-y-4">
-        {/* Compact loading spinner */}
-        <div className="relative">
-          {/* Outer ring */}
-          <div
-            className={`w-12 h-12 border-3 ${currentTheme.border} rounded-full animate-spin`}
-          />
-          {/* Inner spinning element */}
-          <div
-            className={`absolute inset-1 w-10 h-10 border-3 border-transparent ${currentTheme.primary} border-t-3 rounded-full animate-spin`}
-            style={{
-              animationDirection: "reverse",
-              animationDuration: "0.75s",
-            }}
-          />
-          {/* Center dot */}
-          <div
-            className={`absolute inset-3 w-6 h-6 ${currentTheme.primary} rounded-full animate-pulse`}
-          />
-        </div>
+  if (loading) {
+    return (
+      <div
+        className={`${currentTheme.background} rounded-2xl p-8 border ${currentTheme.border}`}
+      >
+        <div className="flex flex-col items-center justify-center h-64 space-y-4">
+          {/* Compact loading spinner */}
+          <div className="relative">
+            {/* Outer ring */}
+            <div
+              className={`w-12 h-12 border-3 ${currentTheme.border} rounded-full animate-spin`}
+            />
+            {/* Inner spinning element */}
+            <div
+              className={`absolute inset-1 w-10 h-10 border-3 border-transparent ${currentTheme.primary} border-t-3 rounded-full animate-spin`}
+              style={{
+                animationDirection: "reverse",
+                animationDuration: "0.75s",
+              }}
+            />
+            {/* Center dot */}
+            <div
+              className={`absolute inset-3 w-6 h-6 ${currentTheme.primary} rounded-full animate-pulse`}
+            />
+          </div>
 
-        {/* Loading text */}
-        <div className="text-center space-y-2">
-          <p className={`text-sm font-medium ${currentTheme.text}`}>
-            Loading GitHub Stats
-          </p>
-          <div className="flex justify-center space-x-1">
-            {[0, 1, 2].map((index) => (
-              <div
-                key={index}
-                className={`w-1.5 h-1.5 ${currentTheme.primary} rounded-full animate-bounce`}
-                style={{
-                  animationDelay: `${index * 0.2}s`,
-                  animationDuration: "1s",
-                }}
-              />
-            ))}
+          {/* Loading text */}
+          <div className="text-center space-y-2">
+            <p className={`text-sm font-medium ${currentTheme.text}`}>
+              Loading GitHub Stats
+            </p>
+            <div className="flex justify-center space-x-1">
+              {[0, 1, 2].map((index) => (
+                <div
+                  key={index}
+                  className={`w-1.5 h-1.5 ${currentTheme.primary} rounded-full animate-bounce`}
+                  style={{
+                    animationDelay: `${index * 0.2}s`,
+                    animationDuration: "1s",
+                  }}
+                />
+              ))}
+            </div>
           </div>
         </div>
       </div>
-    </div>
-  );
-}
-
+    );
+  }
 
   if (error || !data.user) {
     return (
@@ -479,4 +479,3 @@ if (loading) {
 };
 
 export default GitHubStats;
-

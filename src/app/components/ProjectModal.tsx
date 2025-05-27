@@ -4,30 +4,12 @@ import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useTheme } from "@/app/context/ThemeContext";
 import { Project } from "@/types/types.index";
-// import {
-//   XMarkIcon,
-//   CalendarIcon,
-//   ExternalLinkIcon,
-//   CodeBracketIcon,
-//   StarIcon,
-//   ChevronLeftIcon,
-//   ChevronRightIcon,
-//   PlayIcon,
-//   PauseIcon
-// } from "@heroicons/react/24/outline";
-// import { FaGithub } from "react-icons/fa";
-import Image from "next/image";
 import Link from "next/link";
 
 import {
   CalendarIcon,
-  ChevronLeftIcon,
-  ChevronRightIcon,
   ExternalLinkIcon,
-  Github,
   GithubIcon,
-  PauseIcon,
-  PlayIcon,
   StarIcon,
   XIcon,
 } from "lucide-react";
@@ -48,9 +30,9 @@ const ProjectModal: React.FC<ProjectModalProps> = ({
   const currentTheme = currentThemes[theme];
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [isAutoPlaying, setIsAutoPlaying] = useState(false);
-  const [imageLoadError, setImageLoadError] = useState<{
-    [key: number]: boolean;
-  }>({});
+  // const [imageLoadError, setImageLoadError] = useState<{
+  //   [key: number]: boolean;
+  // }>({});
 
   // Auto-play functionality
   useEffect(() => {
@@ -70,7 +52,7 @@ const ProjectModal: React.FC<ProjectModalProps> = ({
     if (isOpen) {
       setCurrentImageIndex(0);
       setIsAutoPlaying(false);
-      setImageLoadError({});
+      // setImageLoadError({});
     }
   }, [isOpen]);
 
@@ -107,14 +89,14 @@ const ProjectModal: React.FC<ProjectModalProps> = ({
     setCurrentImageIndex((prev) => (prev === images.length - 1 ? 0 : prev + 1));
   };
 
-  const handleImageError = (index: number) => {
-    setImageLoadError((prev) => ({ ...prev, [index]: true }));
-  };
+  // const handleImageError = (index: number) => {
+  //   setImageLoadError((prev) => ({ ...prev, [index]: true }));
+  // };
 
-  const handleThumbnailClick = (index: number) => {
-    setCurrentImageIndex(index);
-    setIsAutoPlaying(false);
-  };
+  // const handleThumbnailClick = (index: number) => {
+  //   setCurrentImageIndex(index);
+  //   setIsAutoPlaying(false);
+  // };
 
   return (
     <AnimatePresence>

@@ -3,11 +3,7 @@
 import React from "react";
 import { motion } from "framer-motion";
 import {
-  ArrowRight,
   Download,
-  Github,
-  Linkedin,
-  Mail,
   MessageSquare,
 } from "lucide-react";
 import { useTheme } from "@/app/context/ThemeContext";

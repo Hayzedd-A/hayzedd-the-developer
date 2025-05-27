@@ -1,7 +1,7 @@
 import crypto from "crypto";
-import { Reader } from "@maxmind/geoip2-node";
+// import { Reader } from "@maxmind/geoip2-node";
 import { UAParser } from "ua-parser-js";
-import path from "path";
+// import path from "path";
 
 export interface DeviceInfo {
   type: string;

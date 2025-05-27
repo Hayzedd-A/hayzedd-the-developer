@@ -5,7 +5,6 @@ import { useParams } from "next/navigation";
 import { useTheme } from "@/app/context/ThemeContext";
 import {
   Clock,
-  Globe,
   Monitor,
   Smartphone,
   Eye,
@@ -17,11 +16,7 @@ import {
   MapPin,
   Activity,
   BarChart3,
-  PieChart,
-  LineChart,
   ArrowLeft,
-  ExternalLink,
-  Download,
   User,
   Tablet,
   XIcon,
@@ -65,17 +60,13 @@ interface VisitorData {
 
 interface VisitorDetailsProps {
   visitorId: string;
-  isOpen: boolean;
   onClose: () => void;
 }
 
 const VisitorDetails: React.FC<VisitorDetailsProps> = ({
   visitorId,
-  isOpen,
   onClose,
 }) => {
-  const params = useParams();
-  const { theme } = useTheme();
   // const visitorId = params.visitorId as string;
 
   const [data, setData] = useState<VisitorData | null>(null);

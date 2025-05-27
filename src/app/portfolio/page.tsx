@@ -3,19 +3,8 @@
 import { useState, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useTheme } from "@/app/context/ThemeContext";
-// import { themes } from "@/app/context/ThemeContext";
 import { projects } from "@/datas/projects";
 import { Project, Theme } from "@/types/types.index";
-// import {
-//   FolderIcon,
-//   UserIcon,
-//   StarIcon,
-//   CalendarIcon,
-//   ExternalLinkIcon,
-//   CodeBracketIcon,
-//   EyeIcon
-// } from "@heroicons/react/24/outline";
-// import { FaGithub } from "react-icons/fa";
 import Image from "next/image";
 import Link from "next/link";
 import ProjectModal from "@/app/components/ProjectModal";

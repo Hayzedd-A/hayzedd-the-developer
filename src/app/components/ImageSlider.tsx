@@ -3,14 +3,13 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useTheme } from "@/app/context/ThemeContext";
-// import { 
-//   ChevronLeftIcon,
-//   ChevronRightIcon,
-//   PlayIcon,
-//   PauseIcon
-// } from "@heroicons/react/24/outline";
 import Image from "next/image";
-import { ChevronLeftIcon, ChevronRightIcon, PauseIcon, PlayIcon } from "lucide-react";
+import {
+  ChevronLeftIcon,
+  ChevronRightIcon,
+  PauseIcon,
+  PlayIcon,
+} from "lucide-react";
 
 interface ImageSliderProps {
   images: string[];
@@ -32,7 +31,7 @@ const ImageSlider: React.FC<ImageSliderProps> = ({
   height = "h-64 md:h-96",
 }) => {
   const { currentThemes, theme } = useTheme();
-  const currentTheme = currentThemes[theme]
+  const currentTheme = currentThemes[theme];
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [isAutoPlaying, setIsAutoPlaying] = useState(false);
   const [imageLoadError, setImageLoadError] = useState<{
@@ -210,4 +209,3 @@ const ImageSlider: React.FC<ImageSliderProps> = ({
 };
 
 export default ImageSlider;
-

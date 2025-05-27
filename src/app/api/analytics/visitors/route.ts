@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import connectDB  from "@/lib/mongodb";
-import { VisitorSession, PageView, Event } from "@/models/Analytics";
+import { VisitorSession, Event } from "@/models/Analytics";
 
 export async function GET(request: NextRequest) {
   try {

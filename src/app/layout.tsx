@@ -4,7 +4,6 @@ import "./globals.css";
 import { ThemeProvider } from "./context/ThemeContext";
 import Sidebar from "./components/Sidebar";
 import MainWrapper from "./components/MainWrapper";
-import SuspenseWrapper from "./components/common/SuspenseWrapper";
 import AppInitializer from "./components/common/AppInitializer";
 import { AnalyticsProvider } from "@/components/AnalyticsProvider";
 
