@@ -221,7 +221,7 @@ class AnalyticsTracker {
       let eventLabel =
         target.textContent?.trim() || target.getAttribute("aria-label") || "";
       let eventCategory = "click";
-      let metadata: Record<string, any> = {
+      const metadata: Record<string, any> = {
         tagName,
         className: target.className,
         id: target.id,
