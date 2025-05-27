@@ -145,7 +145,7 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
   const [theme, setTheme] = useState<Theme>("blue");
-  const [isDarkMode, setIsDarkMode] = useState(false);
+  const [isDarkMode, setIsDarkMode] = useState(true);
   const [isOpen, setIsOpen] = useState(false);
 
   // Get current theme object based on dark mode
