@@ -39,10 +39,7 @@ const socialLinks = [
   },
   { name: "Twitter", href: "https://twitter.com/yourusername", icon: Twitter },
 ];
-interface Sidebarprops {
-  isOpen: Boolean;
-  setIsOpen: Dispatch<React.SetStateAction<boolean>>;
-}
+
 const Sidebar: React.FC = () => {
     const [showThemeSelector, setShowThemeSelector] = useState(false);
     const pathname = usePathname();

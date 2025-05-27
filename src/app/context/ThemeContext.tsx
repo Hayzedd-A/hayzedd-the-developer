@@ -14,7 +14,7 @@ interface ThemeContextType {
   setTheme: (theme: Theme) => void;
   isDarkMode: boolean;
   setIsDarkMode: (isDark: boolean) => void;
-  isOpen: Boolean;
+  isOpen: boolean;
   setIsOpen: React.Dispatch<SetStateAction<boolean>>;
   currentThemes: typeof lightThemes; // Export current theme object
 }
@@ -174,7 +174,7 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({
       document.body.style.backgroundColor = "white"
     } else {
       document.documentElement.classList.remove("dark");
-      // document.body.style.backgroundColor = "black";
+      document.body.style.backgroundColor = "black";
 
     }
   }, [isDarkMode]);

@@ -32,7 +32,7 @@ export async function POST(request: NextRequest) {
     );
 
     // Check if visitor exists
-    let existingSession = await VisitorSession.findOne({
+    const existingSession = await VisitorSession.findOne({
       deviceFingerprint,
       lastActivity: { $gte: new Date(Date.now() - 30 * 60 * 1000) }, // 30 minutes
     }).sort({ lastActivity: -1 });
