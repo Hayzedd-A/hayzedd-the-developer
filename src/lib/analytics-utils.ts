@@ -26,21 +26,21 @@ export interface LocationInfo {
 }
 
 // Initialize MaxMind reader (you'll need to download the GeoLite2 database)
-let geoReader: Reader | null = null;
+// let geoReader: Reader | null = null;
 
-async function initializeGeoReader() {
-  if (!geoReader) {
-    try {
-      // You'll need to download GeoLite2-City.mmdb from MaxMind
-      const dbPath = path.join(process.cwd(), "data", "GeoLite2-City.mmdb");
-      console.log("+======================== mmdb path", dbPath)
-      geoReader = await Reader.open(dbPath);
-    } catch (error) {
-      console.warn("GeoIP database not available:", error);
-    }
-  }
-  return geoReader;
-}
+// async function initializeGeoReader() {
+//   if (!geoReader) {
+//     try {
+//       // You'll need to download GeoLite2-City.mmdb from MaxMind
+//       const dbPath = path.join(process.cwd(), "data", "GeoLite2-City.mmdb");
+//       console.log("+======================== mmdb path", dbPath)
+//       geoReader = await Reader.open(dbPath);
+//     } catch (error) {
+//       console.warn("GeoIP database not available:", error);
+//     }
+//   }
+//   return geoReader;
+// }
 
 export function generateDeviceFingerprint(
   userAgent: string,
