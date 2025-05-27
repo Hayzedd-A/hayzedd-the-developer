@@ -11,12 +11,12 @@ import connectDB from "@/lib/mongodb";
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { visitorId: string } }
+  context : { params: { visitorId: string } }
 ) {
   try {
     await connectDB();
 
-    const { visitorId } = params;
+    const { visitorId } = context.params;
     const { searchParams } = new URL(request.url);
     const startDate = searchParams.get("startDate");
     const endDate = searchParams.get("endDate");
