@@ -20,6 +20,7 @@ import {
   BriefcaseIcon,
   Icon,
   PiIcon,
+  Dot,
 } from "lucide-react";
 
 import { motion } from "framer-motion";
@@ -51,31 +52,40 @@ const About = () => {
     { name: "MongoDB", icon: PiIcon, level: 78, color: "#47A248" },
     { name: "Git", icon: PiIcon, level: 85, color: "#F05032" },
   ];
-
   const experiences = [
     {
-      title: "Senior Full Stack Developer",
-      company: "Tech Solutions Inc.",
-      period: "2022 - Present",
+      title: "Full Stack web Developer",
+      company: "ExcellentBridge ",
+      period: "2024 - Present",
       description:
-        "Leading development of scalable web applications using React, Node.js, and cloud technologies. Mentoring junior developers and architecting system solutions.",
-      technologies: ["React", "TypeScript", "AWS", "Node.js", "PostgreSQL"],
+        "work with other developer in developing and maintaining ERP software, Implemented authentication system, payment system, security and more core ERP features",
+      technologies: [
+        "React",
+        "Javascript",
+        "Express",
+        "Next.js",
+        "Git",
+        "Microsoft SQL",
+        "MongoDB",
+        "MySql",
+      ],
     },
     {
       title: "Full Stack Developer",
-      company: "Digital Agency Co.",
-      period: "2020 - 2022",
+      company: "Hayzedd",
+      period: "2020 - present",
       description:
-        "Developed and maintained multiple client projects, focusing on responsive design and performance optimization. Collaborated with design teams to implement pixel-perfect UIs.",
-      technologies: ["Vue.js", "Laravel", "MySQL", "Docker"],
-    },
-    {
-      title: "Frontend Developer",
-      company: "StartUp Ventures",
-      period: "2019 - 2020",
-      description:
-        "Built interactive user interfaces and implemented modern frontend architectures. Worked closely with UX designers to create engaging user experiences.",
-      technologies: ["React", "JavaScript", "SCSS", "Webpack"],
+        "Developed and maintained multiple client projects, ensuring on responsive design, performance optimization, excellent features. Collaborate with design teams to implement problem solving solutions",
+      technologies: [
+        "ExpressJs",
+        "NodeJs",
+        "Flask",
+        "NextJs",
+        "React",
+        "JQuery",
+        "MongoDB",
+        "MySql",
+      ],
     },
   ];
 
@@ -86,6 +96,12 @@ const About = () => {
       period: "2018 - 2023",
       description:
         "Focused on software engineering, algorithms, and data structures. Graduated with honors.",
+      stack: [
+        "Programming paradigms",
+        "Artificial intelligence",
+        "Software Engineering",
+        "Network diagonisis and installation",
+      ],
     },
     {
       degree: "Backend Web Development Bootcamp",
@@ -93,21 +109,30 @@ const About = () => {
       period: "2024",
       description:
         "Intensive 9 months program covering modern web development technologies and best practices.",
-      stack: ["MySql", "Github", "Express.js", "MongoDB", "JavaScript", "Algorithm"]
+      stack: [
+        "MySql",
+        "Github",
+        "Express.js",
+        "MongoDB",
+        "JavaScript",
+        "Algorithm",
+      ],
     },
     {
-      degree: "Full Stack Web Development Bootcamp",
+      degree: "Frontend web Development Bootcamp",
       school: "Tobex Academy",
       period: "2020",
       description:
-        "Intensive program covering modern web development technologies and best practices.",
+        "Intensive 3 months program covering modern web development technologies on frontend development.",
+      stack: ["HTML5", "CSS3", "Javascript"],
     },
     {
-      degree: "Full Stack Web Development Bootcamp",
-      school: "Tobex Academy",
-      period: "2020",
+      degree: "Microsoft packages and desktop Publishing",
+      school: "Glorious institues",
+      period: "2017",
       description:
         "Intensive program covering modern web development technologies and best practices.",
+      stack: ["Microsoft Word", "Excel", "Presentation", "Graphics design"],
     },
   ];
 
@@ -192,7 +217,9 @@ const About = () => {
             <h3 className={`font-semibold ${currentTheme.text} mb-1`}>
               Location
             </h3>
-            <p className={`${currentTheme.textSecondary}`}>Ikotun, Lagos, Nigeria</p>
+            <p className={`${currentTheme.textSecondary}`}>
+              Ikotun, Lagos, Nigeria
+            </p>
           </div>
           <div
             className={`${currentTheme.background} border ${currentTheme.border} rounded-xl p-6 text-center shadow-lg`}
@@ -377,15 +404,24 @@ const About = () => {
                     <p className={`${currentTheme.accent} text-sm mb-1`}>
                       {edu.school}
                     </p>
-                    <p
-                      className={`${currentTheme.textSecondary} text-xs mb-3`}
-                    >
+                    <p className={`${currentTheme.textSecondary} text-xs mb-3`}>
                       {edu.period}
                     </p>
                   </div>
                 </div>
-                <p className={`${currentTheme.textSecondary} text-sm`}>
+                <p className={`${currentTheme.textSecondary} text-sm mb-1`}>
                   {edu.description}
+                </p>
+                <p
+                  className={`${currentTheme.textSecondary} text-sm flex items-center`}
+                >
+                  {edu.stack?.length > 0 &&
+                    edu.stack.map((stack, key) => (
+                      <span key={key} className="flex items-center">
+                        <Dot />
+                        <span className="">{stack}</span>
+                      </span>
+                    ))}
                 </p>
               </motion.div>
             ))}
@@ -441,9 +477,7 @@ const About = () => {
           <h2 className={`text-2xl font-bold ${currentTheme.text} mb-4`}>
             Let's Work Together
           </h2>
-          <p
-            className={`${currentTheme.textSecondary} mb-6 max-w-2xl mx-auto`}
-          >
+          <p className={`${currentTheme.textSecondary} mb-6 max-w-2xl mx-auto`}>
             I'm always interested in new opportunities and exciting projects.
             Whether you have a project in mind or just want to chat about
             technology, feel free to reach out!
@@ -458,7 +492,7 @@ const About = () => {
               Get In Touch
             </motion.a>
             <motion.a
-              href="/projects"
+              href="/portfolio"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               className={`border-2 ${currentTheme.border} ${currentTheme.text} px-8 py-3 rounded-lg font-medium transition-all duration-200 hover:${currentTheme.hover}`}
