@@ -23,80 +23,18 @@ import {
   StarIcon,
   User2Icon,
 } from "lucide-react";
+import { useAnalyticsConsent } from "@/components/AnalyticsProvider";
 
-interface GitHubStatsData {
-  user: GitHubUser | null;
-  repos: GitHubRepo[];
-  languages: GitHubLanguageStats;
-  topRepos: GitHubRepo[];
-  totalStars: number;
-  totalForks: number;
-  contributions: any[];
-}
 
 const GitHubStats = () => {
+  const {gitHubData, gitError, gitLoading} = useAnalyticsConsent()
   const { currentThemes, theme } = useTheme();
   const currentTheme = currentThemes[theme];
-  const [data, setData] = useState<GitHubStatsData>({
-    user: null,
-    repos: [],
-    languages: {},
-    topRepos: [],
-    totalStars: 0,
-    totalForks: 0,
-    contributions: [],
-  });
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<"overview" | "repos" | "activity">(
     "overview"
   );
 
-  useEffect(() => {
-    const fetchGitHubData = async () => {
-      try {
-        setLoading(true);
-        setError(null);
-
-        const [user, repos, languages, topRepos, contributions] =
-          await Promise.all([
-            githubService.getUserProfile(),
-            githubService.getUserRepos(),
-            githubService.getLanguageStats(),
-            githubService.getTopRepositories(6),
-            githubService.getContributionData(),
-          ]);
-
-        const totalStars = repos.reduce(
-          (sum, repo) => sum + repo.stargazers_count,
-          0
-        );
-        const totalForks = repos.reduce(
-          (sum, repo) => sum + repo.forks_count,
-          0
-        );
-
-        setData({
-          user,
-          repos,
-          languages,
-          topRepos,
-          totalStars,
-          totalForks,
-          contributions,
-        });
-      } catch (err) {
-        setError("Failed to fetch GitHub data");
-        console.error("GitHub data fetch error:", err);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchGitHubData();
-  }, []);
-
-  if (loading) {
+  if (gitLoading) {
     return (
       <div
         className={`${currentTheme.background} rounded-2xl p-8 border ${currentTheme.border}`}
@@ -145,7 +83,7 @@ const GitHubStats = () => {
     );
   }
 
-  if (error || !data.user) {
+  if (gitError || !gitHubData.user) {
     return (
       <div
         className={`${currentTheme.background} rounded-2xl p-8 border ${currentTheme.border}`}
@@ -158,7 +96,7 @@ const GitHubStats = () => {
             Unable to load GitHub stats
           </h3>
           <p className={`${currentTheme.textSecondary}`}>
-            {error || "Please try again later"}
+            {gitError || "Please try again later"}
           </p>
         </div>
       </div>
@@ -168,25 +106,25 @@ const GitHubStats = () => {
   const stats = [
     {
       label: "Public Repos",
-      value: data.user.public_repos,
+      value: gitHubData.user.public_repos,
       icon: CodeSquareIcon,
       color: "blue",
     },
     {
       label: "Total Stars",
-      value: data.totalStars,
+      value: gitHubData.totalStars,
       icon: StarIcon,
       color: "yellow",
     },
     {
       label: "Followers",
-      value: data.user.followers,
+      value: gitHubData.user.followers,
       icon: User2Icon,
       color: "green",
     },
     {
       label: "Total Forks",
-      value: data.totalForks,
+      value: gitHubData.totalForks,
       icon: CodeSquareIcon,
       color: "purple",
     },
@@ -210,8 +148,8 @@ const GitHubStats = () => {
         <div className="flex items-center gap-4">
           <div className="relative">
             <Image
-              src={data.user.avatar_url}
-              alt={data.user.name || data.user.login}
+              src={gitHubData.user.avatar_url}
+              alt={gitHubData.user.name || gitHubData.user.login}
               width={64}
               height={64}
               className="rounded-full"
@@ -221,7 +159,7 @@ const GitHubStats = () => {
           <div className="flex-1">
             <div className="flex items-center gap-2 mb-1">
               <h3 className={`text-xl font-bold ${currentTheme.text}`}>
-                {data.user.name || data.user.login}
+                {gitHubData.user.name || gitHubData.user.login}
               </h3>
               <Link
                 href={`https://github.com/${GITHUB_USERNAME}`}
@@ -233,30 +171,30 @@ const GitHubStats = () => {
               </Link>
             </div>
             <p className={`${currentTheme.textSecondary} text-sm mb-2`}>
-              @{data.user.login}
+              @{gitHubData.user.login}
             </p>
-            {data.user.bio && (
+            {gitHubData.user.bio && (
               <p className={`${currentTheme.text} text-sm mb-2`}>
-                {data.user.bio}
+                {gitHubData.user.bio}
               </p>
             )}
             <div className="flex flex-wrap gap-3 text-xs text-gray-500">
-              {data.user.location && (
+              {gitHubData.user.location && (
                 <span className="flex items-center gap-1">
                   <MapPinIcon className="w-3 h-3" />
-                  {data.user.location}
+                  {gitHubData.user.location}
                 </span>
               )}
-              {data.user.company && (
+              {gitHubData.user.company && (
                 <span className="flex items-center gap-1">
                   <Building className="w-3 h-3" />
-                  {data.user.company}
+                  {gitHubData.user.company}
                 </span>
               )}
               <span className="flex items-center gap-1">
                 <CalendarIcon className="w-3 h-3" />
                 Joined{" "}
-                {new Date(data.user.created_at).toLocaleDateString("en-US", {
+                {new Date(gitHubData.user.created_at).toLocaleDateString("en-US", {
                   month: "short",
                   year: "numeric",
                 })}
@@ -332,7 +270,7 @@ const GitHubStats = () => {
                 >
                   Most Used Languages
                 </h4>
-                <LanguageChart languages={data.languages} theme={theme} />
+                <LanguageChart languages={gitHubData.languages} theme={theme} />
               </div>
 
               {/* Recent Activity */}
@@ -343,7 +281,7 @@ const GitHubStats = () => {
                   Recent Activity
                 </h4>
                 <div className="space-y-2">
-                  {data.repos.slice(0, 3).map((repo) => (
+                  {gitHubData.repos.slice(0, 3).map((repo) => (
                     <div
                       key={repo.id}
                       className={`flex items-center justify-between p-3 rounded-lg ${currentTheme.hover}`}
@@ -386,7 +324,7 @@ const GitHubStats = () => {
               transition={{ duration: 0.3 }}
             >
               <div className="grid gap-4">
-                {data.topRepos.map((repo, index) => (
+                {gitHubData.topRepos.map((repo, index) => (
                   <motion.div
                     key={repo.id}
                     initial={{ opacity: 0, x: -20 }}
@@ -467,7 +405,7 @@ const GitHubStats = () => {
               transition={{ duration: 0.3 }}
             >
               <ContributionGraph
-                contributions={data.contributions}
+                contributions={gitHubData.contributions}
                 theme={theme}
               />
             </motion.div>

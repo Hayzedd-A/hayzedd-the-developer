@@ -1,9 +1,20 @@
 "use client";
 
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useContext, useState, useEffect, SetStateAction } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, Shield, Settings } from 'lucide-react';
 import { analytics } from '@/lib/analytics-tracker';
+import { githubService } from '@/app/services/github';
+import { GitHubLanguageStats, GitHubRepo, GitHubUser } from '@/types/types.index';
+interface GitHubStatsData {
+  user: GitHubUser | null;
+  repos: GitHubRepo[];
+  languages: GitHubLanguageStats;
+  topRepos: GitHubRepo[];
+  totalStars: number;
+  totalForks: number;
+  contributions: any[];
+}
 
 interface AnalyticsContextType {
   isEnabled: boolean;
@@ -12,6 +23,10 @@ interface AnalyticsContextType {
   disableAnalytics: () => void;
   showConsentBanner: boolean;
   hideConsentBanner: () => void;
+  gitError: string | null;
+  gitLoading: boolean;
+  // setGitLoading: () => void;
+  gitHubData: GitHubStatsData
 }
 
 const AnalyticsContext = createContext<AnalyticsContextType | undefined>(undefined);
@@ -33,6 +48,17 @@ export const AnalyticsProvider: React.FC<AnalyticsProviderProps> = ({ children }
   const [hasConsented, setHasConsented] = useState(false);
   const [showConsentBanner, setShowConsentBanner] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
+  const [gitError, setGitError] = useState<string| null>("");
+  const [gitLoading, setGitLoading] = useState(true)
+  const [gitHubData, setGithubData] = useState<GitHubStatsData>({
+    user: null,
+    repos: [],
+    languages: {},
+    topRepos: [],
+    totalStars: 0,
+    totalForks: 0,
+    contributions: [],
+  });
 
   useEffect(() => {
     // Check for existing consent
@@ -60,6 +86,50 @@ export const AnalyticsProvider: React.FC<AnalyticsProviderProps> = ({ children }
       setShowConsentBanner(true);
     }
   }, []);
+
+    useEffect(() => {
+      const fetchGitHubData = async () => {
+        try {
+          setGitLoading(true);
+          setGitError(null);
+  
+          const [user, repos, languages, topRepos, contributions] =
+            await Promise.all([
+              githubService.getUserProfile(),
+              githubService.getUserRepos(),
+              githubService.getLanguageStats(),
+              githubService.getTopRepositories(6),
+              githubService.getContributionData(),
+            ]);
+  
+          const totalStars = repos.reduce(
+            (sum, repo) => sum + repo.stargazers_count,
+            0
+          );
+          const totalForks = repos.reduce(
+            (sum, repo) => sum + repo.forks_count,
+            0
+          );
+  
+          setGithubData({
+            user,
+            repos,
+            languages,
+            topRepos,
+            totalStars,
+            totalForks,
+            contributions,
+          });
+        } catch (err) {
+          setGitError("Failed to fetch GitHub data");
+          console.error("GitHub data fetch error:", err);
+        } finally {
+          setGitLoading(false);
+        }
+      };
+  
+      fetchGitHubData();
+    }, []);
 
   const enableAnalytics = () => {
     setIsEnabled(true);
@@ -91,6 +161,10 @@ export const AnalyticsProvider: React.FC<AnalyticsProviderProps> = ({ children }
         disableAnalytics,
         showConsentBanner,
         hideConsentBanner,
+        gitError,
+        gitHubData,
+        gitLoading,
+        
       }}
     >
       {children}

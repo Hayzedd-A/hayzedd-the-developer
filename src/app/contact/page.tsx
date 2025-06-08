@@ -17,6 +17,7 @@ import {
 } from 'lucide-react';
 import { useTheme } from '@/app/context/ThemeContext';
 import { useAnalytics } from '@/hooks/useAnalytics';
+import gsap from 'gsap';
 
 interface FormData {
   name: string;
@@ -143,8 +144,8 @@ const ContactPage: React.FC = () => {
     {
       icon: Mail,
       label: "Email",
-      value: "hello@hayzedd.dev",
-      href: "mailto:hello@hayzedd.dev",
+      value: "adebayoazeez37@yahoo.com",
+      href: "mailto:adebayoazeez37@yahoo.com",
       action: () => {
         trackClick("email-contact");
         trackEvent("interaction", "contact", "email-click");
@@ -153,8 +154,8 @@ const ContactPage: React.FC = () => {
     {
       icon: Phone,
       label: "Phone",
-      value: "+1 (555) 123-4567",
-      href: "tel:+15551234567",
+      value: "+2348081602424",
+      href: "tel:+2348081602424",
       action: () => {
         trackClick("phone-contact");
         trackEvent("interaction", "contact", "phone-click");
@@ -163,7 +164,7 @@ const ContactPage: React.FC = () => {
     {
       icon: MapPin,
       label: "Location",
-      value: "San Francisco, CA",
+      value: "Ikotun, Lagos, Nigeria",
       href: "#",
       action: () => {
         trackClick("location-contact");
@@ -182,16 +183,62 @@ const ContactPage: React.FC = () => {
     {
       icon: Linkedin,
       label: "LinkedIn",
-      url: "https://linkedin.com/in/hayzedd",
+      url: "https://www.linkedin.com/in/azeez-adebayo-ola",
       color: "hover:text-blue-600",
     },
     {
       icon: Twitter,
       label: "Twitter",
-      url: "https://twitter.com/hayzedd",
+      url: "https://x.com/AdebayoAzeez3",
       color: "hover:text-blue-400",
     },
   ];
+
+    useEffect(() => {
+      const ctx = gsap.context(() => {
+        // Header animation
+        gsap.fromTo(
+          headerRef.current,
+          { opacity: 0, y: -50 },
+          { opacity: 1, y: 0, duration: 1, ease: "power3.out" }
+        );
+
+        // Contact info cards animation
+        gsap.fromTo(
+          contactInfoRef.current?.children || [],
+          { opacity: 0, x: -100, scale: 0.8 },
+          {
+            opacity: 1,
+            x: 0,
+            scale: 1,
+            duration: 0.8,
+            stagger: 0.2,
+            ease: "back.out(1.7)",
+            delay: 0.3,
+          }
+        );
+
+        // Form animation
+        gsap.fromTo(
+          formRef.current,
+          { opacity: 0, x: 100 },
+          { opacity: 1, x: 0, duration: 1, ease: "power3.out", delay: 0.5 }
+        );
+
+        // Floating animation for contact cards
+        gsap.to(contactInfoRef.current?.children || [], {
+          y: -10,
+          duration: 2,
+          ease: "power2.inOut",
+          yoyo: true,
+          repeat: -1,
+          stagger: 0.3,
+        });
+      }, containerRef);
+
+      return () => ctx.revert();
+    }, []);
+
 
   return (
     <div
@@ -258,7 +305,8 @@ const ContactPage: React.FC = () => {
                     initial={{ opacity: 0, x: -20 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ duration: 0.6, delay: 0.3 + index * 0.1 }}
-                    className={`flex items-center space-x-4 p-4 rounded-lg ${currentTheme.backgroundSecondary} ${currentTheme.hover} transition-colors group`}
+                    // className={`p-6 rounded-2xl bg-white dark:bg-gray-800 shadow-lg border ${themeClasses.border} hover:shadow-xl transition-all duration-300`}
+                    className={`flex items-center space-x-4 p-4 rounded-lg ${currentTheme.backgroundSecondary} ${currentTheme.hover} transition-all duration-300 group`}
                   >
                     <div className={`p-3 rounded-lg ${currentTheme.accent}`}>
                       <IconComponent className="w-6 h-6" />
@@ -473,7 +521,7 @@ const ContactPage: React.FC = () => {
             <p
               className={`mt-4 text-sm ${currentTheme.textSecondary} text-center`}
             >
-              I'll get back to you within 24 hours.
+              I'll get back to you within 6 hours.
             </p>
           </motion.div>
         </div>
