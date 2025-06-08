@@ -6,10 +6,16 @@ export const projects: Project[] = [
     title: "Live cron manager",
     description:
       "An automated task scheduler and management dashboard built with Next.js + Typescript + Tailwind for real-time monitoring and control, and node-cron built with Node.js for running recurring backend jobs. The system includes JWT-based authentication, RESTful API communication, and is deployed using Vercel, with MongoDB for handling data storage. This project demonstrates my ability to build and deploy full-stack applications that combine background automation with a user-friendly management interface.",
+    features: [
+      "Automated recurring task scheduling",
+      "Real-time cron job management UI",
+      "JWT authentication system",
+      "RESTful API integration",
+      "MongoDB-backed data storage",
+    ],
     image: "/projects/cron-manager/cron-manager.png",
     images: [
       "/projects/cron-manager/project1.png",
-      // "/projects/cron-manager/project2.png",
       "/projects/cron-manager/project3.png",
       "/projects/cron-manager/project4.png",
       "/projects/cron-manager/project5.png",
@@ -36,6 +42,14 @@ export const projects: Project[] = [
     title: "Phone Repair web App",
     description:
       "A website for a phone engineer to show their skill and place product for sale",
+    features: [
+      "Engineer portfolio showcase",
+      "Product listing for sale",
+      "Authentication with NextAuth",
+      "Responsive UI with Tailwind",
+      "MongoDB product management",
+      "Admin section for managing products, blogs, services",
+    ],
     image: "/projects/phone-management/phoneManagement1.png",
     images: [
       "/projects/phone-management/phoneManagement1.png",
@@ -56,6 +70,15 @@ export const projects: Project[] = [
     title: "My Portfolio",
     description:
       "A portfolio website for a developer to showcase skill, experience, and get to know me better. Features include, light and dark mode, four color scheme, admin section using Next.js authentication, visitor analytics.",
+    features: [
+      "Light/Dark mode support",
+      "Multiple color schemes",
+      "Admin dashboard with auth",
+      "Visitor analytics tracking",
+      "Animated transitions (GSAP, Framer Motion)",
+      "Github stats API",
+      "Sending email form",
+    ],
     image: "/projects/portfolio/portfolio1.png",
     images: [
       "/projects/portfolio/portfolio1.png",
@@ -83,6 +106,16 @@ export const projects: Project[] = [
     title: "Errand Buddies",
     description:
       "An E-Commerce website where vendor can onboard, upload products and make sales on their product. Customers can also onboard, make purchase on products and track their order",
+    features: [
+      "Vendor onboarding & product upload",
+      "Customer registration and purchases",
+      "Order tracking system",
+      "Payment integration (Paystack)",
+      "Chating with Socket.IO",
+      "Identity verification with YouVerify",
+      "SMS sending with termii",
+      "Image upload and optimization with cloudinary",
+    ],
     image: "/projects/errandBuddies/project1.png",
     images: [
       "/projects/errandBuddies/project1.png",
@@ -109,6 +142,13 @@ export const projects: Project[] = [
     title: "A store sales management",
     description:
       "A full web app for managing sales in a store or market. Built with react, fetches the product from the an express js server through an API. When each sale is made, the app helps to get the product, record the sale and generate an invoice.",
+    features: [
+      "Product list retrieval via API",
+      "Sales recording system",
+      "Invoice generation",
+      "User-friendly interface",
+      "Data management with MySQL",
+    ],
     image: "/projects/storeKeeper/storeKeeper1.png",
     images: ["/projects/storeKeeper/storeKeeper1.png"],
     technologies: ["Express.js", "React", "SCSS", "AntD", "RestApi", "MySQL"],
@@ -123,6 +163,12 @@ export const projects: Project[] = [
     title: "The google book API",
     description:
       "A dynamic Books Search App built with react that fetches data from the Google Books API and allows users to search for books by title, author, or keyword. By clicking on any book, users are taken to a dedicated single page that provides more detailed information about the book, including its description, publisher, publication date.",
+    features: [
+      "Book search by title, author, or keyword",
+      "Single book detailed page",
+      "Data fetched from Google Books API",
+      "Client-side routing with React Router",
+    ],
     image: "/projects/googleBooks/project1.png",
     images: [
       "/projects/googleBooks/project1.png",
@@ -140,6 +186,18 @@ export const projects: Project[] = [
     title: "A Calender app",
     description:
       "A feature-rich calendar application built with HTML5, CSS3, and jQuery that combines elegant design with powerful functionality. This single-page application dynamically generates accurate calendar layouts through mathematical calculations and provides comprehensive task management capabilities with persistent local storage.",
+    features: [
+      "Dynamically calculates and displays accurate calendar layouts for years 2022-2028",
+      "Task management with local storage",
+      "Single-page app architecture",
+      "Offline support with PWA",
+      "Automatic leap year detection and February date adjustment",
+      "Intelligent day-of-week positioning using mathematical algorithms",
+      "Real-time current date highlighting with animated gradient effects",
+      "Mark tasks as complete/incomplete with visual status indicators",
+      "Export/Import calendar data as JSON for backup and migration",
+      "Search functionality across all events and tasks",
+    ],
     image: "/projects/calender/project1.png",
     images: [
       "/projects/calender/project1.png",
@@ -163,4 +221,5 @@ export const projects: Project[] = [
     createdAt: "2022-06-18",
   },
 ];
+
 // HTML5, CSS3 (Grid, Flexbox, Animations), JavaScript ES6+, jQuery, jQuery UI, Local Storage API, Service Workers, Progressive Web App APIs

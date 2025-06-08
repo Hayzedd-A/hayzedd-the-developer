@@ -12,6 +12,7 @@ import {
   GithubIcon,
   StarIcon,
   XIcon,
+  CheckCircleIcon,
 } from "lucide-react";
 import ImageSlider from "./ImageSlider";
 
@@ -221,6 +222,37 @@ const ProjectModal: React.FC<ProjectModalProps> = ({
                         {project.description}
                       </p>
 
+                      {/* Key Features */}
+                      {project.features && project.features.length > 0 && (
+                        <>
+                          <h3
+                            className={`text-lg font-semibold ${currentTheme.text} mb-3`}
+                          >
+                            Key Features
+                          </h3>
+                          <div className="space-y-2 mb-6">
+                            {project.features.map((feature, index) => (
+                              <motion.div
+                                key={index}
+                                initial={{ opacity: 0, x: -20 }}
+                                animate={{ opacity: 1, x: 0 }}
+                                transition={{ delay: index * 0.1 }}
+                                className="flex items-start gap-3"
+                              >
+                                <CheckCircleIcon
+                                  className={`w-5 h-5 mt-0.5 flex-shrink-0 ${currentTheme.primary}`}
+                                />
+                                <span
+                                  className={`${currentTheme.textSecondary} leading-relaxed`}
+                                >
+                                  {feature}
+                                </span>
+                              </motion.div>
+                            ))}
+                          </div>
+                        </>
+                      )}
+
                       {/* Technologies */}
                       <h3
                         className={`text-lg font-semibold ${currentTheme.text} mb-3`}
@@ -240,26 +272,6 @@ const ProjectModal: React.FC<ProjectModalProps> = ({
                           </motion.span>
                         ))}
                       </div>
-
-                      {/* Image Gallery Info */}
-                      {/* {images.length > 1 && (
-                        <div
-                          className={`p-4 rounded-lg ${currentTheme.hover} mb-6`}
-                        >
-                          <h4
-                            className={`font-semibold ${currentTheme.text} mb-2`}
-                          >
-                            Gallery Navigation
-                          </h4>
-                          <div
-                            className={`text-sm ${currentTheme.textSecondary} space-y-1`}
-                          >
-                            <p>• Use arrow keys or click buttons to navigate</p>
-                            <p>• Press spacebar to toggle auto-play</p>
-                            <p>• Click thumbnails for quick navigation</p>
-                          </div>
-                        </div>
-                      )} */}
                     </div>
 
                     {/* Sidebar */}
@@ -310,6 +322,19 @@ const ProjectModal: React.FC<ProjectModalProps> = ({
                               {images.length !== 1 ? "s" : ""}
                             </span>
                           </div>
+                          {project.features && project.features.length > 0 && (
+                            <div className="flex items-center gap-2">
+                              <span
+                                className={`w-4 h-4 text-center text-xs ${currentTheme.textSecondary}`}
+                              >
+                                ✨
+                              </span>
+                              <span className={currentTheme.textSecondary}>
+                                {project.features.length} Feature
+                                {project.features.length !== 1 ? "s" : ""}
+                              </span>
+                            </div>
+                          )}
                         </div>
                       </div>
 

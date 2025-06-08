@@ -5,6 +5,7 @@ export interface Project {
   image: string;
   images: string[];
   technologies: string[];
+  features: string[];
   githubUrl?: string;
   liveUrl?: string;
   category: "personal" | "client" | "other";
