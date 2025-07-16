@@ -140,7 +140,7 @@ const skills: Skill[] = [
   },
   {
     id: "4",
-    name: "Node.js",
+    name: "Express.js",
     category: "backend",
     level: "advanced",
     icon: "🟢",
