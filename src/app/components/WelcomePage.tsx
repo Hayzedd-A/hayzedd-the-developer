@@ -140,7 +140,7 @@ export default function WelcomePage() {
               variants={itemVariants}
               className="flex flex-col sm:flex-row gap-4 pt-4"
             >
-              <Link href="/portfolio">
+              <Link href="/contact">
                 <motion.button
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
