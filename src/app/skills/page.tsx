@@ -233,6 +233,7 @@ export default function SkillsPage() {
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
   const [selectedLevel, setSelectedLevel] = useState<string>("all");
   const [isDragging, setIsDragging] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
   const skillRefs = useRef<Map<string, HTMLDivElement>>(new Map());
   const draggablesRef = useRef<Draggable[]>([]);
@@ -248,6 +249,20 @@ export default function SkillsPage() {
 
     return matchesSearch && matchesCategory && matchesLevel;
   });
+
+  // Check if device is mobile
+  useEffect(() => {
+    const checkMobile = () => {
+      const isMobileDevice = window.innerWidth < 768 || 
+        /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+      setIsMobile(isMobileDevice);
+    };
+
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   // Clean up function for draggables
   const cleanupDraggables = useCallback(() => {
@@ -287,9 +302,9 @@ export default function SkillsPage() {
     });
   };
 
-  // Initialize draggables
+  // Initialize draggables (only on desktop)
   useEffect(() => {
-    if (viewMode === "grid") {
+    if (viewMode === "grid" && !isMobile) {
       // Clean up existing draggables first
       cleanupDraggables();
 
@@ -332,12 +347,12 @@ export default function SkillsPage() {
 
       draggablesRef.current = newDraggables;
     } else {
-      // Clean up draggables when switching to list view
+      // Clean up draggables when switching to list view or on mobile
       cleanupDraggables();
     }
 
     return cleanupDraggables;
-  }, [viewMode, filteredSkills, cleanupDraggables]);
+  }, [viewMode, filteredSkills, isMobile, cleanupDraggables]);
 
   // Animate cards on mount and filter change
   useEffect(() => {
@@ -389,7 +404,7 @@ export default function SkillsPage() {
           currentTheme.background
         } shadow-lg hover:shadow-xl transition-all duration-300
         ${
-          viewMode === "grid"
+          viewMode === "grid" && !isMobile
             ? "cursor-grab active:cursor-grabbing"
             : "cursor-pointer"
         }
@@ -536,7 +551,7 @@ export default function SkillsPage() {
           >
             A comprehensive overview of my technical expertise and creative
             abilities.
-            {viewMode === "grid" && " Drag the cards around to explore!"}
+            {viewMode === "grid" && !isMobile && " Drag the cards around to explore!"}
           </p>
         </div>
 
@@ -594,7 +609,7 @@ export default function SkillsPage() {
 
           {/* View Mode & Reset */}
           <div className="flex items-center gap-2">
-            {viewMode === "grid" && (
+            {viewMode === "grid" && !isMobile && (
               <button
                 onClick={resetPositions}
                 className={`p-2 ${currentTheme.textSecondary} ${currentTheme.hover} 

@@ -346,6 +346,7 @@ const ProjectModal: React.FC<ProjectModalProps> = ({
                             whileTap={{ scale: 0.98 }}
                           >
                             <Link
+                              data-track={`${project.title} project-live-link`}
                               href={project.liveUrl}
                               target="_blank"
                               rel="noopener noreferrer"
@@ -364,6 +365,7 @@ const ProjectModal: React.FC<ProjectModalProps> = ({
                               whileTap={{ scale: 0.98 }}
                             >
                               <Link
+                                data-track={`${project.title} project-github-link`}
                                 href={project.githubUrl}
                                 target="_blank"
                                 rel="noopener noreferrer"
