@@ -217,9 +217,13 @@ class AnalyticsTracker {
     document.addEventListener("click", (event) => {
       const target = event.target as HTMLElement;
       const tagName = target.tagName.toLowerCase();
-
+      console.log("button clicked", tagName, target);
+      const eventElement = target.closest("[data-track]")
       let eventLabel =
-        target.textContent?.trim() || target.getAttribute("aria-label") || "";
+        eventElement?.getAttribute('data-track') ||
+        target.textContent?.trim() ||
+        target.getAttribute('aria-label') ||
+        '';
       let eventCategory = "click";
       const metadata: Record<string, any> = {
         tagName,
@@ -257,6 +261,8 @@ class AnalyticsTracker {
   private setupScrollTracking(): void {
     let maxScroll = 0;
     let scrollTimeout: NodeJS.Timeout;
+    const milestones = [25, 50, 75, 90, 100];
+    const reachedMilestones = new Set<number>();
 
     const trackScroll = () => {
       const scrollPercent = Math.round(
@@ -268,21 +274,19 @@ class AnalyticsTracker {
       if (scrollPercent > maxScroll) {
         maxScroll = scrollPercent;
 
-        // Track scroll milestones
-        const milestones = [25, 50, 75, 90, 100];
-        const milestone = milestones.find(
-          (m) => scrollPercent >= m && maxScroll - scrollPercent < m
-        );
-
-        if (milestone) {
-          this.trackEvent(
-            "engagement",
-            "scroll",
-            "milestone",
-            `${milestone}%`,
-            milestone
-          );
-        }
+        // Track scroll milestones only once
+        milestones.forEach((milestone) => {
+          if (scrollPercent >= milestone && !reachedMilestones.has(milestone)) {
+            reachedMilestones.add(milestone);
+            this.trackEvent(
+              "engagement",
+              "scroll",
+              "milestone",
+              `${milestone}%`,
+              milestone
+            );
+          }
+        });
       }
     };
 
