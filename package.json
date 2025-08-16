@@ -12,6 +12,7 @@
     "@maxmind/geoip2-node": "^6.1.0",
     "@sentry/nextjs": "^9.39.0",
     "@types/nodemailer": "^6.4.17",
+    "@vercel/functions": "^2.2.12",
     "crypto-js": "^4.2.0",
     "framer-motion": "^12.12.2",
     "gsap": "^3.13.0",
