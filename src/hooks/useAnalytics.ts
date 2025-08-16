@@ -4,9 +4,10 @@ import { analytics } from "@/lib/analytics-tracker";
 
 export const useAnalytics = () => {
   const pathname = usePathname();
-
+  console.log("the analytics hook is running")
   useEffect(() => {
     // Track page view when pathname changes
+    console.log("tracking page change in hook")
     analytics.trackPageView(pathname);
   }, [pathname]);
 

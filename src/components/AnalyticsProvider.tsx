@@ -6,6 +6,7 @@ import { X, Shield, Settings } from 'lucide-react';
 import { analytics } from '@/lib/analytics-tracker';
 import { githubService } from '@/app/services/github';
 import { GitHubLanguageStats, GitHubRepo, GitHubUser } from '@/types/types.index';
+import { usePathname } from 'next/navigation';
 interface GitHubStatsData {
   user: GitHubUser | null;
   repos: GitHubRepo[];
@@ -44,7 +45,9 @@ interface AnalyticsProviderProps {
 }
 
 export const AnalyticsProvider: React.FC<AnalyticsProviderProps> = ({ children }) => {
+  const pathname = usePathname();
   const [isEnabled, setIsEnabled] = useState(false);
+  const [currentPage, setCurrentPage] = useState<string>(pathname);
   const [hasConsented, setHasConsented] = useState(false);
   const [showConsentBanner, setShowConsentBanner] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
@@ -123,6 +126,16 @@ export const AnalyticsProvider: React.FC<AnalyticsProviderProps> = ({ children }
 
     fetchGitHubData();
   }, []);
+
+  console.log('the analytics hook is running');
+  useEffect(() => {
+    if (currentPage !== pathname) {
+      // Track page view when pathname changes
+      console.log('tracking page change in hook');
+      setCurrentPage(pathname);
+      analytics.trackPageView(pathname);
+    }
+  }, [pathname]);
 
   const enableAnalytics = () => {
     setIsEnabled(true);

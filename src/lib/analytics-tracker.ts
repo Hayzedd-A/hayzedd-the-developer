@@ -117,6 +117,7 @@ class AnalyticsTracker {
   }
 
   trackPageView(page?: string, title?: string): void {
+    console.log("tracking new page")
     // Check if we should track this page
     if (!this.shouldTrackCurrentPage()) {
       this.log("Page view tracking skipped for:", page || window.location.pathname);
@@ -131,13 +132,14 @@ class AnalyticsTracker {
     // Record duration of previous page
     if (this.currentPage && this.pageStartTime) {
       const duration = Date.now() - this.pageStartTime;
+      console.log({page: this.currentPage})
       this.sendPageView(this.currentPage, document.title, undefined, duration);
     }
 
     // Start tracking new page
     this.currentPage = page || window.location.pathname;
     this.pageStartTime = Date.now();
-
+    console.log(page, window.location.pathname)
     this.sendPageView(this.currentPage, title || document.title);
   }
 
