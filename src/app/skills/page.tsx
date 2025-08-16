@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
-import React, { useState, useRef, useEffect, useCallback } from "react";
-import { gsap } from "gsap";
-import { Draggable } from "gsap/Draggable";
+import React, { useState, useRef, useEffect, useCallback } from 'react';
+import { gsap } from 'gsap';
+import { Draggable } from 'gsap/Draggable';
 import {
   Grid3X3,
   List,
@@ -16,19 +16,20 @@ import {
   Smartphone,
   Settings,
   Globe,
-} from "lucide-react";
-import { useTheme } from "@/app/context/ThemeContext";
+} from 'lucide-react';
+import { useTheme } from '@/app/context/ThemeContext';
+import Link from 'next/link';
 
 // Register GSAP plugins
-if (typeof window !== "undefined") {
+if (typeof window !== 'undefined') {
   gsap.registerPlugin(Draggable);
 }
 
 interface Skill {
   id: string;
   name: string;
-  category: "frontend" | "backend" | "database" | "tools" | "design" | "fullstack";
-  level: "beginner" | "intermediate" | "advanced" | "expert";
+  category: 'frontend' | 'backend' | 'database' | 'tools' | 'design' | 'fullstack';
+  level: 'beginner' | 'intermediate' | 'advanced' | 'expert';
   icon: string;
   color: string;
   description: string;
@@ -38,200 +39,197 @@ interface Skill {
 
 const skills: Skill[] = [
   {
-    id: "12",
-    name: "HTML",
-    category: "frontend",
-    level: "expert",
-    icon: "#️⃣",
-    color: "#336791",
-    description: "The structue and semantics of websites",
-    experience: "5+ years",
+    id: '12',
+    name: 'HTML',
+    category: 'frontend',
+    level: 'expert',
+    icon: '#️⃣',
+    color: '#336791',
+    description: 'The structue and semantics of websites',
+    experience: '5+ years',
     projects: 30,
   },
   {
-    id: "13",
-    name: "CSS & SCSS",
-    category: "frontend",
-    level: "expert",
-    icon: "🎨",
-    color: "#336791",
-    description:
-      "Advanced styling skill with native css or using preprocessors for larger apps",
-    experience: "5+ years",
+    id: '13',
+    name: 'CSS & SCSS',
+    category: 'frontend',
+    level: 'expert',
+    icon: '🎨',
+    color: '#336791',
+    description: 'Advanced styling skill with native css or using preprocessors for larger apps',
+    experience: '5+ years',
     projects: 29,
   },
   {
-    id: "8",
-    name: "Tailwind CSS",
-    category: "frontend",
-    level: "expert",
-    icon: "💨",
-    color: "#06B6D4",
-    description: "Utility-first CSS framework",
-    experience: "2+ years",
+    id: '8',
+    name: 'Tailwind CSS',
+    category: 'frontend',
+    level: 'expert',
+    icon: '💨',
+    color: '#06B6D4',
+    description: 'Utility-first CSS framework',
+    experience: '2+ years',
     projects: 15,
   },
   {
-    id: "14",
-    name: "JavaScript",
-    category: "fullstack",
-    level: "advanced",
-    icon: "🔰",
-    color: "#336791",
-    description: "Advanced relational database",
-    experience: "5+ years",
+    id: '14',
+    name: 'JavaScript',
+    category: 'fullstack',
+    level: 'advanced',
+    icon: '🔰',
+    color: '#336791',
+    description: 'Advanced relational database',
+    experience: '5+ years',
     projects: 20,
   },
   {
-    id: "3",
-    name: "TypeScript",
-    category: "fullstack",
-    level: "advanced",
-    icon: "📘",
-    color: "#3178C6",
-    description: "Type-safe JavaScript development",
-    experience: "2+ years",
+    id: '3',
+    name: 'TypeScript',
+    category: 'fullstack',
+    level: 'advanced',
+    icon: '📘',
+    color: '#3178C6',
+    description: 'Type-safe JavaScript development',
+    experience: '2+ years',
     projects: 7,
   },
   {
-    id: "9",
-    name: "Python",
-    category: "fullstack",
-    level: "intermediate",
-    icon: "☯️",
-    color: "#88CE02",
-    description: "Professional-grade animation library",
-    experience: "1+ years",
+    id: '9',
+    name: 'Python',
+    category: 'fullstack',
+    level: 'intermediate',
+    icon: '☯️',
+    color: '#88CE02',
+    description: 'Professional-grade animation library',
+    experience: '1+ years',
     projects: 2,
   },
   {
-    id: "10",
-    name: "JQuery",
-    category: "frontend",
-    level: "intermediate",
-    icon: "📱",
-    color: "#61DAFB",
-    description:
-      "Build web app using frameword on similar to vanila javascript",
-    experience: "1+ years",
+    id: '10',
+    name: 'JQuery',
+    category: 'frontend',
+    level: 'intermediate',
+    icon: '📱',
+    color: '#61DAFB',
+    description: 'Build web app using frameword on similar to vanila javascript',
+    experience: '1+ years',
     projects: 6,
   },
   {
-    id: "1",
-    name: "React",
-    category: "frontend",
-    level: "expert",
-    icon: "⚛️",
-    color: "#61DAFB",
-    description: "Building modern, interactive user interfaces",
-    experience: "3+ years",
+    id: '1',
+    name: 'React',
+    category: 'frontend',
+    level: 'expert',
+    icon: '⚛️',
+    color: '#61DAFB',
+    description: 'Building modern, interactive user interfaces',
+    experience: '3+ years',
     projects: 15,
   },
   {
-    id: "2",
-    name: "Next.js",
-    category: "fullstack",
-    level: "advanced",
-    icon: "▲",
-    color: "#000000",
-    description: "Full-stack React framework for production",
-    experience: "2+ years",
+    id: '2',
+    name: 'Next.js',
+    category: 'fullstack',
+    level: 'advanced',
+    icon: '▲',
+    color: '#000000',
+    description: 'Full-stack React framework for production',
+    experience: '2+ years',
     projects: 5,
   },
   {
-    id: "4",
-    name: "Express.js",
-    category: "backend",
-    level: "advanced",
-    icon: "🟢",
-    color: "#339933",
-    description: "Server-side JavaScript runtime",
-    experience: "3+ years",
+    id: '4',
+    name: 'Express.js',
+    category: 'backend',
+    level: 'advanced',
+    icon: '🟢',
+    color: '#339933',
+    description: 'Server-side JavaScript runtime',
+    experience: '3+ years',
     projects: 10,
   },
   {
-    id: "7",
-    name: "Flask",
-    category: "backend",
-    level: "intermediate",
-    icon: "🌶️",
-    color: "#F24E1E",
-    description: "Ligtweight python framework for building backend solutions",
-    experience: "2+ years",
+    id: '7',
+    name: 'Flask',
+    category: 'backend',
+    level: 'intermediate',
+    icon: '🌶️',
+    color: '#F24E1E',
+    description: 'Ligtweight python framework for building backend solutions',
+    experience: '2+ years',
     projects: 2,
   },
   {
-    id: "5",
-    name: "MongoDB",
-    category: "database",
-    level: "intermediate",
-    icon: "🍃",
-    color: "#47A248",
-    description:
-      "NoSQL database for modern applications and ability to use mongoose",
-    experience: "2+ years",
+    id: '5',
+    name: 'MongoDB',
+    category: 'database',
+    level: 'intermediate',
+    icon: '🍃',
+    color: '#47A248',
+    description: 'NoSQL database for modern applications and ability to use mongoose',
+    experience: '2+ years',
     projects: 12,
   },
   {
-    id: "6",
-    name: "PostgreSQL",
-    category: "database",
-    level: "intermediate",
-    icon: "🐘",
-    color: "#336791",
-    description: "Advanced relational database using sequelize",
-    experience: "1+ years",
+    id: '6',
+    name: 'PostgreSQL',
+    category: 'database',
+    level: 'intermediate',
+    icon: '🐘',
+    color: '#336791',
+    description: 'Advanced relational database using sequelize',
+    experience: '1+ years',
     projects: 1,
   },
   {
-    id: "11",
-    name: "MySQL",
-    category: "database",
-    level: "intermediate",
-    icon: "🐘",
-    color: "#336791",
+    id: '11',
+    name: 'MySQL',
+    category: 'database',
+    level: 'intermediate',
+    icon: '🐘',
+    color: '#336791',
     description:
-      "Advanced relational database, can query database directly or use sequelize from within the app",
-    experience: "3+ years",
+      'Advanced relational database, can query database directly or use sequelize from within the app',
+    experience: '3+ years',
     projects: 1,
   },
   {
-    id: "15",
-    name: "MicrosoftSQL",
-    category: "database",
-    level: "intermediate",
-    icon: "🐘",
-    color: "#336791",
-    description: "Advanced relational database using sequelize",
-    experience: "1+ years",
+    id: '15',
+    name: 'MicrosoftSQL',
+    category: 'database',
+    level: 'intermediate',
+    icon: '🐘',
+    color: '#336791',
+    description: 'Advanced relational database using sequelize',
+    experience: '1+ years',
     projects: 1,
   },
 ];
 
 const categoryIcons = {
-  frontend: <Code className="w-4 h-4" />,
-  backend: <Settings className="w-4 h-4" />,
-  database: <Database className="w-4 h-4" />,
-  tools: <Settings className="w-4 h-4" />,
-  design: <Palette className="w-4 h-4" />,
-  fullstack: <Globe className="w-4 h-4" />,
+  frontend: <Code className='w-4 h-4' />,
+  backend: <Settings className='w-4 h-4' />,
+  database: <Database className='w-4 h-4' />,
+  tools: <Settings className='w-4 h-4' />,
+  design: <Palette className='w-4 h-4' />,
+  fullstack: <Globe className='w-4 h-4' />,
 };
 
 const levelColors = {
-  beginner: "bg-green-500",
-  intermediate: "bg-yellow-500",
-  advanced: "bg-orange-500",
-  expert: "bg-red-500",
+  beginner: 'bg-green-500',
+  intermediate: 'bg-yellow-500',
+  advanced: 'bg-orange-500',
+  expert: 'bg-red-500',
 };
 
 export default function SkillsPage() {
   const { currentThemes, theme } = useTheme();
   const currentTheme = currentThemes[theme];
 
-  const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
-  const [searchTerm, setSearchTerm] = useState("");
-  const [selectedCategory, setSelectedCategory] = useState<string>("all");
-  const [selectedLevel, setSelectedLevel] = useState<string>("all");
+  const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
+  const [searchTerm, setSearchTerm] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState<string>('all');
+  const [selectedLevel, setSelectedLevel] = useState<string>('all');
   const [isDragging, setIsDragging] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -242,10 +240,8 @@ export default function SkillsPage() {
     const matchesSearch =
       skill.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
       skill.description.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesCategory =
-      selectedCategory === "all" || skill.category === selectedCategory;
-    const matchesLevel =
-      selectedLevel === "all" || skill.level === selectedLevel;
+    const matchesCategory = selectedCategory === 'all' || skill.category === selectedCategory;
+    const matchesLevel = selectedLevel === 'all' || skill.level === selectedLevel;
 
     return matchesSearch && matchesCategory && matchesLevel;
   });
@@ -253,14 +249,15 @@ export default function SkillsPage() {
   // Check if device is mobile
   useEffect(() => {
     const checkMobile = () => {
-      const isMobileDevice = window.innerWidth < 768 || 
+      const isMobileDevice =
+        window.innerWidth < 768 ||
         /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
       setIsMobile(isMobileDevice);
     };
 
     checkMobile();
     window.addEventListener('resize', checkMobile);
-    
+
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
@@ -275,16 +272,13 @@ export default function SkillsPage() {
   }, []);
 
   // Set ref for skill card
-  const setSkillRef = useCallback(
-    (skillId: string, element: HTMLDivElement | null) => {
-      if (element) {
-        skillRefs.current.set(skillId, element);
-      } else {
-        skillRefs.current.delete(skillId);
-      }
-    },
-    []
-  );
+  const setSkillRef = useCallback((skillId: string, element: HTMLDivElement | null) => {
+    if (element) {
+      skillRefs.current.set(skillId, element);
+    } else {
+      skillRefs.current.delete(skillId);
+    }
+  }, []);
 
   const resetPositions = () => {
     filteredSkills.forEach((skill) => {
@@ -296,7 +290,7 @@ export default function SkillsPage() {
           rotation: 0,
           scale: 1,
           duration: 0.5,
-          ease: "back.out(1.7)",
+          ease: 'back.out(1.7)',
         });
       }
     });
@@ -304,7 +298,7 @@ export default function SkillsPage() {
 
   // Initialize draggables (only on desktop)
   useEffect(() => {
-    if (viewMode === "grid" && !isMobile) {
+    if (viewMode === 'grid' && !isMobile) {
       // Clean up existing draggables first
       cleanupDraggables();
 
@@ -315,7 +309,7 @@ export default function SkillsPage() {
         const ref = skillRefs.current.get(skill.id);
         if (ref) {
           const draggable = Draggable.create(ref, {
-            type: "x,y",
+            type: 'x,y',
             edgeResistance: 0.65,
             bounds: containerRef.current,
             inertia: true,
@@ -378,7 +372,7 @@ export default function SkillsPage() {
           scale: 1,
           duration: 0.6,
           stagger: 0.1,
-          ease: "back.out(1.7)",
+          ease: 'back.out(1.7)',
         }
       );
     }
@@ -389,7 +383,7 @@ export default function SkillsPage() {
     return () => {
       cleanupDraggables();
       // Kill all GSAP animations
-      gsap.killTweensOf("*");
+      gsap.killTweensOf('*');
     };
   }, [cleanupDraggables]);
 
@@ -397,18 +391,12 @@ export default function SkillsPage() {
     <div
       ref={(el) => setSkillRef(skill.id, el)}
       className={`
-        skill-card group relative overflow-hidden rounded-xl border-[1px] ${
-          currentTheme.border
-        }
+        skill-card group relative overflow-hidden rounded-xl border-[1px] ${currentTheme.border}
+        ${currentTheme.background} shadow-lg hover:shadow-xl transition-all duration-300
         ${
-          currentTheme.background
-        } shadow-lg hover:shadow-xl transition-all duration-300
-        ${
-          viewMode === "grid" && !isMobile
-            ? "cursor-grab active:cursor-grabbing"
-            : "cursor-pointer"
+          viewMode === 'grid' && !isMobile ? 'cursor-grab active:cursor-grabbing' : 'cursor-pointer'
         }
-        ${isDragging ? "pointer-events-none" : ""}
+        ${isDragging ? 'pointer-events-none' : ''}
         ${currentTheme.hover}
       `}
       style={{
@@ -418,64 +406,44 @@ export default function SkillsPage() {
     >
       {/* Floating effect overlay */}
       <div
-        className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent 
+        className='absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent 
                       transform -skew-x-12 -translate-x-full group-hover:translate-x-full 
-                      transition-transform duration-1000"
+                      transition-transform duration-1000'
       />
 
-      <div
-        className={`p-6 ${
-          viewMode === "list" ? "flex items-center space-x-4" : ""
-        }`}
-      >
+      <div className={`p-6 ${viewMode === 'list' ? 'flex items-center space-x-4' : ''}`}>
         {/* Skill Icon */}
         <div
           className={`
           flex items-center justify-center rounded-lg text-2xl font-bold
-          ${
-            viewMode === "grid"
-              ? "w-16 h-16 mb-4 mx-auto"
-              : "w-12 h-12 flex-shrink-0"
-          }
+          ${viewMode === 'grid' ? 'w-16 h-16 mb-4 mx-auto' : 'w-12 h-12 flex-shrink-0'}
         `}
           style={{ backgroundColor: `${skill.color}20`, color: skill.color }}
         >
           {skill.icon}
         </div>
 
-        <div className={`${viewMode === "list" ? "flex-1" : ""}`}>
+        <div className={`${viewMode === 'list' ? 'flex-1' : ''}`}>
           {/* Header */}
           <div
             className={`${
-              viewMode === "list"
-                ? "flex items-center justify-between"
-                : "text-center mb-4"
+              viewMode === 'list' ? 'flex items-center justify-between' : 'text-center mb-4'
             }`}
           >
             <div>
-              <h3 className={`text-xl font-bold ${currentTheme.text} mb-1`}>
-                {skill.name}
-              </h3>
-              <div className="flex items-center gap-2 mb-2">
-                <span className={currentTheme.accent}>
-                  {categoryIcons[skill.category]}
-                </span>
-                <span
-                  className={`text-sm ${currentTheme.textSecondary} capitalize`}
-                >
+              <h3 className={`text-xl font-bold ${currentTheme.text} mb-1`}>{skill.name}</h3>
+              <div className='flex items-center gap-2 mb-2'>
+                <span className={currentTheme.accent}>{categoryIcons[skill.category]}</span>
+                <span className={`text-sm ${currentTheme.textSecondary} capitalize`}>
                   {skill.category}
                 </span>
               </div>
             </div>
 
-            {viewMode === "list" && (
-              <div className="flex items-center gap-4">
-                <div
-                  className={`w-3 h-3 rounded-full ${levelColors[skill.level]}`}
-                />
-                <span
-                  className={`text-sm font-medium capitalize ${currentTheme.text}`}
-                >
+            {viewMode === 'list' && (
+              <div className='flex items-center gap-4'>
+                <div className={`w-3 h-3 rounded-full ${levelColors[skill.level]}`} />
+                <span className={`text-sm font-medium capitalize ${currentTheme.text}`}>
                   {skill.level}
                 </span>
               </div>
@@ -483,38 +451,26 @@ export default function SkillsPage() {
           </div>
 
           {/* Level indicator for grid view */}
-          {viewMode === "grid" && (
-            <div className="flex items-center justify-center gap-2 mb-3">
-              <div
-                className={`w-3 h-3 rounded-full ${levelColors[skill.level]}`}
-              />
-              <span
-                className={`text-sm font-medium capitalize ${currentTheme.text}`}
-              >
+          {viewMode === 'grid' && (
+            <div className='flex items-center justify-center gap-2 mb-3'>
+              <div className={`w-3 h-3 rounded-full ${levelColors[skill.level]}`} />
+              <span className={`text-sm font-medium capitalize ${currentTheme.text}`}>
                 {skill.level}
               </span>
             </div>
           )}
 
           {/* Description */}
-          <p className={`${currentTheme.textSecondary} text-sm mb-3`}>
-            {skill.description}
-          </p>
+          <p className={`${currentTheme.textSecondary} text-sm mb-3`}>{skill.description}</p>
 
           {/* Stats */}
-          <div
-            className={`${
-              viewMode === "list" ? "flex items-center gap-6" : "space-y-2"
-            }`}
-          >
-            <div className="flex items-center gap-2">
-              <Star className="w-4 h-4 text-yellow-500" />
-              <span className={`text-sm ${currentTheme.textSecondary}`}>
-                {skill.experience}
-              </span>
+          <div className={`${viewMode === 'list' ? 'flex items-center gap-6' : 'space-y-2'}`}>
+            <div className='flex items-center gap-2'>
+              <Star className='w-4 h-4 text-yellow-500' />
+              <span className={`text-sm ${currentTheme.textSecondary}`}>{skill.experience}</span>
             </div>
             {skill.projects && (
-              <div className="flex items-center gap-2">
+              <div className='flex items-center gap-2'>
                 <ExternalLink className={`w-4 h-4 ${currentTheme.accent}`} />
                 <span className={`text-sm ${currentTheme.textSecondary}`}>
                   {skill.projects} projects
@@ -527,31 +483,22 @@ export default function SkillsPage() {
 
       {/* Hover effect */}
       <div
-        className="absolute inset-0 border-2 border-transparent group-hover:border-current 
-                      rounded-xl transition-all duration-300 opacity-0 group-hover:opacity-20"
+        className='absolute inset-0 border-2 border-transparent group-hover:border-current 
+                      rounded-xl transition-all duration-300 opacity-0 group-hover:opacity-20'
         style={{ borderColor: skill.color }}
       />
     </div>
   );
 
   return (
-    <div
-      className={`min-h-screen ${currentTheme.background} transition-colors py-12`}
-    >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div className={`min-h-screen ${currentTheme.background} transition-colors py-12`}>
+      <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'>
         {/* Header */}
-        <div className="text-center mb-12">
-          <h1
-            className={`text-4xl md:text-5xl font-bold ${currentTheme.text} mb-4`}
-          >
-            My Skills
-          </h1>
-          <p
-            className={`text-xl ${currentTheme.textSecondary} max-w-3xl mx-auto`}
-          >
-            A comprehensive overview of my technical expertise and creative
-            abilities.
-            {viewMode === "grid" && !isMobile && " Drag the cards around to explore!"}
+        <div className='text-center mb-12'>
+          <h1 className={`text-4xl md:text-5xl font-bold ${currentTheme.text} mb-4`}>My Skills</h1>
+          <p className={`text-xl ${currentTheme.textSecondary} max-w-3xl mx-auto`}>
+            A comprehensive overview of my technical expertise and creative abilities.
+            {viewMode === 'grid' && !isMobile && ' Drag the cards around to explore!'}
           </p>
         </div>
 
@@ -561,13 +508,13 @@ export default function SkillsPage() {
                         ${currentTheme.background} rounded-xl shadow-lg ${currentTheme.border}`}
         >
           {/* Search */}
-          <div className="relative flex-1 min-w-64">
+          <div className='relative flex-1 min-w-64'>
             <Search
               className={`absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 ${currentTheme.textSecondary}`}
             />
             <input
-              type="text"
-              placeholder="Search skills..."
+              type='text'
+              placeholder='Search skills...'
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               className={`w-full pl-10 pr-4 py-2 ${currentTheme.border} 
@@ -577,20 +524,20 @@ export default function SkillsPage() {
           </div>
 
           {/* Filters */}
-          <div className="flex items-center gap-4">
+          <div className='flex items-center gap-4'>
             <select
               value={selectedCategory}
               onChange={(e) => setSelectedCategory(e.target.value)}
               className={`px-3 py-2 ${currentTheme.border} rounded-lg
                          ${currentTheme.backgroundSecondary} ${currentTheme.text} transition-all duration-200`}
             >
-              <option value="all">All Categories</option>
-              <option value="frontend">Frontend</option>
-              <option value="backend">Backend</option>
-              <option value="database">Database</option>
-              <option value="design">Design</option>
-              <option value="mobile">Mobile</option>
-              <option value="tools">Tools</option>
+              <option value='all'>All Categories</option>
+              <option value='frontend'>Frontend</option>
+              <option value='backend'>Backend</option>
+              <option value='database'>Database</option>
+              <option value='design'>Design</option>
+              <option value='mobile'>Mobile</option>
+              <option value='tools'>Tools</option>
             </select>
 
             <select
@@ -599,56 +546,54 @@ export default function SkillsPage() {
               className={`px-3 py-2 ${currentTheme.border} rounded-lg
                          ${currentTheme.backgroundSecondary} ${currentTheme.text} transition-all duration-200`}
             >
-              <option value="all">All Levels</option>
-              <option value="beginner">Beginner</option>
-              <option value="intermediate">Intermediate</option>
-              <option value="advanced">Advanced</option>
-              <option value="expert">Expert</option>
+              <option value='all'>All Levels</option>
+              <option value='beginner'>Beginner</option>
+              <option value='intermediate'>Intermediate</option>
+              <option value='advanced'>Advanced</option>
+              <option value='expert'>Expert</option>
             </select>
           </div>
 
           {/* View Mode & Reset */}
-          <div className="flex items-center gap-2">
-            {viewMode === "grid" && !isMobile && (
+          <div className='flex items-center gap-2'>
+            {viewMode === 'grid' && !isMobile && (
               <button
                 onClick={resetPositions}
                 className={`p-2 ${currentTheme.textSecondary} ${currentTheme.hover} 
                            transition-colors rounded-lg`}
-                title="Reset positions"
+                title='Reset positions'
               >
-                <RotateCcw className="w-5 h-5" />
+                <RotateCcw className='w-5 h-5' />
               </button>
             )}
 
-            <div
-              className={`flex ${currentTheme.backgroundSecondary} rounded-lg p-1`}
-            >
+            <div className={`flex ${currentTheme.backgroundSecondary} rounded-lg p-1`}>
               <button
-                onClick={() => setViewMode("grid")}
+                onClick={() => setViewMode('grid')}
                 className={`p-2 rounded-md transition-all ${
-                  viewMode === "grid"
+                  viewMode === 'grid'
                     ? `${currentTheme.background} ${currentTheme.accent} shadow-sm`
                     : `${currentTheme.textSecondary} ${currentTheme.hover}`
                 }`}
               >
-                <Grid3X3 className="w-5 h-5" />
+                <Grid3X3 className='w-5 h-5' />
               </button>
               <button
-                onClick={() => setViewMode("list")}
+                onClick={() => setViewMode('list')}
                 className={`p-2 rounded-md transition-all ${
-                  viewMode === "list"
+                  viewMode === 'list'
                     ? `${currentTheme.background} ${currentTheme.accent} shadow-sm`
                     : `${currentTheme.textSecondary} ${currentTheme.hover}`
                 }`}
               >
-                <List className="w-5 h-5" />
+                <List className='w-5 h-5' />
               </button>
             </div>
           </div>
         </div>
 
         {/* Skills Count */}
-        <div className="mb-6">
+        <div className='mb-6'>
           <p className={currentTheme.textSecondary}>
             Showing {filteredSkills.length} of {skills.length} skills
           </p>
@@ -659,11 +604,11 @@ export default function SkillsPage() {
           ref={containerRef}
           className={`
             ${
-              viewMode === "grid"
-                ? "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"
-                : "space-y-4"
+              viewMode === 'grid'
+                ? 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6'
+                : 'space-y-4'
             }
-            ${viewMode === "grid" ? "min-h-screen" : ""}
+            ${viewMode === 'grid' ? 'min-h-screen' : ''}
           `}
         >
           {filteredSkills.length > 0 ? (
@@ -671,11 +616,9 @@ export default function SkillsPage() {
               <SkillCard key={skill.id} skill={skill} index={index} />
             ))
           ) : (
-            <div className="col-span-full text-center py-12">
-              <div className="text-6xl mb-4">🔍</div>
-              <h3 className={`text-xl font-semibold ${currentTheme.text} mb-2`}>
-                No skills found
-              </h3>
+            <div className='col-span-full text-center py-12'>
+              <div className='text-6xl mb-4'>🔍</div>
+              <h3 className={`text-xl font-semibold ${currentTheme.text} mb-2`}>No skills found</h3>
               <p className={currentTheme.textSecondary}>
                 Try adjusting your search or filter criteria
               </p>
@@ -684,21 +627,19 @@ export default function SkillsPage() {
         </div>
 
         {/* Stats Section */}
-        <div className="mt-16 grid grid-cols-1 md:grid-cols-4 gap-6">
+        <div className='mt-16 grid grid-cols-1 md:grid-cols-4 gap-6'>
           <div
             className={`${currentTheme.background} rounded-xl p-6 text-center border-2 shadow-lg ${currentTheme.border} ${currentTheme.hover} transition-all duration-300`}
           >
-            <div className={`text-3xl font-bold ${currentTheme.accent} mb-2`}>
-              {skills.length}
-            </div>
+            <div className={`text-3xl font-bold ${currentTheme.accent} mb-2`}>{skills.length}</div>
             <div className={currentTheme.textSecondary}>Total Skills</div>
           </div>
 
           <div
             className={`${currentTheme.background} rounded-xl p-6 text-center shadow-lg border-2 ${currentTheme.border} ${currentTheme.hover} transition-all duration-300`}
           >
-            <div className="text-3xl font-bold text-green-600 mb-2">
-              {skills.filter((s) => s.level === "expert").length}
+            <div className='text-3xl font-bold text-green-600 mb-2'>
+              {skills.filter((s) => s.level === 'expert').length}
             </div>
             <div className={currentTheme.textSecondary}>Expert Level</div>
           </div>
@@ -706,7 +647,7 @@ export default function SkillsPage() {
           <div
             className={`${currentTheme.background} rounded-xl p-6 text-center shadow-lg border-2 ${currentTheme.border} ${currentTheme.hover} transition-all duration-300`}
           >
-            <div className="text-3xl font-bold text-purple-600 mb-2">
+            <div className='text-3xl font-bold text-purple-600 mb-2'>
               {skills.reduce((acc, skill) => acc + (skill.projects || 0), 0)}
             </div>
             <div className={currentTheme.textSecondary}>Total Projects</div>
@@ -715,7 +656,7 @@ export default function SkillsPage() {
           <div
             className={`${currentTheme.background} rounded-xl p-6 text-center shadow-lg border-2 ${currentTheme.border} ${currentTheme.hover} transition-all duration-300`}
           >
-            <div className="text-3xl font-bold text-orange-600 mb-2">
+            <div className='text-3xl font-bold text-orange-600 mb-2'>
               {new Set(skills.map((s) => s.category)).size}
             </div>
             <div className={currentTheme.textSecondary}>Categories</div>
@@ -723,13 +664,11 @@ export default function SkillsPage() {
         </div>
 
         {/* Category Overview */}
-        <div className="mt-16">
-          <h2
-            className={`text-3xl font-bold ${currentTheme.text} mb-8 text-center`}
-          >
+        <div className='mt-16'>
+          <h2 className={`text-3xl font-bold ${currentTheme.text} mb-8 text-center`}>
             Skills by Category
           </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6'>
             {Object.entries(
               skills.reduce((acc, skill) => {
                 if (!acc[skill.category]) {
@@ -746,7 +685,7 @@ export default function SkillsPage() {
                            ${currentTheme.hover}`}
                 onClick={() => setSelectedCategory(category)}
               >
-                <div className="flex items-center gap-3 mb-4">
+                <div className='flex items-center gap-3 mb-4'>
                   <div
                     className={`p-2 ${currentTheme.backgroundSecondary} rounded-lg group-hover:scale-110 
                                   transition-transform duration-300`}
@@ -755,46 +694,36 @@ export default function SkillsPage() {
                       {categoryIcons[category as keyof typeof categoryIcons]}
                     </span>
                   </div>
-                  <h3
-                    className={`text-xl font-semibold ${currentTheme.text} capitalize`}
-                  >
+                  <h3 className={`text-xl font-semibold ${currentTheme.text} capitalize`}>
                     {category}
                   </h3>
                 </div>
 
-                <div className="space-y-2">
-                  <div className="flex justify-between text-sm">
+                <div className='space-y-2'>
+                  <div className='flex justify-between text-sm'>
                     <span className={currentTheme.textSecondary}>Skills</span>
                     <span className={`font-medium ${currentTheme.text}`}>
                       {categorySkills.length}
                     </span>
                   </div>
 
-                  <div className="flex justify-between text-sm">
-                    <span className={currentTheme.textSecondary}>
-                      Expert Level
-                    </span>
+                  <div className='flex justify-between text-sm'>
+                    <span className={currentTheme.textSecondary}>Expert Level</span>
                     <span className={`font-medium ${currentTheme.text}`}>
-                      {
-                        categorySkills.filter((s) => s.level === "expert")
-                          .length
-                      }
+                      {categorySkills.filter((s) => s.level === 'expert').length}
                     </span>
                   </div>
 
-                  <div className="flex justify-between text-sm">
+                  <div className='flex justify-between text-sm'>
                     <span className={currentTheme.textSecondary}>Projects</span>
                     <span className={`font-medium ${currentTheme.text}`}>
-                      {categorySkills.reduce(
-                        (acc, skill) => acc + (skill.projects || 0),
-                        0
-                      )}
+                      {categorySkills.reduce((acc, skill) => acc + (skill.projects || 0), 0)}
                     </span>
                   </div>
                 </div>
 
                 {/* Skill preview */}
-                <div className="mt-4 flex flex-wrap gap-2">
+                <div className='mt-4 flex flex-wrap gap-2'>
                   {categorySkills.slice(0, 3).map((skill) => (
                     <span
                       key={skill.id}
@@ -819,31 +748,33 @@ export default function SkillsPage() {
         </div>
 
         {/* Call to Action */}
-        <div className="mt-16 text-center">
+        <div className='mt-16 text-center'>
           <div
             className={`bg-gradient-to-r ${currentTheme.gradient} rounded-2xl p-8 text-white shadow-2xl`}
           >
-            <h2 className="text-3xl font-bold mb-4">
-              Let's Build Something Amazing Together
-            </h2>
-            <p className="text-xl mb-6 opacity-90">
+            <h2 className='text-3xl font-bold mb-4'>Let's Build Something Amazing Together</h2>
+            <p className='text-xl mb-6 opacity-90'>
               Ready to bring your ideas to life with these skills?
             </p>
-            <div className="flex flex-wrap justify-center gap-4">
-              <button
-                className={`px-6 py-3 bg-white ${currentTheme.accent} rounded-lg font-semibold
-                                 hover:bg-gray-100 transition-all duration-300 shadow-lg hover:shadow-xl
-                                 transform hover:scale-105`}
-              >
-                View Projects
-              </button>
-              <button
-                className="px-6 py-3 border-2 border-white text-white rounded-lg font-semibold
-                                 hover:bg-white hover:text-gray-900 transition-all duration-300
-                                 shadow-lg hover:shadow-xl transform hover:scale-105"
-              >
-                Get In Touch
-              </button>
+            <div className='flex flex-wrap justify-center gap-4'>
+              <Link href='https://my-cv-web-developer.vercel.app/'>
+                <button
+                  className={`px-6 py-3 bg-white ${currentTheme.accent} rounded-lg font-semibold
+                hover:bg-gray-100 transition-all duration-300 shadow-lg hover:shadow-xl
+                transform hover:scale-105`}
+                >
+                  View Projects
+                </button>
+              </Link>
+              <Link href='/contact'>
+                <button
+                  className='px-6 py-3 border-2 border-white text-white rounded-lg font-semibold
+                hover:bg-white hover:text-gray-900 transition-all duration-300
+                shadow-lg hover:shadow-xl transform hover:scale-105'
+                >
+                  Get In Touch
+                </button>
+              </Link>
             </div>
           </div>
         </div>

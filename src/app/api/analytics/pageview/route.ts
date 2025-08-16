@@ -15,6 +15,7 @@ export async function POST(request: NextRequest) {
 
     const body = await request.json();
     const { sessionId, visitorId, page, title, referrer, duration } = body;
+    console.log(body)
 
     if (!sessionId || !visitorId || !page) {
       return NextResponse.json(

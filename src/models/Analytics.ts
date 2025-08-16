@@ -15,6 +15,7 @@ export interface IPageView extends Document {
   region?: string;
   city?: string;
   timezone?: string;
+  org?: string;
   coordinates?: {
     lat: number;
     lng: number;
@@ -45,6 +46,7 @@ export interface IVisitorSession extends Document {
     region?: string;
     city?: string;
     timezone?: string;
+    org?: string;
     coordinates?: {
       lat: number;
       lng: number;
@@ -171,6 +173,7 @@ const PageViewSchema = new Schema<IPageView>({
   region: { type: String },
   city: { type: String },
   timezone: { type: String },
+  org: {type: String},
   coordinates: {
     lat: Number,
     lng: Number,
@@ -201,6 +204,7 @@ const VisitorSessionSchema = new Schema<IVisitorSession>({
     region: String,
     city: String,
     timezone: String,
+    org: String,
     coordinates: {
       lat: Number,
       lng: Number,

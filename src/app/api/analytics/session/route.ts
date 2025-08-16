@@ -22,6 +22,7 @@ export async function POST(request: NextRequest) {
     const acceptLanguage = request.headers.get("accept-language") || "";
     const acceptEncoding = request.headers.get("accept-encoding") || "";
     const ipAddress = getRealIP(request);
+    console.log({ipAddress})
 
     // Generate device fingerprint
     const deviceFingerprint = generateDeviceFingerprint(
@@ -42,6 +43,7 @@ export async function POST(request: NextRequest) {
     let isReturningVisitor = false;
 
     if (existingSession) {
+      console.log("its an existing visitor")
       // Update existing session
       visitorId = existingSession.visitorId;
       sessionId = existingSession.sessionId;
@@ -50,6 +52,7 @@ export async function POST(request: NextRequest) {
       existingSession.lastActivity = new Date();
       await existingSession.save();
     } else {
+      console.log("its a new visitor")
       // Check if this device has visited before (returning visitor)
       const previousVisitor = await VisitorSession.findOne({
         deviceFingerprint,
@@ -61,9 +64,9 @@ export async function POST(request: NextRequest) {
 
       // Parse device info and location
       const deviceInfo = parseUserAgent(userAgent);
-      const locationInfo = getLocationFromIP(ipAddress);
+      const locationInfo = await getLocationFromIP(ipAddress);
       const utmParams = currentUrl ? parseUTMParameters(currentUrl) : {};
-
+      console.log({locationInfo})
       // Create new session
       const newSession = new VisitorSession({
         sessionId,

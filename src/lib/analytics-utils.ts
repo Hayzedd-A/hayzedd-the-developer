@@ -19,6 +19,7 @@ export interface LocationInfo {
   region?: string;
   city?: string;
   timezone?: string;
+  org?: string;
   coordinates?: {
     lat: number;
     lng: number;
@@ -90,9 +91,9 @@ export async function getLocationFromIP(
   // Skip location detection for local/private IPs
   if (isPrivateIP(ipAddress)) {
     return {
-      country: "Unknown",
-      region: "Unknown",
-      city: "Unknown",
+      country: "Nigeria",
+      region: "Lagos",
+      city: "Lekki phase 1",
     };
   }
 
@@ -126,6 +127,7 @@ export async function getLocationFromIP(
 // Fallback to API-based geolocation
 async function getLocationFromAPI(ipAddress: string): Promise<LocationInfo> {
   try {
+    console.log("getting location from IP")
     // Option 1: ipapi.co (free tier: 1000 requests/day)
     const response = await fetch(`https://ipapi.co/${ipAddress}/json/`, {
       headers: {
@@ -142,12 +144,13 @@ async function getLocationFromAPI(ipAddress: string): Promise<LocationInfo> {
     if (data.error) {
       throw new Error(data.reason || "API Error");
     }
-
+    console.log(data)
     return {
       country: data.country_name || "Unknown",
       region: data.region || "Unknown",
       city: data.city || "Unknown",
       timezone: data.timezone || undefined,
+      org: data.org,
       coordinates:
         data.latitude && data.longitude
           ? {
