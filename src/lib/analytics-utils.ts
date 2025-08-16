@@ -165,6 +165,7 @@ async function getLocationFromAPI(ipAddress: string): Promise<LocationInfo> {
       country: "Reserved Country",
       region: "Reserved region",
       city: "Reserved city",
+      timezone: ipAddress,
     };
   }
 }
