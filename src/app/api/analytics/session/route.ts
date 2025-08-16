@@ -22,7 +22,7 @@ export async function POST(request: NextRequest) {
     const userAgent = request.headers.get('user-agent') || '';
     const acceptLanguage = request.headers.get('accept-language') || '';
     const acceptEncoding = request.headers.get('accept-encoding') || '';
-    const ipAddress = getRealIP(request);
+    const ipAddress = vercelIP(request) || '128.0.0.1';
     // console.log({ ipAddress });
     // console.log({ geo: vercelGeo(request), ip: vercelIP(request) });
 
@@ -43,14 +43,8 @@ export async function POST(request: NextRequest) {
     let visitorId: string;
     let sessionId: string;
     let isReturningVisitor = false;
-    const rawLocation = vercelGeo(request)
-    const location = {
-      ...rawLocation,
-      coordinates: {
-        lat: rawLocation?.latitude,
-        lng: rawLocation?.longitude,
-      },
-    };
+    const rawLocation = vercelGeo(request);
+    const location = await getLocationFromIP(ipAddress);
     if (existingSession) {
       console.log('its an existing visitor');
       // Update existing session
@@ -75,9 +69,9 @@ export async function POST(request: NextRequest) {
 
       // Parse device info and location
       const deviceInfo = parseUserAgent(userAgent);
-      const locationInfo = await getLocationFromIP(ipAddress);
+      // const locationInfo = await getLocationFromIP(ipAddress);
       const utmParams = currentUrl ? parseUTMParameters(currentUrl) : {};
-      console.log({ locationInfo });
+      // console.log({ locationInfo });
       // Create new session
       const newSession = new VisitorSession({
         sessionId,
