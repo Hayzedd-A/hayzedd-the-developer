@@ -146,9 +146,9 @@ async function getLocationFromAPI(ipAddress: string): Promise<LocationInfo> {
     }
     console.log(data)
     return {
-      country: data.country_name || "Unknown",
-      region: data.region || "Unknown",
-      city: data.city || "Unknown",
+      country: data.country_name || "Unknown result",
+      region: data.region || "Unknown result",
+      city: data.city || "Unknown result",
       timezone: data.timezone || undefined,
       org: data.org,
       coordinates:
@@ -186,15 +186,17 @@ export function isPrivateIP(ip: string): boolean {
 
 export function getRealIP(req: any): string {
   return (
-    req.headers["x-forwarded-for"]?.split(",")[0]?.trim() ||
-    req.headers["x-real-ip"] ||
-    req.headers["cf-connecting-ip"] || // Cloudflare
-    req.headers["x-client-ip"] ||
+    req.headers['x-vercel-forwarded-for'] || // Vercel-specific
+    req.headers['x-forwarded-for']?.split(',')[0]?.trim() ||
+    req.headers['x-real-ip'] ||
+    req.headers['cf-connecting-ip'] || // Cloudflare
+    req.headers['x-client-ip'] ||
     req.connection?.remoteAddress ||
     req.socket?.remoteAddress ||
-    "127.0.0.1"
+    '127.0.0.1'
   );
 }
+
 
 export function parseUTMParameters(url: string) {
   try {
