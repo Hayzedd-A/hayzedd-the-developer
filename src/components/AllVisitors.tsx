@@ -23,6 +23,9 @@ import {
   TrendingUp,
   BarChart3,
   ArrowLeft,
+  FileText,
+  FileSpreadsheet,
+  ChevronDown,
 } from "lucide-react";
 import Link from "next/link";
 import VisitorDetails from "./VisitorDetails";
@@ -83,8 +86,10 @@ const VisitorsPage: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [searchTerm, setSearchTerm] = useState("");
   const [showFilters, setShowFilters] = useState(false);
-  const [modalOpen, setModalOpen] = useState(false)
-  const [selectedVisitor, setSelectedVisitor] = useState("")
+  const [modalOpen, setModalOpen] = useState(false);
+  const [selectedVisitor, setSelectedVisitor] = useState("");
+  const [viewMode, setViewMode] = useState<"all" | "unique">("all");
+  const [showExportMenu, setShowExportMenu] = useState(false);
 
   // Filter and pagination state
   const [filters, setFilters] = useState({
@@ -139,10 +144,11 @@ const VisitorsPage: React.FC = () => {
   }, [fetchVisitors]);
 
   const handleVisitorDetails = (id: string) => {
-    console.log(id)
+    console.log(id);
     setSelectedVisitor(id);
-    setModalOpen(true)
-  }
+    setModalOpen(true);
+  };
+
   const handleSort = (sortBy: string) => {
     setFilters((prev) => ({
       ...prev,
@@ -192,7 +198,39 @@ const VisitorsPage: React.FC = () => {
     return new Intl.NumberFormat().format(num);
   };
 
-  const filteredVisitors = visitors.filter(
+  // Get unique visitors by grouping by visitorId
+  const getUniqueVisitors = (visitorsList: VisitorListItem[]) => {
+    const uniqueVisitorsMap = new Map<string, VisitorListItem>();
+    
+    visitorsList.forEach((visitor) => {
+      const existingVisitor = uniqueVisitorsMap.get(visitor.visitorId);
+      
+      if (!existingVisitor) {
+        uniqueVisitorsMap.set(visitor.visitorId, visitor);
+      } else {
+        // Keep the visitor with the most recent activity
+        if (new Date(visitor.lastActivity) > new Date(existingVisitor.lastActivity)) {
+          // Aggregate data from all sessions
+          const aggregatedVisitor = {
+            ...visitor,
+            pageViews: existingVisitor.pageViews + visitor.pageViews,
+            totalDuration: existingVisitor.totalDuration + visitor.totalDuration,
+            sessionDuration: existingVisitor.sessionDuration + visitor.sessionDuration,
+            firstVisit: new Date(existingVisitor.firstVisit) < new Date(visitor.firstVisit) 
+              ? existingVisitor.firstVisit 
+              : visitor.firstVisit,
+          };
+          uniqueVisitorsMap.set(visitor.visitorId, aggregatedVisitor);
+        }
+      }
+    });
+    
+    return Array.from(uniqueVisitorsMap.values());
+  };
+
+  const displayedVisitors = viewMode === "unique" ? getUniqueVisitors(visitors) : visitors;
+
+  const filteredVisitors = displayedVisitors.filter(
     (visitor) =>
       visitor.visitorId.toLowerCase().includes(searchTerm.toLowerCase()) ||
       visitor.location.country
@@ -201,6 +239,84 @@ const VisitorsPage: React.FC = () => {
       visitor.location.city.toLowerCase().includes(searchTerm.toLowerCase()) ||
       visitor.device.browser.toLowerCase().includes(searchTerm.toLowerCase())
   );
+
+  // Export functions
+  const exportToJSON = () => {
+    const dataToExport = {
+      exportDate: new Date().toISOString(),
+      viewMode,
+      totalRecords: filteredVisitors.length,
+      visitors: filteredVisitors.map(visitor => ({
+        visitorId: visitor.visitorId,
+        location: visitor.location,
+        device: visitor.device,
+        firstVisit: visitor.firstVisit,
+        lastActivity: visitor.lastActivity,
+        pageViews: visitor.pageViews,
+        totalDuration: visitor.totalDuration,
+        sessionDuration: visitor.sessionDuration,
+        isReturningVisitor: visitor.isReturningVisitor,
+        source: visitor.source,
+        medium: visitor.medium,
+        bounced: visitor.bounced,
+      }))
+    };
+
+    const blob = new Blob([JSON.stringify(dataToExport, null, 2)], {
+      type: "application/json",
+    });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = `visitors-${viewMode}-${new Date().toISOString().split('T')[0]}.json`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+    setShowExportMenu(false);
+  };
+
+  const exportToExcel = async () => {
+    try {
+      // Dynamic import to avoid SSR issues
+      const XLSX = await import('xlsx');
+      
+      const worksheetData = filteredVisitors.map(visitor => ({
+        'Visitor ID': visitor.visitorId,
+        'Country': visitor.location.country,
+        'City': visitor.location.city,
+        'Device Type': visitor.device.type,
+        'Browser': visitor.device.browser,
+        'OS': visitor.device.os,
+        'Is Mobile': visitor.device.isMobile ? 'Yes' : 'No',
+        'First Visit': new Date(visitor.firstVisit).toLocaleString(),
+        'Last Activity': new Date(visitor.lastActivity).toLocaleString(),
+        'Page Views': visitor.pageViews,
+        'Total Duration (min)': visitor.totalDuration,
+        'Session Duration (min)': visitor.sessionDuration,
+        'Returning Visitor': visitor.isReturningVisitor ? 'Yes' : 'No',
+        'Source': visitor.source,
+        'Medium': visitor.medium,
+        'Bounced': visitor.bounced ? 'Yes' : 'No',
+      }));
+
+      const worksheet = XLSX.utils.json_to_sheet(worksheetData);
+      const workbook = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(workbook, worksheet, `${viewMode === 'unique' ? 'Unique ' : ''}Visitors`);
+      
+      // Auto-size columns
+      const colWidths = Object.keys(worksheetData[0] || {}).map(key => ({
+        wch: Math.max(key.length, 15)
+      }));
+      worksheet['!cols'] = colWidths;
+
+      XLSX.writeFile(workbook, `visitors-${viewMode}-${new Date().toISOString().split('T')[0]}.xlsx`);
+      setShowExportMenu(false);
+    } catch (error) {
+      console.error('Error exporting to Excel:', error);
+      alert('Error exporting to Excel. Please try again.');
+    }
+  };
 
   if (loading) {
     return (
@@ -229,28 +345,29 @@ const VisitorsPage: React.FC = () => {
     );
   }
 
+  const uniqueVisitors = getUniqueVisitors(visitors);
   const statCards = [
     {
       title: "Total Visitors",
-      value: formatNumber(pagination.totalCount),
+      value: formatNumber(viewMode === "unique" ? uniqueVisitors.length : pagination.totalCount),
       icon: Users,
       color: "blue",
     },
     {
       title: "Returning Visitors",
-      value: formatNumber(visitors.filter((v) => v.isReturningVisitor).length),
+      value: formatNumber(displayedVisitors.filter((v) => v.isReturningVisitor).length),
       icon: Activity,
       color: "green",
     },
     {
       title: "Mobile Visitors",
-      value: formatNumber(visitors.filter((v) => v.device.isMobile).length),
+      value: formatNumber(displayedVisitors.filter((v) => v.device.isMobile).length),
       icon: Smartphone,
       color: "purple",
     },
     {
       title: "Bounced Sessions",
-      value: formatNumber(visitors.filter((v) => v.bounced).length),
+      value: formatNumber(displayedVisitors.filter((v) => v.bounced).length),
       icon: TrendingUp,
       color: "orange",
     },
@@ -278,16 +395,13 @@ const VisitorsPage: React.FC = () => {
               </div>
             </div>
             <div className="flex items-center space-x-3">
-              <button
-                disabled={loading}
-                
+              <Link
+                href="/admin/analytics"
                 className="flex items-center space-x-2 px-4 py-2 rounded-lg transition-colors bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 border border-gray-200 dark:border-gray-700"
               >
-                <ArrowLeft
-                  className={`w-4 h-4 `}
-                />
-                <Link href="/admin/analytics">Back to Dashboard</Link>
-              </button>
+                <ArrowLeft className="w-4 h-4" />
+                <span>Back to Dashboard</span>
+              </Link>
               <button
                 onClick={fetchVisitors}
                 disabled={loading}
@@ -300,11 +414,69 @@ const VisitorsPage: React.FC = () => {
                 />
                 <span>Refresh</span>
               </button>
-              <button className="flex items-center space-x-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
-                <Download className="w-4 h-4" />
-                <span>Export</span>
-              </button>
+              
+              {/* Export Dropdown */}
+              <div className="relative">
+                <button
+                  onClick={() => setShowExportMenu(!showExportMenu)}
+                  className="flex items-center space-x-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                >
+                  <Download className="w-4 h-4" />
+                  <span>Export</span>
+                  <ChevronDown className="w-4 h-4" />
+                </button>
+                
+                {showExportMenu && (
+                  <motion.div
+                    initial={{ opacity: 0, y: -10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -10 }}
+                    className="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 z-10"
+                  >
+                    <div className="py-2">
+                      <button
+                        onClick={exportToJSON}
+                        className="flex items-center space-x-2 w-full px-4 py-2 text-left text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
+                      >
+                        <FileText className="w-4 h-4" />
+                        <span>Export as JSON</span>
+                      </button>
+                      <button
+                        onClick={exportToExcel}
+                        className="flex items-center space-x-2 w-full px-4 py-2 text-left text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
+                      >
+                        <FileSpreadsheet className="w-4 h-4" />
+                        <span>Export as Excel</span>
+                      </button>
+                    </div>
+                  </motion.div>
+                )}
+              </div>
             </div>
+          </div>
+
+          {/* View Mode Toggle */}
+          <div className="flex items-center space-x-1 bg-gray-100 dark:bg-gray-800 rounded-lg p-1 w-fit">
+            <button
+              onClick={() => setViewMode("all")}
+              className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
+                viewMode === "all"
+                  ? "bg-white dark:bg-gray-700 text-gray-900 dark:text-white shadow-sm"
+                  : "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white"
+              }`}
+            >
+              All Visitors ({formatNumber(pagination.totalCount)})
+            </button>
+            <button
+              onClick={() => setViewMode("unique")}
+              className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
+                viewMode === "unique"
+                  ? "bg-white dark:bg-gray-700 text-gray-900 dark:text-white shadow-sm"
+                  : "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white"
+              }`}
+            >
+              Unique Visitors ({formatNumber(uniqueVisitors.length)})
+            </button>
           </div>
         </motion.div>
 
@@ -571,7 +743,7 @@ const VisitorsPage: React.FC = () => {
                   <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
                     {filteredVisitors.map((visitor, index) => (
                       <motion.tr
-                        key={visitor.id}
+                        key={`${visitor.visitorId}-${visitor.sessionId}`}
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: index * 0.05 }}
@@ -668,7 +840,7 @@ const VisitorsPage: React.FC = () => {
                         </td>
                         <td className="px-6 py-4">
                           <button
-                            onClick={()=>handleVisitorDetails(visitor.visitorId)}
+                            onClick={() => handleVisitorDetails(visitor.visitorId)}
                             className="inline-flex items-center space-x-1 px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-lg transition-colors"
                           >
                             <Eye className="w-4 h-4" />
@@ -681,8 +853,8 @@ const VisitorsPage: React.FC = () => {
                 </table>
               </div>
 
-              {/* Pagination */}
-              {pagination.totalPages > 1 && (
+              {/* Pagination - Only show for "all" view */}
+              {viewMode === "all" && pagination.totalPages > 1 && (
                 <div className="px-6 py-4 border-t border-gray-200 dark:border-gray-700">
                   <div className="flex items-center justify-between">
                     <div className="text-sm text-gray-600 dark:text-gray-400">
@@ -789,7 +961,7 @@ const VisitorsPage: React.FC = () => {
             </h3>
             <div className="space-y-3">
               {Array.from(
-                visitors.reduce((acc, visitor) => {
+                displayedVisitors.reduce((acc, visitor) => {
                   const country = visitor.location.country;
                   acc.set(country, (acc.get(country) || 0) + 1);
                   return acc;
@@ -798,7 +970,7 @@ const VisitorsPage: React.FC = () => {
                 .sort(([, a], [, b]) => b - a)
                 .slice(0, 5)
                 .map(([country, count]) => {
-                  const percentage = ((count / visitors.length) * 100).toFixed(
+                  const percentage = ((count / displayedVisitors.length) * 100).toFixed(
                     1
                   );
                   return (
@@ -831,7 +1003,7 @@ const VisitorsPage: React.FC = () => {
             </h3>
             <div className="space-y-3">
               {Array.from(
-                visitors.reduce((acc, visitor) => {
+                displayedVisitors.reduce((acc, visitor) => {
                   const deviceType = visitor.device.type;
                   acc.set(deviceType, (acc.get(deviceType) || 0) + 1);
                   return acc;
@@ -839,7 +1011,7 @@ const VisitorsPage: React.FC = () => {
               )
                 .sort(([, a], [, b]) => b - a)
                 .map(([deviceType, count]) => {
-                  const percentage = ((count / visitors.length) * 100).toFixed(
+                  const percentage = ((count / displayedVisitors.length) * 100).toFixed(
                     1
                   );
                   const IconComponent =
@@ -885,10 +1057,10 @@ const VisitorsPage: React.FC = () => {
                   Avg. Page Views
                 </span>
                 <span className="text-sm font-semibold text-gray-900 dark:text-white">
-                  {visitors.length > 0
+                  {displayedVisitors.length > 0
                     ? (
-                        visitors.reduce((sum, v) => sum + v.pageViews, 0) /
-                        visitors.length
+                        displayedVisitors.reduce((sum, v) => sum + v.pageViews, 0) /
+                        displayedVisitors.length
                       ).toFixed(1)
                     : "0"}
                 </span>
@@ -898,13 +1070,13 @@ const VisitorsPage: React.FC = () => {
                   Avg. Session Duration
                 </span>
                 <span className="text-sm font-semibold text-gray-900 dark:text-white">
-                  {visitors.length > 0
+                  {displayedVisitors.length > 0
                     ? formatDuration(
                         Math.round(
-                          visitors.reduce(
+                          displayedVisitors.reduce(
                             (sum, v) => sum + v.sessionDuration,
                             0
-                          ) / visitors.length
+                          ) / displayedVisitors.length
                         )
                       )
                     : "0m"}
@@ -915,10 +1087,10 @@ const VisitorsPage: React.FC = () => {
                   Bounce Rate
                 </span>
                 <span className="text-sm font-semibold text-orange-600 dark:text-orange-400">
-                  {visitors.length > 0
+                  {displayedVisitors.length > 0
                     ? (
-                        (visitors.filter((v) => v.bounced).length /
-                          visitors.length) *
+                        (displayedVisitors.filter((v) => v.bounced).length /
+                          displayedVisitors.length) *
                         100
                       ).toFixed(1)
                     : "0"}
@@ -930,10 +1102,10 @@ const VisitorsPage: React.FC = () => {
                   Return Rate
                 </span>
                 <span className="text-sm font-semibold text-green-600 dark:text-green-400">
-                  {visitors.length > 0
+                  {displayedVisitors.length > 0
                     ? (
-                        (visitors.filter((v) => v.isReturningVisitor).length /
-                          visitors.length) *
+                        (displayedVisitors.filter((v) => v.isReturningVisitor).length /
+                          displayedVisitors.length) *
                         100
                       ).toFixed(1)
                     : "0"}
@@ -943,13 +1115,28 @@ const VisitorsPage: React.FC = () => {
             </div>
           </div>
         </motion.div>
-        {modalOpen && 
-        <VisitorDetails onClose={() => {setModalOpen(false)}} visitorId={selectedVisitor} />
-        }
+
+        {/* Visitor Details Modal */}
+        {modalOpen && (
+          <VisitorDetails
+            onClose={() => {
+              setModalOpen(false);
+              setSelectedVisitor("");
+            }}
+            visitorId={selectedVisitor}
+          />
+        )}
+
+        {/* Click outside to close export menu */}
+        {showExportMenu && (
+          <div
+            className="fixed inset-0 z-0"
+            onClick={() => setShowExportMenu(false)}
+          />
+        )}
       </div>
     </div>
   );
 };
 
 export default VisitorsPage;
-

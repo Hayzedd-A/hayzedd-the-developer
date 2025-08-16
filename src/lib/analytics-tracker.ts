@@ -6,6 +6,7 @@ interface AnalyticsConfig {
   trackScrolling?: boolean;
   trackFormSubmissions?: boolean;
   debug?: boolean;
+  excludedPaths?: string[];
 }
 
 interface SessionData {
@@ -31,12 +32,26 @@ class AnalyticsTracker {
       trackScrolling: true,
       trackFormSubmissions: true,
       debug: false,
+      excludedPaths: ["/admin/analytics"],
       ...config,
     };
   }
 
+  private shouldTrackCurrentPage(): boolean {
+    const currentPath = window.location.pathname;
+    return !this.config.excludedPaths?.some(excludedPath => 
+      currentPath.startsWith(excludedPath)
+    );
+  }
+
   async init(): Promise<void> {
     if (this.isInitialized) return;
+
+    // Check if we should track this page at all
+    if (!this.shouldTrackCurrentPage()) {
+      this.log("Analytics tracking disabled for this page:", window.location.pathname);
+      return;
+    }
 
     try {
       // Initialize session
@@ -102,6 +117,12 @@ class AnalyticsTracker {
   }
 
   trackPageView(page?: string, title?: string): void {
+    // Check if we should track this page
+    if (!this.shouldTrackCurrentPage()) {
+      this.log("Page view tracking skipped for:", page || window.location.pathname);
+      return;
+    }
+
     if (!this.sessionData) {
       this.eventQueue.push({ type: "pageview", page, title });
       return;
@@ -154,6 +175,12 @@ class AnalyticsTracker {
     eventValue?: number,
     metadata?: Record<string, any>
   ): void {
+    // Check if we should track events on this page
+    if (!this.shouldTrackCurrentPage()) {
+      this.log("Event tracking skipped for:", window.location.pathname);
+      return;
+    }
+
     if (!this.sessionData) {
       this.eventQueue.push({
         type: "event",
@@ -215,6 +242,11 @@ class AnalyticsTracker {
 
   private setupClickTracking(): void {
     document.addEventListener("click", (event) => {
+      // Check if we should track clicks on this page
+      if (!this.shouldTrackCurrentPage()) {
+        return;
+      }
+
       const target = event.target as HTMLElement;
       const tagName = target.tagName.toLowerCase();
       console.log("button clicked", tagName, target);
@@ -259,6 +291,11 @@ class AnalyticsTracker {
   }
 
   private setupScrollTracking(): void {
+    // Check if we should track scrolling on this page
+    if (!this.shouldTrackCurrentPage()) {
+      return;
+    }
+
     let maxScroll = 0;
     let scrollTimeout: NodeJS.Timeout;
     const milestones = [25, 50, 75, 90, 100];
@@ -298,6 +335,11 @@ class AnalyticsTracker {
 
   private setupFormTracking(): void {
     document.addEventListener("submit", (event) => {
+      // Check if we should track form submissions on this page
+      if (!this.shouldTrackCurrentPage()) {
+        return;
+      }
+
       const form = event.target as HTMLFormElement;
       const formId = form.id || form.className || "unnamed-form";
 
@@ -311,6 +353,11 @@ class AnalyticsTracker {
 
     // Track form field interactions
     document.addEventListener("focus", (event) => {
+      // Check if we should track form field interactions on this page
+      if (!this.shouldTrackCurrentPage()) {
+        return;
+      }
+
       const target = event.target as HTMLElement;
       if (
         target.tagName === "INPUT" ||
@@ -337,6 +384,11 @@ class AnalyticsTracker {
 
   private setupVisibilityTracking(): void {
     document.addEventListener("visibilitychange", () => {
+      // Check if we should track visibility changes on this page
+      if (!this.shouldTrackCurrentPage()) {
+        return;
+      }
+
       if (document.hidden) {
         // Page became hidden - track current page duration
         if (this.currentPage && this.pageStartTime) {
@@ -358,6 +410,11 @@ class AnalyticsTracker {
 
     // Track page unload
     window.addEventListener("beforeunload", () => {
+      // Check if we should track page unload on this page
+      if (!this.shouldTrackCurrentPage()) {
+        return;
+      }
+
       if (this.currentPage && this.pageStartTime) {
         const duration = Date.now() - this.pageStartTime;
         // Use sendBeacon for reliable delivery during page unload
@@ -468,4 +525,3 @@ if (typeof window !== "undefined") {
 }
 
 export default AnalyticsTracker;
-
