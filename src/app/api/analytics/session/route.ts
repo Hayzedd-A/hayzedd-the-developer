@@ -49,6 +49,7 @@ export async function POST(request: NextRequest) {
       sessionId = existingSession.sessionId;
       isReturningVisitor = true;
 
+      existingSession.location = await getLocationFromIP(ipAddress)
       existingSession.lastActivity = new Date();
       await existingSession.save();
     } else {
