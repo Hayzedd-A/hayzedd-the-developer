@@ -89,13 +89,13 @@ export async function getLocationFromIP(
   ipAddress: string
 ): Promise<LocationInfo> {
   // Skip location detection for local/private IPs
-  if (isPrivateIP(ipAddress)) {
-    return {
-      country: "Nigeria",
-      region: "Lagos",
-      city: "Lekki phase 1",
-    };
-  }
+  // if (isPrivateIP(ipAddress)) {
+  //   return {
+  //     country: "Nigeria",
+  //     region: "Lagos",
+  //     city: "Lekki phase 1",
+  //   };
+  // }
 
   try {
     return await getLocationFromAPI(ipAddress);
@@ -162,9 +162,9 @@ async function getLocationFromAPI(ipAddress: string): Promise<LocationInfo> {
   } catch (error) {
     console.warn("API geolocation failed:", error);
     return {
-      country: "Unknown",
-      region: "Unknown",
-      city: "Unknown",
+      country: "Reserved Country",
+      region: "Reserved region",
+      city: "Reserved city",
     };
   }
 }
