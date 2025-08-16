@@ -34,6 +34,7 @@ interface FormStatus {
 const ContactPage: React.FC = () => {
   const { currentThemes, theme } = useTheme();
   const currentTheme = currentThemes[theme];
+  const [currentInput, setCurrentInput] = useState<String>("")
   const { trackEvent, trackFormSubmit, trackClick } = useAnalytics();
 
   const [formData, setFormData] = useState<FormData>({
@@ -65,10 +66,13 @@ const ContactPage: React.FC = () => {
     setFormData((prev) => ({ ...prev, [name]: value }));
 
     // Track form field interactions
-    trackEvent("interaction", "form-field", "input", name, undefined, {
-      fieldName: name,
-      valueLength: value.length,
-    });
+    if (!currentInput || currentInput !== name) {
+      trackEvent("interaction", "form-field", "input", name, undefined, {
+        fieldName: name,
+        valueLength: value.length,
+      });
+      setCurrentInput(name)
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {

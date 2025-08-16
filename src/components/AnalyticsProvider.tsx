@@ -127,11 +127,9 @@ export const AnalyticsProvider: React.FC<AnalyticsProviderProps> = ({ children }
     fetchGitHubData();
   }, []);
 
-  console.log('the analytics hook is running');
   useEffect(() => {
     if (currentPage !== pathname) {
       // Track page view when pathname changes
-      console.log('tracking page change in hook');
       setCurrentPage(pathname);
       analytics.trackPageView(pathname);
     }
