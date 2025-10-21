@@ -240,7 +240,7 @@ const ProjectModal: React.FC<ProjectModalProps> = ({
                                 className="flex items-start gap-3"
                               >
                                 <CheckCircleIcon
-                                  className={`w-5 h-5 mt-0.5 flex-shrink-0 ${currentTheme.primary}`}
+                                  className={`w-5 h-5 mt-0.5 flex-shrink-0 ${currentTheme.text}`}
                                 />
                                 <span
                                   className={`${currentTheme.textSecondary} leading-relaxed`}

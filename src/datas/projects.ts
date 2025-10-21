@@ -187,7 +187,7 @@ export const projects: Project[] = [
       "Tailwind CSS",
     ],
     // githubUrl: "https://github.com/yourusername/moodbrary",
-    liveUrl: "https://moodbrary.vercel.app",
+    liveUrl: "https://gofed.vercel.app/",
     category: "client",
     featured: true,
     createdAt: "2025-10-12",
