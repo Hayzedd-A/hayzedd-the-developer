@@ -34,7 +34,7 @@ interface FormStatus {
 const ContactPage: React.FC = () => {
   const { currentThemes, theme } = useTheme();
   const currentTheme = currentThemes[theme];
-  const [currentInput, setCurrentInput] = useState<String>("")
+  const [currentInput, setCurrentInput] = useState<string>("")
   const { trackEvent, trackFormSubmit, trackClick } = useAnalytics();
 
   const [formData, setFormData] = useState<FormData>({
