@@ -55,8 +55,23 @@ const About = () => {
   const experiences = [
     {
       title: "Full Stack web Developer",
-      company: "ExcellentBridge ",
-      period: "2024 - Present",
+      company: "Intelia",
+      period: "2025 - Present",
+      description:
+        "Developing and maintaining Restaurant application, implemented payment system, automatic terminal printing system, order tracking system, inventory management system, automatic whatsapp messaging system, and more.",
+      technologies: [
+        "React",
+        "Javascript",
+        "FeatherJS",
+        "Git",
+        "PostgresSQL",
+        "Supabase",
+      ],
+    },
+    {
+      title: "Full Stack web Developer",
+      company: "ExcellentBridge",
+      period: "2023 - 2025",
       description:
         "work with other developer in developing and maintaining ERP software, Implemented authentication system, payment system, security and more core ERP features",
       technologies: [
