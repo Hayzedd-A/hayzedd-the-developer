@@ -13,7 +13,9 @@ import {
   Linkedin,
   Twitter,
   CheckCircle,
-  AlertCircle
+  AlertCircle,
+  Facebook,
+  Instagram,
 } from 'lucide-react';
 import { useTheme } from '@/app/context/ThemeContext';
 import { useAnalytics } from '@/hooks/useAnalytics';
@@ -168,7 +170,7 @@ const ContactPage: React.FC = () => {
     {
       icon: MapPin,
       label: "Location",
-      value: "Ikotun, Lagos, Nigeria",
+      value: "Epe, Lagos, Nigeria",
       href: "#",
       action: () => {
         trackClick("location-contact");
@@ -188,13 +190,25 @@ const ContactPage: React.FC = () => {
       icon: Linkedin,
       label: "LinkedIn",
       url: "https://www.linkedin.com/in/azeez-adebayo-ola",
-      color: "hover:text-blue-600",
+      color: `${currentTheme.hover}`,
     },
     {
       icon: Twitter,
       label: "Twitter",
       url: "https://x.com/AdebayoAzeez3",
-      color: "hover:text-blue-400",
+      color: `${currentTheme.hover}`,
+    },
+    {
+      icon: Facebook,
+      label: "Facebook",
+      url: "https://www.facebook.com/adebayo.azeez.31",
+      color: `${currentTheme.hover}`,
+    },
+    {
+      icon: Instagram,
+      label: "Instagram",
+      url: "https://www.instagram.com/adebayoazeez37",
+      color: `${currentTheme.hover}`,
     },
   ];
 

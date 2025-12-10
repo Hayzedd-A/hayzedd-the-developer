@@ -233,7 +233,7 @@ const About = () => {
               Location
             </h3>
             <p className={`${currentTheme.textSecondary}`}>
-              Ikotun, Lagos, Nigeria
+              Epe, Lagos, Nigeria
             </p>
           </div>
           <div

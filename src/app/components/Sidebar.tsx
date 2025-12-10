@@ -16,6 +16,8 @@ import {
   Menu,
   X,
   Palette,
+  Instagram,
+  Facebook,
 } from 'lucide-react';
 import { lightThemes, useTheme } from '@/app/context/ThemeContext';
 import { Theme } from '@/types/types.index';
@@ -38,6 +40,8 @@ const socialLinks = [
     icon: Linkedin,
   },
   { name: 'Twitter', href: 'https://twitter.com/adebayoazeez3', icon: Twitter },
+  { name: 'Instagram', href: 'https://www.instagram.com/adebayoazeez37', icon: Instagram },
+  { name: 'Facebook', href: 'https://www.facebook.com/adebayo.azeez.31', icon: Facebook },
 ];
 
 const Sidebar: React.FC = () => {
