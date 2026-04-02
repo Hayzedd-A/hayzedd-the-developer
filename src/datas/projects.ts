@@ -406,7 +406,7 @@ export const projects: Project[] = [
     id: "10",
     title: "Digital Catalog & Price List Web App",
     description:
-      "A production-ready digital catalog and price list web application built for small businesses to showcase products without requiring user authentication. The platform provides a seamless browsing experience with category-based navigation, search functionality, and WhatsApp integration for direct customer engagement. It also includes a secure admin panel for managing items, tracking user interactions, and gaining insights into customer preferences.",
+      "A digital catalog and price list web application built for small businesses to showcase products without requiring user authentication. The platform provides a seamless browsing experience with category-based navigation, search functionality, and WhatsApp integration for direct customer engagement. It also includes a secure admin panel for managing items, tracking user interactions, and gaining insights into customer preferences.",
     features: [
       "Mobile-first, fully responsive design optimized for all devices",
       "No authentication required for customers – frictionless browsing experience",
