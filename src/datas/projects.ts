@@ -93,7 +93,7 @@ export const projects: Project[] = [
   },
   {
     id: "3",
-    title: "My Portfolio",
+    title: "A Developer's Portfolio",
     description:
       "A portfolio website for a developer to showcase skill, experience, and get to know me better. Features include, light and dark mode, four color scheme, admin section using Next.js authentication, visitor analytics.",
     features: [
@@ -266,6 +266,45 @@ export const projects: Project[] = [
     category: "personal",
     featured: true,
     createdAt: "2026-01-10",
+  },
+  {
+    id: "11",
+    title: "Hayzedd DevHub",
+    description:
+      "A modern developer portfolio and agency website. This platform showcases a range of high-performance web development projects and services, featuring an interactive multi-step questionnaire for client inquiries and automated lead capture for efficient project intake.",
+    features: [
+      "Premium responsive UI/UX with smooth transitions and LineIcons",
+      "SEO optimized structure with meta tags and canonical URLs",
+      "Fast-loading and mobile-first architecture",
+      "Interactive multi-step 'Get a Quote' questionnaire",
+      "Dynamic project gallery filtering and rendering from JSON",
+      "Service-specific optimized landing pages with detailed insights",
+      "Sophisticated form validation and skip functionality for frictionless UX",
+      "Integrated contact forms with automated lead capture API",
+    ],
+    image: "/projects/devhub/project1.png",
+    images: [
+      "/projects/devhub/project1.png",
+      "/projects/devhub/project2.png",
+      "/projects/devhub/project3.png",
+      "/projects/devhub/project4.png",
+      "/projects/devhub/project5.png",
+    ],
+    technologies: [
+      "HTML5",
+      "CSS3",
+      "JavaScript (ES6+)",
+      "Bootstrap 5",
+      "JQuery",
+      "EmailJS",
+      "LineIcons",
+      "Vercel",
+    ],
+    githubUrl: "https://github.com/Hayzedd-A/hayzedd-devhub",
+    liveUrl: "https://hayzedd-devhub.vercel.app/",
+    category: "personal",
+    featured: true,
+    createdAt: "2026-04-03",
   },
   {
     id: "4",
