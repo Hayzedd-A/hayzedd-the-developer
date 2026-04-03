@@ -3,9 +3,10 @@
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import AnalyticsDashboard from "@/components/AnalyticsDashboard";
-import { Lock, Eye, EyeOff, LogOut } from "lucide-react";
+import { Lock, Eye, EyeOff, LogOut, ClipboardList } from "lucide-react";
 import { AnimatePresence, motion } from "framer-motion";
 import VisitorsPage from "@/components/AllVisitors";
+import QuestionnaireList from "@/components/QuestionnaireList";
 
 const AdminAnalyticsPage: React.FC = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -132,6 +133,7 @@ const AdminAnalyticsPage: React.FC = () => {
   const tabs = [
     { id: "dashboard", label: "Dashboard" },
     { id: "visitors", label: "All Visitors" },
+    { id: "questionnaire", label: "Questionnaires" },
   ];
 
   return (
@@ -181,7 +183,7 @@ const AdminAnalyticsPage: React.FC = () => {
           )}
           {activeTab === "visitors" && (
             <motion.div
-              key="overview"
+              key="visitors"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -20 }}
@@ -189,6 +191,18 @@ const AdminAnalyticsPage: React.FC = () => {
               className="space-y-6"
             >
               <VisitorsPage/>
+            </motion.div>
+          )}
+          {activeTab === "questionnaire" && (
+            <motion.div
+              key="questionnaire"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              transition={{ duration: 0.3 }}
+              className="space-y-6"
+            >
+              <QuestionnaireList />
             </motion.div>
           )}
         </AnimatePresence>
