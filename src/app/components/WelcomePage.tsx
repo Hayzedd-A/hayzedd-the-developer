@@ -59,25 +59,25 @@ export default function WelcomePage() {
     {
       icon: <Code className="w-5 h-5" />,
       title: "Custom Web Development",
-      description: "Tailored solutions for your business needs"
+      description: "Tailored solutions for your business needs",
     },
     {
       icon: <Palette className="w-5 h-5" />,
       title: "Brand Identity & Design",
-      description: "Creating memorable digital experiences"
+      description: "Creating memorable digital experiences",
     },
     {
       icon: <Zap className="w-5 h-5" />,
       title: "Performance Optimization",
-      description: "Lightning-fast websites that convert"
-    }
+      description: "Lightning-fast websites that convert",
+    },
   ];
 
   const benefits = [
     "Increase online visibility by 300%",
     "Boost conversion rates significantly",
     "Mobile-first responsive design",
-    "SEO optimized for search engines"
+    "SEO optimized for search engines",
   ];
 
   return (
@@ -133,14 +133,17 @@ export default function WelcomePage() {
               variants={itemVariants}
               className={`text-lg ${currentTheme.textSecondary} leading-relaxed max-w-2xl`}
             >
-              I help businesses establish a powerful online presence with custom web solutions 
-              that drive results. From stunning websites to complex web applications, I deliver 
-              digital experiences that engage your customers and accelerate your growth.
+              I help businesses establish a powerful online presence with custom
+              web solutions that drive results. From stunning websites to
+              complex web applications, I deliver digital experiences that
+              engage your customers and accelerate your growth.
             </motion.p>
 
             {/* Key Services */}
             <motion.div variants={itemVariants} className="space-y-4">
-              <h3 className={`text-lg font-semibold ${currentTheme.text} flex items-center gap-2`}>
+              <h3
+                className={`text-lg font-semibold ${currentTheme.text} flex items-center gap-2`}
+              >
                 <Users className="w-5 h-5" />
                 What I Deliver For Your Business:
               </h3>
@@ -151,7 +154,9 @@ export default function WelcomePage() {
                     variants={itemVariants}
                     className={`flex items-start space-x-3 p-3 rounded-lg ${currentTheme.hover} transition-all duration-300`}
                   >
-                    <div className={`${currentTheme.primary} text-white p-2 rounded-lg`}>
+                    <div
+                      className={`${currentTheme.primary} text-white p-2 rounded-lg`}
+                    >
                       {service.icon}
                     </div>
                     <div>
@@ -169,7 +174,9 @@ export default function WelcomePage() {
 
             {/* Business Benefits */}
             <motion.div variants={itemVariants} className="space-y-3">
-              <h3 className={`text-lg font-semibold ${currentTheme.text} flex items-center gap-2`}>
+              <h3
+                className={`text-lg font-semibold ${currentTheme.text} flex items-center gap-2`}
+              >
                 <TrendingUp className="w-5 h-5" />
                 Results You Can Expect:
               </h3>
@@ -180,7 +187,9 @@ export default function WelcomePage() {
                     variants={itemVariants}
                     className={`flex items-center space-x-2 ${currentTheme.textSecondary}`}
                   >
-                    <CheckCircle className={`w-4 h-4 ${currentTheme.primary}`} />
+                    <CheckCircle
+                      className={`w-4 h-4 ${currentTheme.primary}`}
+                    />
                     <span className="text-sm">{benefit}</span>
                   </motion.div>
                 ))}
@@ -209,15 +218,9 @@ export default function WelcomePage() {
                 className={`flex items-center justify-center space-x-2 px-8 py-4 border-2 ${currentTheme.border} ${currentTheme.text} rounded-lg font-semibold ${currentTheme.hover} transition-all duration-300`}
               >
                 <Download className="w-5 h-5" />
-                <Link
-                  href="/portfolio"
-                  target="_blank"
-                >
-                  View Portfolio
-                </Link>
+                <Link href="/portfolio">View Portfolio</Link>
               </motion.button>
             </motion.div>
-           
           </motion.div>
 
           {/* Right Side - Enhanced Profile with Tech Elements */}

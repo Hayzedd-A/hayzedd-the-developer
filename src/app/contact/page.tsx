@@ -1,7 +1,7 @@
 "use client";
 
-import React, { useState, useRef, useEffect } from 'react';
-import { motion } from 'framer-motion';
+import React, { useState, useRef, useEffect } from "react";
+import { motion } from "framer-motion";
 import {
   Mail,
   Phone,
@@ -16,10 +16,11 @@ import {
   AlertCircle,
   Facebook,
   Instagram,
-} from 'lucide-react';
-import { useTheme } from '@/app/context/ThemeContext';
-import { useAnalytics } from '@/hooks/useAnalytics';
-import gsap from 'gsap';
+} from "lucide-react";
+import { useTheme } from "@/app/context/ThemeContext";
+import { useAnalytics } from "@/hooks/useAnalytics";
+import gsap from "gsap";
+import Link from "next/link";
 
 interface FormData {
   name: string;
@@ -29,14 +30,14 @@ interface FormData {
 }
 
 interface FormStatus {
-  type: 'idle' | 'loading' | 'success' | 'error';
+  type: "idle" | "loading" | "success" | "error";
   message: string;
 }
 
 const ContactPage: React.FC = () => {
   const { currentThemes, theme } = useTheme();
   const currentTheme = currentThemes[theme];
-  const [currentInput, setCurrentInput] = useState<string>("")
+  const [currentInput, setCurrentInput] = useState<string>("");
   const { trackEvent, trackFormSubmit, trackClick } = useAnalytics();
 
   const [formData, setFormData] = useState<FormData>({
@@ -62,7 +63,7 @@ const ContactPage: React.FC = () => {
   }, [trackEvent]);
 
   const handleInputChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
@@ -73,7 +74,7 @@ const ContactPage: React.FC = () => {
         fieldName: name,
         valueLength: value.length,
       });
-      setCurrentInput(name)
+      setCurrentInput(name);
     }
   };
 
@@ -115,7 +116,7 @@ const ContactPage: React.FC = () => {
             name: formData.name,
             subject: formData.subject,
             messageLength: formData.message.length,
-          }
+          },
         );
       } else {
         setFormStatus({
@@ -189,7 +190,7 @@ const ContactPage: React.FC = () => {
     {
       icon: Linkedin,
       label: "LinkedIn",
-      url: "https://www.linkedin.com/in/azeez-adebayo-ola",
+      url: "https://www.linkedin.com/in/hayzedd-devhub/",
       color: `${currentTheme.hover}`,
     },
     {
@@ -207,56 +208,55 @@ const ContactPage: React.FC = () => {
     {
       icon: Instagram,
       label: "Instagram",
-      url: "https://www.instagram.com/adebayoazeez37",
+      url: "https://www.instagram.com/hayzedd_devhub/",
       color: `${currentTheme.hover}`,
     },
   ];
 
-    useEffect(() => {
-      const ctx = gsap.context(() => {
-        // Header animation
-        gsap.fromTo(
-          headerRef.current,
-          { opacity: 0, y: -50 },
-          { opacity: 1, y: 0, duration: 1, ease: "power3.out" }
-        );
+  useEffect(() => {
+    const ctx = gsap.context(() => {
+      // Header animation
+      gsap.fromTo(
+        headerRef.current,
+        { opacity: 0, y: -50 },
+        { opacity: 1, y: 0, duration: 1, ease: "power3.out" },
+      );
 
-        // Contact info cards animation
-        gsap.fromTo(
-          contactInfoRef.current?.children || [],
-          { opacity: 0, x: -100, scale: 0.8 },
-          {
-            opacity: 1,
-            x: 0,
-            scale: 1,
-            duration: 0.8,
-            stagger: 0.2,
-            ease: "back.out(1.7)",
-            delay: 0.3,
-          }
-        );
+      // Contact info cards animation
+      gsap.fromTo(
+        contactInfoRef.current?.children || [],
+        { opacity: 0, x: -100, scale: 0.8 },
+        {
+          opacity: 1,
+          x: 0,
+          scale: 1,
+          duration: 0.8,
+          stagger: 0.2,
+          ease: "back.out(1.7)",
+          delay: 0.3,
+        },
+      );
 
-        // Form animation
-        gsap.fromTo(
-          formRef.current,
-          { opacity: 0, x: 100 },
-          { opacity: 1, x: 0, duration: 1, ease: "power3.out", delay: 0.5 }
-        );
+      // Form animation
+      gsap.fromTo(
+        formRef.current,
+        { opacity: 0, x: 100 },
+        { opacity: 1, x: 0, duration: 1, ease: "power3.out", delay: 0.5 },
+      );
 
-        // Floating animation for contact cards
-        gsap.to(contactInfoRef.current?.children || [], {
-          y: -10,
-          duration: 2,
-          ease: "power2.inOut",
-          yoyo: true,
-          repeat: -1,
-          stagger: 0.3,
-        });
-      }, containerRef);
+      // Floating animation for contact cards
+      gsap.to(contactInfoRef.current?.children || [], {
+        y: -10,
+        duration: 2,
+        ease: "power2.inOut",
+        yoyo: true,
+        repeat: -1,
+        stagger: 0.3,
+      });
+    }, containerRef);
 
-      return () => ctx.revert();
-    }, []);
-
+    return () => ctx.revert();
+  }, []);
 
   return (
     <div
@@ -363,7 +363,7 @@ const ContactPage: React.FC = () => {
                       onClick={() =>
                         handleSocialClick(
                           social.label.toLowerCase(),
-                          social.url
+                          social.url,
                         )
                       }
                       initial={{ opacity: 0, scale: 0.8 }}
@@ -400,8 +400,8 @@ const ContactPage: React.FC = () => {
                   formStatus.type === "success"
                     ? "bg-green-100 dark:bg-green-900/20 text-green-800 dark:text-green-400"
                     : formStatus.type === "error"
-                    ? "bg-red-100 dark:bg-red-900/20 text-red-800 dark:text-red-400"
-                    : "bg-blue-100 dark:bg-blue-900/20 text-blue-800 dark:text-blue-400"
+                      ? "bg-red-100 dark:bg-red-900/20 text-red-800 dark:text-red-400"
+                      : "bg-blue-100 dark:bg-blue-900/20 text-blue-800 dark:text-blue-400"
                 }`}
               >
                 {formStatus.type === "success" && (
@@ -578,19 +578,19 @@ const ContactPage: React.FC = () => {
               >
                 Schedule a Call
               </motion.button>
-              <motion.button
-                onClick={() => {
-                  trackClick("cta-view-portfolio");
-                  trackEvent("interaction", "cta", "portfolio-click");
-                  // Navigate to portfolio
-                  window.location.href = "/portfolio";
-                }}
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className={`px-8 py-3 rounded-lg font-medium ${currentTheme.text} ${currentTheme.background} border ${currentTheme.border} ${currentTheme.hover} transition-all duration-300`}
-              >
-                View My Work
-              </motion.button>
+              <Link href="/portfolio">
+                <motion.button
+                  onClick={() => {
+                    trackClick("cta-view-portfolio");
+                    trackEvent("interaction", "cta", "portfolio-click");
+                  }}
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  className={`px-8 py-3 rounded-lg font-medium ${currentTheme.text} ${currentTheme.background} border ${currentTheme.border} ${currentTheme.hover} transition-all duration-300`}
+                >
+                  View My Work
+                </motion.button>
+              </Link>
             </div>
           </div>
         </motion.div>
@@ -600,4 +600,3 @@ const ContactPage: React.FC = () => {
 };
 
 export default ContactPage;
-
