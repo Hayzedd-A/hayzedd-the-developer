@@ -27,6 +27,7 @@ const lightThemes = {
     primary: "bg-blue-600",
     primaryHover: "hover:bg-blue-700",
     accent: "text-blue-600",
+    accentHover: "hover:text-blue-700",
     gradient: "from-blue-600 to-blue-800",
     background: "bg-gray-50",
     backgroundSecondary: "bg-gray-50",
@@ -41,6 +42,7 @@ const lightThemes = {
     primary: "bg-purple-600",
     primaryHover: "hover:bg-purple-700",
     accent: "text-purple-600",
+    accentHover: "hover:text-purple-700",
     gradient: "from-purple-600 to-purple-800",
     background: "bg-white",
     backgroundSecondary: "bg-gray-50",
@@ -55,6 +57,7 @@ const lightThemes = {
     primary: "bg-green-600",
     primaryHover: "hover:bg-green-700",
     accent: "text-green-600",
+    accentHover: "hover:text-green-700",
     gradient: "from-green-600 to-green-800",
     background: "bg-white",
     backgroundSecondary: "bg-gray-50",
@@ -69,6 +72,7 @@ const lightThemes = {
     primary: "bg-orange-600",
     primaryHover: "hover:bg-orange-700",
     accent: "text-orange-600",
+    accentHover: "hover:text-orange-700",
     gradient: "from-orange-600 to-orange-800",
     background: "bg-white",
     backgroundSecondary: "bg-gray-50",
@@ -87,6 +91,7 @@ const darkThemes = {
     primary: "bg-blue-600",
     primaryHover: "hover:bg-blue-700",
     accent: "text-blue-400",
+    accentHover: "hover:text-blue-500",
     gradient: "from-blue-600 to-blue-800",
     background: "bg-gray-900",
     backgroundSecondary: "bg-gray-800",
@@ -101,6 +106,7 @@ const darkThemes = {
     primary: "bg-purple-600",
     primaryHover: "hover:bg-purple-700",
     accent: "text-purple-400",
+    accentHover: "hover:text-purple-500",
     gradient: "from-purple-600 to-purple-800",
     background: "bg-gray-900",
     backgroundSecondary: "bg-gray-800",
@@ -115,6 +121,7 @@ const darkThemes = {
     primary: "bg-green-600",
     primaryHover: "hover:bg-green-700",
     accent: "text-green-400",
+    accentHover: "hover:text-green-500",
     gradient: "from-green-600 to-green-800",
     background: "bg-gray-900",
     backgroundSecondary: "bg-gray-800",
@@ -129,6 +136,7 @@ const darkThemes = {
     primary: "bg-orange-600",
     primaryHover: "hover:bg-orange-700",
     accent: "text-orange-400",
+    accentHover: "hover:text-orange-500",
     gradient: "from-orange-600 to-orange-800",
     background: "bg-gray-900",
     backgroundSecondary: "bg-gray-800",
@@ -171,11 +179,10 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({
 
     if (isDarkMode) {
       document.documentElement.classList.add("dark");
-      document.body.style.backgroundColor = "white"
+      document.body.style.backgroundColor = "white";
     } else {
       document.documentElement.classList.remove("dark");
       document.body.style.backgroundColor = "black";
-
     }
   }, [isDarkMode]);
 

@@ -552,16 +552,12 @@ const ContactPage: React.FC = () => {
           className="mt-20 text-center"
         >
           <div
-            className={`bg-gradient-to-r ${currentTheme.backgroundSecondary} to-gray-100 dark:to-gray-700 rounded-2xl p-8 md:p-12`}
+            className={`bg-gradient-to-r ${currentTheme.gradient} rounded-2xl p-8 md:p-12`}
           >
-            <h3
-              className={`text-2xl md:text-3xl font-bold ${currentTheme.text} mb-4`}
-            >
+            <h3 className={`text-2xl md:text-3xl font-bold mb-4`}>
               Ready to Start Your Project?
             </h3>
-            <p
-              className={`text-lg ${currentTheme.textSecondary} mb-8 max-w-2xl mx-auto`}
-            >
+            <p className={`text-lg mb-8 max-w-2xl mx-auto`}>
               Let's discuss your ideas and see how we can bring them to life.
               I'm here to help you build something amazing.
             </p>
@@ -574,7 +570,7 @@ const ContactPage: React.FC = () => {
                 }}
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                className={`px-8 py-3 rounded-lg font-medium text-white transition-all duration-300 ${currentTheme.primary} ${currentTheme.primaryHover}`}
+                className={`px-8 py-3 hover:scale-105 text-semibold bg-white ${currentTheme.accent} rounded-lg transition-all duration-300 `}
               >
                 Schedule a Call
               </motion.button>
@@ -586,7 +582,9 @@ const ContactPage: React.FC = () => {
                   }}
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
-                  className={`px-8 py-3 rounded-lg font-medium ${currentTheme.text} ${currentTheme.background} border ${currentTheme.border} ${currentTheme.hover} transition-all duration-300`}
+                  className={`px-6 py-3 border-2 border-white text-white rounded-lg font-semibold
+                hover:bg-white transition-all ${currentTheme.accentHover} duration-300
+                shadow-lg hover:shadow-xl transform hover:scale-105`}
                 >
                   View My Work
                 </motion.button>

@@ -845,9 +845,9 @@ export default function SkillsPage() {
               </Link>
               <Link href="/contact">
                 <button
-                  className="px-6 py-3 border-2 border-white text-white rounded-lg font-semibold
-                hover:bg-white hover:text-gray-900 transition-all duration-300
-                shadow-lg hover:shadow-xl transform hover:scale-105"
+                  className={`px-6 py-3 border-2 border-white text-white rounded-lg font-semibold
+                hover:bg-white ${currentTheme.accentHover} transition-all duration-300
+                shadow-lg hover:shadow-xl transform hover:scale-105`}
                 >
                   Get In Touch
                 </button>
