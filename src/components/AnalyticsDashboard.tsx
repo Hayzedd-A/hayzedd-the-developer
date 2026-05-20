@@ -83,19 +83,19 @@ const AnalyticsDashboard: React.FC = () => {
     fetchStats();
   }, [period]);
 
-const formatDuration = (seconds: number): string => {
-  const hours = Math.floor(seconds / 3600 / 1000);
-  const minutes = Math.floor((seconds % 3600) / 60);
-  const remainingSeconds = Math.floor(seconds % 60);
+  const formatDuration = (seconds: number): string => {
+    const hours = Math.floor(seconds / 3600 / 1000);
+    const minutes = Math.floor((seconds % 3600) / 60);
+    const remainingSeconds = Math.floor(seconds % 60);
 
-  if (hours > 0) {
-    return `${hours}h ${minutes}m `;
-  } else if (minutes > 0) {
-    return `${minutes}m ${remainingSeconds}s`;
-  } else {
-    return `${remainingSeconds}s`;
-  }
-};
+    if (hours > 0) {
+      return `${hours}h ${minutes}m `;
+    } else if (minutes > 0) {
+      return `${minutes}m ${remainingSeconds}s`;
+    } else {
+      return `${remainingSeconds}s`;
+    }
+  };
 
   const formatNumber = (num: number): string => {
     return new Intl.NumberFormat().format(num);
@@ -181,10 +181,10 @@ const formatDuration = (seconds: number): string => {
                 {p === "1d"
                   ? "Today"
                   : p === "7d"
-                  ? "7 Days"
-                  : p === "30d"
-                  ? "30 Days"
-                  : "90 Days"}
+                    ? "7 Days"
+                    : p === "30d"
+                      ? "30 Days"
+                      : "90 Days"}
               </button>
             ))}
           </div>
@@ -202,23 +202,23 @@ const formatDuration = (seconds: number): string => {
                 transition={{ delay: index * 0.1 }}
                 className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm border border-gray-200 dark:border-gray-700"
               >
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <p className="text-sm text-gray-600 dark:text-gray-400 mb-1">
-                        {card.title}
-                      </p>
-                      <p className="text-2xl font-bold text-gray-900 dark:text-white">
-                        {card.value}
-                      </p>
-                    </div>
-                    <div
-                      className={`p-3 rounded-lg bg-${card.color}-100 dark:bg-${card.color}-900/20`}
-                    >
-                      <IconComponent
-                        className={`w-6 h-6 text-${card.color}-600 dark:text-${card.color}-400`}
-                      />
-                    </div>
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-sm text-gray-600 dark:text-gray-400 mb-1">
+                      {card.title}
+                    </p>
+                    <p className="text-2xl font-bold text-gray-900 dark:text-white">
+                      {card.value}
+                    </p>
                   </div>
+                  <div
+                    className={`p-3 rounded-lg bg-${card.color}-100 dark:bg-${card.color}-900/20`}
+                  >
+                    <IconComponent
+                      className={`w-6 h-6 text-${card.color}-600 dark:text-${card.color}-400`}
+                    />
+                  </div>
+                </div>
               </motion.div>
             );
           })}
@@ -278,7 +278,7 @@ const formatDuration = (seconds: number): string => {
               {stats.deviceTypes.map((device, index) => {
                 const total = stats.deviceTypes.reduce(
                   (sum, d) => sum + d.count,
-                  0
+                  0,
                 );
                 const percentage = ((device.count / total) * 100).toFixed(1);
                 const IconComponent =
@@ -325,7 +325,7 @@ const formatDuration = (seconds: number): string => {
               {stats.browsers.slice(0, 5).map((browser, index) => {
                 const total = stats.browsers.reduce(
                   (sum, b) => sum + b.count,
-                  0
+                  0,
                 );
                 const percentage = ((browser.count / total) * 100).toFixed(1);
 
@@ -366,7 +366,7 @@ const formatDuration = (seconds: number): string => {
               {stats.countries.slice(0, 5).map((country, index) => {
                 const total = stats.countries.reduce(
                   (sum, c) => sum + c.count,
-                  0
+                  0,
                 );
                 const percentage = ((country.count / total) * 100).toFixed(1);
 
@@ -407,19 +407,27 @@ const formatDuration = (seconds: number): string => {
           <div className="h-64 flex items-end space-x-2">
             {stats.dailyVisitors.map((day, index) => {
               const maxVisitors = Math.max(
-                ...stats.dailyVisitors.map((d) => d.visitors)
+                ...stats.dailyVisitors.map((d) => d.visitors),
               );
+              const uniqHeight = (day.uniqueVisitors / maxVisitors) * 100;
               const height = (day.visitors / maxVisitors) * 100;
+              const returningHeight = height - uniqHeight;
 
               return (
                 <div
                   key={day.date}
-                  className="flex-1 flex flex-col items-center"
+                  className="flex-1 h-[90%] justify-end flex flex-col items-center"
                 >
                   <div
                     className="w-full bg-blue-600 rounded-t transition-all duration-300 hover:bg-blue-700"
-                    style={{ height: `${height}%`, minHeight: "4px" }}
-                    title={`${day.date}: ${day.visitors} visitors`}
+                    style={{ height: `${uniqHeight}%`, minHeight: "4px" }}
+                    title={`${day.date}: ${day.uniqueVisitors} unique visitors`}
+                  />
+
+                  <div
+                    className="w-full bg-blue-400 transition-all duration-300 hover:bg-blue-700"
+                    style={{ height: `${returningHeight}%`, minHeight: "1px" }}
+                    title={`${day.date}: ${day.visitors - day.uniqueVisitors} returning visitors`}
                   />
                   <div className="mt-2 text-xs text-gray-500 dark:text-gray-400 text-center">
                     {new Date(day.date).toLocaleDateString("en-US", {
