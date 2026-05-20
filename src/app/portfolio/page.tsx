@@ -206,7 +206,7 @@ const Portfolio = () => {
           >
             {filteredProjects.map((project, index) => (
               <ProjectCard
-                key={project.id}
+                key={`${project.id}-${index}`}
                 project={project}
                 index={index}
                 theme={theme}
