@@ -35,7 +35,8 @@ interface Skill {
     | "database"
     | "tools"
     | "design"
-    | "fullstack";
+    | "fullstack"
+    | "mobile";
   level: "beginner" | "intermediate" | "advanced" | "expert";
   icon: string;
   color: string;
@@ -214,6 +215,28 @@ const skills: Skill[] = [
     experience: experienceYear(2024),
     projects: 1,
   },
+  {
+    id: "16",
+    name: "React Native",
+    category: "mobile",
+    level: "expert",
+    icon: "📱",
+    color: "#61DAFB",
+    description: "Cross-platform mobile app development with native performance",
+    experience: experienceYear(2024),
+    projects: 3,
+  },
+  {
+    id: "17",
+    name: "Expo",
+    category: "mobile",
+    level: "expert",
+    icon: "🚀",
+    color: "#4630EB",
+    description: "Building universal React apps with seamless deployment and OTA updates",
+    experience: experienceYear(2024),
+    projects: 3,
+  },
 ];
 
 const categoryIcons = {
@@ -223,6 +246,7 @@ const categoryIcons = {
   tools: <Settings className="w-4 h-4" />,
   design: <Palette className="w-4 h-4" />,
   fullstack: <Globe className="w-4 h-4" />,
+  mobile: <Smartphone className="w-4 h-4" />,
 };
 
 const levelColors = {
