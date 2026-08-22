@@ -128,6 +128,45 @@ export const projects: Project[] = [
     createdAt: "2025-01-10",
   },
   {
+    id: "6",
+    title: "KOS — Kitchen Order System",
+    description:
+      "A real-time kitchen order management tablet app built for Gourmet Twist, a multi-branch food brand. Designed for landscape Android tablets mounted in kitchen stations, KOS gives each department (bakery, packing, dispatch) a live view of incoming orders, with role-based station login, barcode scanning for order fulfilment, and an offline-first sync architecture that keeps operations running during network interruptions.",
+    features: [
+      "Real-time order queue with per-department filtering",
+      "Multi-station role login with PIN gate",
+      "Barcode/QR scanning for order packing and fulfilment",
+      "Packing station with packed and pickup order workflows",
+      "Production batch tracking and shortfall management",
+      "Manager reconciliation with approval workflow",
+      "Live order timers with urgency escalation (late, very late)",
+      "Offline-first architecture with action outbox and delta sync",
+      "In-app APK update system with progress tracking",
+    ],
+    image: "/projects/kos/kos1.png",
+    images: [
+      "/projects/kos/kos1.png",
+      "/projects/kos/kos2.png",
+      "/projects/kos/kos3.png",
+      "/projects/kos/kos4.png",
+    ],
+    technologies: [
+      "React Native",
+      "Expo v56",
+      "TypeScript",
+      "TanStack Query v5",
+      "WebSocket",
+      "Zupa REST API",
+      "expo-file-system",
+      "expo-camera",
+    ],
+    liveUrl:
+      "https://expo.dev/artifacts/eas/fEMmDgGu3xAlVGNvXArgSpgTq3fOohwCHZyi5I1by30.apk",
+    category: "client",
+    featured: true,
+    createdAt: "2026-07-07",
+  },
+  {
     id: "8",
     title: "Moodbrary",
     description:
